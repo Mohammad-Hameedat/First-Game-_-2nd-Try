@@ -11,49 +11,48 @@ public class FollowerController : MonoBehaviour
     #region Nearest Object Tracking
     [SerializeField] private GameObject lastNearestObject = null;
     private Vector3 lastPosition;
-    private float checkThreshold = 2f; // Set a threshold for significant position change
+    private float positionChangeThreshold = 2f; // Set a threshold for significant position change
+    private float inRangeThreshold = 1f; // Set a threshold for the distance between the follower and the target object
     #endregion
 
 
 
+    #region Hunger Situation Variables
 
-    float timeBeforeGettingHungry = 0f;
+    [SerializeField] float timeBeforeGettingHungry = 0f;
     float hungerStartingTime = 5f;
-    float hungerEndingTime = 8f;
+    //float hungerEndingTime = 8f;
     float timeBeforeDying = 15f;
-
-
-
-    public MeshRenderer meshRenderer { get; private set; }
-
+    #endregion
 
 
     private void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
         lastPosition = transform.position;
     }
 
     private void Update()
     {
         HungerHandler();
+
     }
 
 
     #region Nearest Object Tracking System
+
     public Vector3 CheckNearestTargetObject()
     {
         // Check if the follower has moved significantly since the last check
-        if (lastNearestObject != null && (transform.position - lastPosition).sqrMagnitude <= checkThreshold)
+        if (lastNearestObject != null && (transform.position - lastPosition).sqrMagnitude <= positionChangeThreshold)
         {
             return lastNearestObject.transform.position;
         }
         // Check if the last nearest target object is so close to the follower
-        else if (lastNearestObject != null && (transform.position - lastNearestObject.transform.position).magnitude <= 1f)
+        else if (lastNearestObject != null && (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold)
         {
+            timeBeforeGettingHungry = 0f;
             RemoveTargetObjectFromList(lastNearestObject);
             Destroy(lastNearestObject);
-            lastNearestObject = null;
         }
 
 
@@ -99,12 +98,19 @@ public class FollowerController : MonoBehaviour
     #endregion
 
 
+    #region Hunger System
 
     private void HungerHandler()
     {
         timeBeforeGettingHungry += Time.deltaTime;
 
-        float changingColorDuration = Mathf.Clamp01((timeBeforeGettingHungry - hungerStartingTime) / (hungerEndingTime / hungerStartingTime));
+        // Change the color of the follower based on the follower level
+        //float changingColorDuration = Mathf.Clamp01((timeBeforeGettingHungry - hungerStartingTime) / (hungerEndingTime / hungerStartingTime));
+
+        if (timeBeforeGettingHungry >= timeBeforeDying)
+        {
+            Destroy(gameObject);
+        }
     }
 
 
@@ -112,6 +118,6 @@ public class FollowerController : MonoBehaviour
     {
         return timeBeforeGettingHungry >= hungerStartingTime;
     }
-
+    #endregion
 
 }

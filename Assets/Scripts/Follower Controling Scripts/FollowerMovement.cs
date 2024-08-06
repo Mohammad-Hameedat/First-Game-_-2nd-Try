@@ -84,7 +84,7 @@ public class FollowerMovement : MonoBehaviour
 
         movementSpeed = desiredVelocity;
 
-        rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime);
+        rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime / 2f);
 
     }
 
@@ -100,7 +100,7 @@ public class FollowerMovement : MonoBehaviour
         movementSpeed = desiredVelocity;
 
         // Move the object towards the random target
-        rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime / 2f);
+        rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime);
 
     }
 
@@ -126,7 +126,7 @@ public class FollowerMovement : MonoBehaviour
                 timeBeforeChangingVelocity = 0f;
             }
         }
-        else
+        else if (followerController.IsHungry())
         {
             desiredVelocity = 4f;
         }
