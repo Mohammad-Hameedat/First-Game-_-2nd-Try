@@ -11,6 +11,9 @@ public class FollowerMovement : MonoBehaviour
     [Header("Follower Controller References")]
 
     FollowerController followerController;
+
+    MovementAreaScript movementAreaScript;
+
     #endregion
 
     #region Utility Controllers
@@ -19,21 +22,21 @@ public class FollowerMovement : MonoBehaviour
     private Rigidbody rb;
     int numberOfTargets;
 
-    [SerializeField] Vector3 targetPosition;
     #endregion
 
     #region Movement Controllers
     [Header("Movement controllers")]
 
     float minDistance = 1f;
-
     float desiredVelocity;
 
     [SerializeField] float movementSpeed;
     [SerializeField] float accelerationDuration;
+    float timeBeforeChangingVelocity = 0f;
+
+    [SerializeField] Vector3 targetPosition;
     #endregion
 
-    float timeBeforeChangingVelocity = 0f;
     // A variable that will be later deleted
     public float currentSpeed;
 
@@ -41,6 +44,7 @@ public class FollowerMovement : MonoBehaviour
     private void Start()
     {
         followerController = GetComponent<FollowerController>();
+        movementAreaScript = GetComponent<MovementAreaScript>();
         rb = GetComponent<Rigidbody>();
         desiredVelocity = .5f;
         accelerationDuration = Random.Range(2f, 4f);
@@ -55,6 +59,7 @@ public class FollowerMovement : MonoBehaviour
 
         currentSpeed = rb.velocity.magnitude;
 
+        movementAreaScript.ClampPositionWithInView(transform);
 
     }
 
@@ -69,7 +74,6 @@ public class FollowerMovement : MonoBehaviour
             MovingInRandomDirection();
         }
 
-        //MovingInRandomDirection();
     }
 
 
