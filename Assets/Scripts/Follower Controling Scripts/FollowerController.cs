@@ -11,11 +11,9 @@ public class FollowerController : MonoBehaviour
     #region Nearest Object Tracking
     [SerializeField] private GameObject lastNearestObject = null;
     private Vector3 lastPosition;
-    private float positionChangeThreshold = 2f; // Set a threshold for significant position change
-    private float inRangeThreshold = 1f; // Set a threshold for the distance between the follower and the target object
+    private float positionChangeThreshold = 1.5f; // Set a threshold for significant position change
+    private float inRangeThreshold = 1.5f; // Set a threshold for the distance between the follower and the target object
     #endregion
-
-
 
     #region Hunger Situation Variables
 
@@ -24,7 +22,6 @@ public class FollowerController : MonoBehaviour
     //float hungerEndingTime = 8f;
     float timeBeforeDying = 15f;
     #endregion
-
 
     private void Start()
     {
@@ -40,15 +37,15 @@ public class FollowerController : MonoBehaviour
 
     #region Nearest Object Tracking System
 
-    public Vector3 CheckNearestTargetObject()
+    public Vector3 CheckTargetDirection()
     {
         // Check if the follower has moved significantly since the last check
         if (lastNearestObject != null && (transform.position - lastPosition).sqrMagnitude <= positionChangeThreshold)
         {
             return lastNearestObject.transform.position;
         }
-        // Check if the last nearest target object is so close to the follower
-        else if (lastNearestObject != null && (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold)
+        // Check if the last nearest target object is in follower's range and if the follower is hungry or not
+        else if (lastNearestObject != null && (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold && IsHungry())
         {
             timeBeforeGettingHungry = 0f;
             RemoveTargetObjectFromList(lastNearestObject);
@@ -75,11 +72,16 @@ public class FollowerController : MonoBehaviour
 
         lastNearestObject = nearestObject;
 
+
         // Check if nearestObject is null before accessing its transform OR Return some default position or handle the case where there is no nearest object
         return nearestObject != null ? nearestObject.transform.position : Vector3.zero;
     }
+    #endregion
 
-    public static int GetNumberOfTargetObjects()
+
+    #region Target Objects Management
+
+    public int GetNumberOfTargetObjects()
     {
         return targetObjects.Count;
     }
