@@ -6,11 +6,6 @@ public class Target : MonoBehaviour
 {
     public int objectID;
 
-    private void Start()
-    {
-        TargetSpawned();
-    }
-
     private void Update()
     {
         transform.position += Vector3.down * Time.deltaTime;
@@ -24,8 +19,4 @@ public class Target : MonoBehaviour
         }
     }
 
-    void TargetSpawned()
-    {
-        // calling a event to invoke it.
-    }
 }

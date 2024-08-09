@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        spawnObject.onClick.AddListener(() => GameEvents.eventsChannelInstance.SpawnObject(1));
-        spawnFood.onClick.AddListener(() => GameEvents.eventsChannelInstance.SpawnObject(2));
+        //spawnObject.onClick.AddListener(() => GameEvents.eventsChannelInstance.SpawnObject(1));
+        //spawnFood.onClick.AddListener(() => GameEvents.eventsChannelInstance.SpawnObject(2));
     }
 }

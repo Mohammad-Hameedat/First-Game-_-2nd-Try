@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class FollowerMovement : MonoBehaviour
 
     FollowerController followerController;
 
-    MovementAreaScript movementAreaScript;
+    BoundsManager boundsManager;
 
     #endregion
 
@@ -44,22 +45,20 @@ public class FollowerMovement : MonoBehaviour
     private void Start()
     {
         followerController = GetComponent<FollowerController>();
-        movementAreaScript = GetComponent<MovementAreaScript>();
+        boundsManager = GetComponent<BoundsManager>();
         rb = GetComponent<Rigidbody>();
         desiredVelocity = .5f;
         accelerationDuration = Random.Range(2f, 4f);
-        targetPosition = GetNewRandomPosition();
+        targetPosition = boundsManager.GetNewRandomPosition();
     }
 
     private void Update()
     {
-        numberOfTargets = FollowerController.GetNumberOfTargetObjects();
-        //CheckDistance();
-        MovementSpeed();
+        numberOfTargets = followerController.GetNumberOfTargetObjects();
 
         currentSpeed = rb.velocity.magnitude;
 
-        movementAreaScript.ClampPositionWithInView(transform);
+        transform.position = boundsManager.ClampPositionWithInView(transform.position);
 
     }
 
@@ -82,20 +81,23 @@ public class FollowerMovement : MonoBehaviour
 
     void MovingTowardsTarget()
     {
-        Vector3 positionDifference = followerController.CheckNearestTargetObject() - transform.position;
+        MovementSpeed();
+
+        Vector3 positionDifference = followerController.CheckTargetDirection() - transform.position;
 
         Vector3 directionToTarget = positionDifference.normalized;
 
         movementSpeed = desiredVelocity;
 
-        rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime / 2f);
-
+        rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime);
     }
 
     void MovingInRandomDirection()
     {
+        RandomMovementSpeed();
+
         // Get the difference between the target position and the object position OR return a new random target position
-        Vector3 positionDifference = (targetPosition - transform.position).sqrMagnitude >= minDistance * minDistance ? targetPosition - transform.position : targetPosition = GetNewRandomPosition();
+        Vector3 positionDifference = (targetPosition - transform.position).sqrMagnitude >= minDistance * minDistance ? targetPosition - transform.position : targetPosition = boundsManager.GetNewRandomPosition();
 
         // Get the direction to the target
         Vector3 directionToTarget = positionDifference.normalized;
@@ -105,34 +107,29 @@ public class FollowerMovement : MonoBehaviour
 
         // Move the object towards the random target
         rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime);
-
-    }
-
-    Vector3 GetNewRandomPosition()
-    {
-        targetPosition = new Vector3(Random.Range(-17f, 17f), Random.Range(1f, 17f), -2f);
-        return targetPosition;
     }
 
     #endregion
 
 
-    #region Movement Speed Controller
-    void MovementSpeed()
+    #region Movement Speed Controllers
+    private void MovementSpeed()
     {
-        if (numberOfTargets == 0)
+        if (timeBeforeChangingVelocity < accelerationDuration)
         {
-            timeBeforeChangingVelocity += Time.deltaTime;
-            if (timeBeforeChangingVelocity > accelerationDuration)
-            {
-                desiredVelocity = Random.Range(.5f, 2f);
-                accelerationDuration = Random.Range(2f, 4f);
-                timeBeforeChangingVelocity = 0f;
-            }
+            timeBeforeChangingVelocity = accelerationDuration + 1f;
         }
-        else if (followerController.IsHungry())
+        desiredVelocity = 4f;
+    }
+
+    private void RandomMovementSpeed()
+    {
+        timeBeforeChangingVelocity += Time.deltaTime;
+        if (timeBeforeChangingVelocity >= accelerationDuration)
         {
-            desiredVelocity = 4f;
+            desiredVelocity = Random.Range(.5f, 2f);
+            accelerationDuration = Random.Range(2f, 4f);
+            timeBeforeChangingVelocity = 0f;
         }
     }
 
@@ -145,5 +142,11 @@ public class FollowerMovement : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, targetPosition);
+
+
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawLine(transform.position, followerController.CheckNearestTargetObject());
     }
+
+
 }
