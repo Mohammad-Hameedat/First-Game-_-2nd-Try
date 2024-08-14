@@ -89,13 +89,13 @@ public class FollowerController : MonoBehaviour
     public static void AddTargetObjectToList(GameObject targetObject)
     {
         targetObjects.Add(targetObject);
-        Debug.Log("Number of Target Object Added = " + targetObjects.Count);
+        //Debug.Log("Number of Target Object Added = " + targetObjects.Count);
     }
 
     public static void RemoveTargetObjectFromList(GameObject targetObject)
     {
         targetObjects.Remove(targetObject);
-        Debug.Log("Number of Target Object Removed = " + targetObjects.Count);
+        //Debug.Log("Number of Target Object Removed = " + targetObjects.Count);
     }
     #endregion
 
