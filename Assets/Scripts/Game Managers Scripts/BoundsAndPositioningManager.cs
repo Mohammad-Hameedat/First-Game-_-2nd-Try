@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoundsManager : MonoBehaviour
+public class BoundsAndPositioningManager : MonoBehaviour
 {
 
     #region Movement Area Variables
@@ -24,6 +24,7 @@ public class BoundsManager : MonoBehaviour
         // Get the new position of the object
         Vector3 clampedPosition = Camera.main.ViewportToWorldPoint(viewPos);
         clampedPosition.z = -2;
+
         // Set the new position of the object
         return clampedPosition;
     }

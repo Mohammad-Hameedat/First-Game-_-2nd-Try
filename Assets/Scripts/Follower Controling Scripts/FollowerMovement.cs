@@ -13,7 +13,7 @@ public class FollowerMovement : MonoBehaviour
 
     FollowerController followerController;
 
-    BoundsManager boundsManager;
+    BoundsAndPositioningManager boundsManager;
 
     #endregion
 
@@ -45,10 +45,14 @@ public class FollowerMovement : MonoBehaviour
     private void Start()
     {
         followerController = GetComponent<FollowerController>();
-        boundsManager = GetComponent<BoundsManager>();
+        boundsManager = GetComponent<BoundsAndPositioningManager>();
         rb = GetComponent<Rigidbody>();
+
+
         desiredVelocity = .5f;
         accelerationDuration = Random.Range(2f, 4f);
+
+
         targetPosition = boundsManager.GetNewRandomPosition();
     }
 
