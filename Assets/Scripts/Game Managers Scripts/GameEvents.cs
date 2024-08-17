@@ -10,6 +10,7 @@ public class GameEvents : MonoBehaviour
 
     // Events
     public event Action<int> onSpawnObject;
+    public event Action<float> onUpdateCoins;
 
     private void Awake()
     {
@@ -24,10 +25,15 @@ public class GameEvents : MonoBehaviour
     }
 
     // Invoking the event
-    public void SpawnObject(int objectType)
+    public void SpawnObjects(int objectType)
     {
         // If there are subscribers to the event, invoke the event
-        onSpawnObject?.Invoke(objectType);
+        onSpawnObject?.Invoke(obj: objectType);
+    }
+
+    public void UpdateInGameSceneMoney(float coins)
+    {
+        onUpdateCoins?.Invoke(coins);
     }
 
 }

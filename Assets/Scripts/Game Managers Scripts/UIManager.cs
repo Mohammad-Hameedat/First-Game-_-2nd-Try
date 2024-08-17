@@ -1,17 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public Button spawnObject;
-    public Button spawnFood;
+    public Button upgradeFood;
+    public TMPro.TextMeshProUGUI currencyText;
 
-    private void Start()
+    [SerializeField] float moneyAmount = 0;
+
+
+    void GetMoneyValue(float coinsValue)
     {
-        //spawnObject.onClick.AddListener(() => GameEvents.eventsChannelInstance.SpawnObject(1));
-        //spawnFood.onClick.AddListener(() => GameEvents.eventsChannelInstance.SpawnObject(2));
+        moneyAmount = coinsValue;
+        currencyText.text = moneyAmount.ToString() + "$";
+
+    }
+
+
+    private void OnEnable()
+    {
+        GameEvents.eventsChannelInstance.onUpdateCoins += GetMoneyValue;
+
+        spawnObject.onClick.AddListener(() => GameEvents.eventsChannelInstance?.SpawnObjects(1));
+        //upgradeFood.onClick.AddListener(() => GameEvents.eventsChannelInstance?.SpawnObjects(2));
+    }
+
+
+    private void OnDisable()
+    {
+        GameEvents.eventsChannelInstance.onUpdateCoins -= GetMoneyValue;
+
+        spawnObject.onClick.RemoveAllListeners();
+        //upgradeFood.onClick.RemoveAllListeners();
     }
 }

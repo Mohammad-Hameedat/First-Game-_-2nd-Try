@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class BoundsAndPositioningManager : MonoBehaviour
@@ -7,8 +8,9 @@ public class BoundsAndPositioningManager : MonoBehaviour
 
     #region Movement Area Variables
     float xMin = 0.05f, xMax = 0.95f, yMin = 0.05f, yMax = 0.80f;
-
+    float threshold = 0.01f;
     #endregion
+
 
     #region Movement Area Methods
     // Clamp the position of the object to the camera view
@@ -30,6 +32,7 @@ public class BoundsAndPositioningManager : MonoBehaviour
     }
 
 
+    // Get a new random position for the object
     public Vector3 GetNewRandomPosition()
     {
         // Get the new random position
@@ -39,6 +42,22 @@ public class BoundsAndPositioningManager : MonoBehaviour
 
         // Set the new position of the object
         return clampedRandomPosition;
+    }
+
+    // Check if the object is close to the edge of the movement-area
+    public bool PositionCheck()
+    {
+        Vector3 positionInCameraViewport = Camera.main.WorldToViewportPoint(transform.position);
+
+        if (positionInCameraViewport.x <= xMin + threshold || positionInCameraViewport.x >= xMax - threshold || positionInCameraViewport.y <= yMin + threshold || positionInCameraViewport.y >= yMax - threshold)
+        {
+            return true;
+
+        }
+        else
+        {
+            return false;
+        }
     }
 
     #endregion
