@@ -4,6 +4,9 @@ using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager gameManagerInstance;
+
+
     #region References
     private BoundsAndPositioningManager positioningManager;
 
@@ -15,70 +18,78 @@ public class GameManager : MonoBehaviour
 
     [Header("Spawn Object")]
     [SerializeField] GameObject _spawnedObject = null;
-    Vector3 spawnPosition;
+    Vector3 clampedSpawnPosition;
+    float spawnDelay = 0.1f;
 
+
+    float inSceneMoney;
+
+    private void Awake()
+    {
+        if (gameManagerInstance == null)
+        {
+            gameManagerInstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
+        inSceneMoney = 300f;
+        GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+
+
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
-        StartCoroutine(MouseClicksHandler());
+        StartCoroutine(HandleClicksAndTouches());
 
         // A function that subscribed to the event, when the event is invoked.. the function will be called to do whatever is inside it.
         //GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
     }
 
 
-    IEnumerator MouseClicksHandler()
+    IEnumerator HandleClicksAndTouches()
     {
         while (true)
         {
+            Vector3 inputPosition = Vector3.zero;
+            bool isInputActive = false;
+
+            // Check if the player is using a mouse or a touch
             if (Input.GetMouseButton(0))
             {
-                Vector3 mousePosition = Input.mousePosition;
-                Vector3 mousePositionToWorld = Camera.main.ScreenToWorldPoint(mousePosition);
-                Vector3 mousePositionClamped = positioningManager.ClampPositionWithInView(mousePositionToWorld);
-
-
-                #region Mouse Clicks
-                // Check if the ((MOUSE CLICK)) is over a UI element
-                if (EventSystem.current.IsPointerOverGameObject())
-                {
-                    yield return null;
-                }
-                else
-                {
-                    //Spawn a target object instance in the position of the ((MOUSE CLICK))
-                    spawnPosition = mousePositionClamped;
-                    SpawnObject(2);
-
-                    yield return new WaitForSeconds(0.25f);
-                }
-                #endregion
-
-
-                #region Touches
-                // Check if the ((TOUCH)) is over a UI element
-                foreach (Touch touch in Input.touches)
-                {
-                    int id = touch.fingerId;
-                    // If the ((TOUCH)) is over a UI element, skip spawning an object and wait for the next frame
-                    if (EventSystem.current.IsPointerOverGameObject(id))
-                    {
-                        yield return null;
-                    }
-
-                    else
-                    {
-                        //Spawn a target object instance in the position of the ((TOUCH))
-                        spawnPosition = mousePositionClamped;
-                        SpawnObject(2);
-
-                        yield return new WaitForSeconds(0.25f);
-                    }
-                }
-                #endregion
+                // Get the mouse position
+                inputPosition = Input.mousePosition;
+                isInputActive = true;
             }
+            else if (Input.touchCount > 0)
+            {
+                // Get the first touch onlt if there are multiple touches and get the touch position
+                Touch touch = Input.GetTouch(0);
+                inputPosition = touch.position;
+                isInputActive = true;
+            }
+
+            // quick check to see if the input is active
+            if (isInputActive)
+            {
+                // Convert the input position to a world position
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(inputPosition);
+                // Clamp the world position to be within the camera view
+                clampedSpawnPosition = positioningManager.ClampPositionWithInView(worldPosition);
+
+                // Check if the mouse click or touch is over a UI element
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    //Spawn a target object instance in the position of the mouse click or touch
+                    SpawnObject(2);
+                    yield return new WaitForSeconds(spawnDelay);
+                }
+            }
+
             yield return null;
         }
     }
@@ -86,22 +97,41 @@ public class GameManager : MonoBehaviour
     // A function that will be called to spawn an object
     public void SpawnObject(int objectType)
     {
-
-
         // Switch statement to determine which object to spawn
         switch (objectType)
         {
             // If the object type is 1, spawn the follower prefab
             case 1:
-                // Get a random position depending on the camera viewport
-                spawnPosition = positioningManager.GetNewRandomPosition();
-                _spawnedObject = Instantiate(followerPrefab, spawnPosition, Quaternion.identity);
+                if (inSceneMoney >= 200f)
+                {
+                    // Get a random position depending on the camera viewport
+                    clampedSpawnPosition = positioningManager.GetNewRandomPosition();
+                    _spawnedObject = Instantiate(followerPrefab, clampedSpawnPosition, Quaternion.identity);
+                    inSceneMoney -= 200f;
+                }
                 break;
             // If the object type is 2, spawn the target prefab
             case 2:
-                _spawnedObject = Instantiate(targetPrefab, spawnPosition, Quaternion.identity);
-                FollowerController.AddTargetObjectToList(_spawnedObject);
+                if (inSceneMoney >= 5f)
+                {
+                    _spawnedObject = Instantiate(targetPrefab, clampedSpawnPosition, Quaternion.identity);
+                    FollowerController.AddTargetObjectToList(_spawnedObject);
+                    inSceneMoney -= 5f;
+                }
                 break;
         }
+        GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
     }
+
+
+    private void OnEnable()
+    {
+        GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.eventsChannelInstance.onSpawnObject -= SpawnObject;
+    }
+
 }

@@ -54,15 +54,19 @@ public class FollowerMovement : MonoBehaviour
 
 
         targetPosition = boundsManager.GetNewRandomPosition();
+
+        StartCoroutine(CheckPosition());
     }
 
     private void Update()
     {
         numberOfTargets = followerController.GetNumberOfTargetObjects();
 
+        // <<<<<<<<<>>>>>>>>>> A variable that will be later deleted <<<<<<<<<>>>>>>>>>>
         currentSpeed = rb.velocity.magnitude;
 
         transform.position = boundsManager.ClampPositionWithInView(transform.position);
+
 
     }
 
@@ -100,8 +104,22 @@ public class FollowerMovement : MonoBehaviour
     {
         RandomMovementSpeed();
 
-        // Get the difference between the target position and the object position OR return a new random target position
-        Vector3 positionDifference = (targetPosition - transform.position).sqrMagnitude >= minDistance * minDistance ? targetPosition - transform.position : targetPosition = boundsManager.GetNewRandomPosition();
+        Vector3 positionDifference;
+
+        // Check if the squared distance is greater than or equal to the squared minimum distance
+        if ((targetPosition - transform.position).sqrMagnitude >= minDistance * minDistance)
+        {
+            // If the distance is sufficient, use the difference between the target position and the current position
+            positionDifference = targetPosition - transform.position;
+        }
+        else
+        {
+            // If the distance is too small, generate a new random target position
+            targetPosition = boundsManager.GetNewRandomPosition();
+
+            // Use the difference between the new target position and the current position
+            positionDifference = targetPosition - transform.position;
+        }
 
         // Get the direction to the target
         Vector3 directionToTarget = positionDifference.normalized;
@@ -139,6 +157,19 @@ public class FollowerMovement : MonoBehaviour
 
     #endregion
 
+
+    private IEnumerator CheckPosition()
+    {
+        while (true)
+        {
+            if (boundsManager.PositionCheck())
+            {
+                targetPosition = boundsManager.GetNewRandomPosition();
+                yield return new WaitForSeconds(2f);
+            }
+            yield return null;
+        }
+    }
 
 
     // Draw a line to see the movement direction of the object
