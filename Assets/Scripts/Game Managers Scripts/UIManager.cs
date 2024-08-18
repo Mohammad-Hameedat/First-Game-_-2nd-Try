@@ -7,10 +7,10 @@ public class UIManager : MonoBehaviour
     public Button upgradeFood;
     public TMPro.TextMeshProUGUI currencyText;
 
-    [SerializeField] float moneyAmount = 0;
+    [SerializeField] int moneyAmount = 0;
 
 
-    void GetMoneyValue(float coinsValue)
+    void GetMoneyValue(int coinsValue)
     {
         moneyAmount = coinsValue;
         currencyText.text = moneyAmount.ToString() + "$";
@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
         GameEvents.eventsChannelInstance.onUpdateCoins += GetMoneyValue;
 
         spawnObject.onClick.AddListener(() => GameEvents.eventsChannelInstance?.SpawnObjects(1));
-        //upgradeFood.onClick.AddListener(() => GameEvents.eventsChannelInstance?.SpawnObjects(2));
+        upgradeFood.onClick.AddListener(() => GameEvents.eventsChannelInstance?.UpgradeFood());
     }
 
 
@@ -34,4 +34,6 @@ public class UIManager : MonoBehaviour
         spawnObject.onClick.RemoveAllListeners();
         //upgradeFood.onClick.RemoveAllListeners();
     }
+
+
 }
