@@ -5,6 +5,7 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     public int objectID;
+    public ScriptableObject foodConfig;
 
     private void Update()
     {

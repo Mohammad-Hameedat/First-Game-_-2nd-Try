@@ -4,8 +4,6 @@ using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager gameManagerInstance;
-
 
     #region References
     private BoundsAndPositioningManager positioningManager;
@@ -24,17 +22,6 @@ public class GameManager : MonoBehaviour
 
     float inSceneMoney;
 
-    private void Awake()
-    {
-        if (gameManagerInstance == null)
-        {
-            gameManagerInstance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     void Start()
     {
@@ -50,7 +37,7 @@ public class GameManager : MonoBehaviour
         //GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
     }
 
-
+    #region Handle Clicks and Touches
     IEnumerator HandleClicksAndTouches()
     {
         while (true)
@@ -93,6 +80,8 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
     }
+    #endregion
+
 
     // A function that will be called to spawn an object
     public void SpawnObject(int objectType)
@@ -124,6 +113,7 @@ public class GameManager : MonoBehaviour
     }
 
 
+    #region Event Subscriptions
     private void OnEnable()
     {
         GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
@@ -133,5 +123,6 @@ public class GameManager : MonoBehaviour
     {
         GameEvents.eventsChannelInstance.onSpawnObject -= SpawnObject;
     }
+    #endregion
 
 }
