@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class GameEvents : MonoBehaviour
 {
-    // Singleton
+    // Reference to the instance of the GameEvents class
     public static GameEvents eventsChannelInstance;
 
     // Events
     public event Action<int> onSpawnObject;
-    public event Action<float> onUpdateCoins;
+    public event Action<int> onUpdateCoins;
+    public event Action onUpgradeFood;
 
     private void Awake()
     {
@@ -31,9 +32,13 @@ public class GameEvents : MonoBehaviour
         onSpawnObject?.Invoke(obj: objectType);
     }
 
-    public void UpdateInGameSceneMoney(float coins)
+    public void UpdateInGameSceneMoney(int coins)
     {
         onUpdateCoins?.Invoke(coins);
     }
 
+    public void UpgradeFood()
+    {
+        onUpgradeFood?.Invoke();
+    }
 }
