@@ -6,49 +6,26 @@ public class GameManager : MonoBehaviour
 {
 
     #region References
-    [Header("Prefabs")]
-
     private BoundsAndPositioningManager positioningManager;
 
+    [Header("Prefabs")]
     public GameObject followerPrefab;
     public GameObject targetPrefab;
 
     #endregion
 
-
-    #region Spawn Objects Managers
     [Header("Spawn Object")]
-
+    [SerializeField] GameObject _spawnedObject = null;
     Vector3 clampedSpawnPosition;
-
     float spawnDelay = 0.1f;
-    [SerializeField] int inSceneMoney;
-    #endregion
 
 
-    #region Upgradables
-    #region Food Properties
-
-    [Header("Food Properties")]
-    public FoodProperties[] foodTypes;
-    int currentFoodIndex = 0;
-
-
-    #endregion
-
-    #region Upgrade Costs
-    int followerUpgradeCost = 200;
-    int foodUpgradeCost = 300;
-
-    #endregion
-
-    #endregion
-
+    float inSceneMoney;
 
 
     void Start()
     {
-        inSceneMoney = 300;
+        inSceneMoney = 300f;
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
 
@@ -56,6 +33,8 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(HandleClicksAndTouches());
 
+        // A function that subscribed to the event, when the event is invoked.. the function will be called to do whatever is inside it.
+        //GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
     }
 
     #region Handle Clicks and Touches
@@ -107,70 +86,42 @@ public class GameManager : MonoBehaviour
     // A function that will be called to spawn an object
     public void SpawnObject(int objectType)
     {
-        GameObject _spawnedObject = null;
-
         // Switch statement to determine which object to spawn
         switch (objectType)
         {
             // If the object type is 1, spawn the follower prefab
             case 1:
-                if (inSceneMoney >= followerUpgradeCost)
+                if (inSceneMoney >= 200f)
                 {
                     // Get a random position depending on the camera viewport
                     clampedSpawnPosition = positioningManager.GetNewRandomPosition();
-                    _spawnedObject = Instantiate(followerPrefab);
-                    _spawnedObject.transform.position = clampedSpawnPosition;
-
-
-
-                    inSceneMoney -= followerUpgradeCost;
+                    _spawnedObject = Instantiate(followerPrefab, clampedSpawnPosition, Quaternion.identity);
+                    inSceneMoney -= 200f;
                 }
                 break;
             // If the object type is 2, spawn the target prefab
             case 2:
-                if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost)
+                if (inSceneMoney >= 5f)
                 {
                     _spawnedObject = Instantiate(targetPrefab, clampedSpawnPosition, Quaternion.identity);
-                    _spawnedObject.GetComponent<Target>().foodConfig = foodTypes[currentFoodIndex];
-
                     FollowerController.AddTargetObjectToList(_spawnedObject);
-                    inSceneMoney -= foodTypes[currentFoodIndex].foodCost;
+                    inSceneMoney -= 5f;
                 }
                 break;
         }
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
     }
 
-    void UpgradeFood()
-    {
-        if (inSceneMoney >= foodUpgradeCost && currentFoodIndex <= foodTypes.Length - 1)
-        {
-            // Deduct the cost of the food upgrade from the in-scene money
-            currentFoodIndex = (currentFoodIndex + 1) % foodTypes.Length;
-            inSceneMoney -= foodUpgradeCost;
-            GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
-
-            Debug.Log("Current food index = " + currentFoodIndex);
-        }
-    }
-
-
-
-
-
-
 
     #region Event Subscriptions
     private void OnEnable()
     {
         GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
-        GameEvents.eventsChannelInstance.onUpgradeFood += UpgradeFood;
     }
 
     private void OnDisable()
     {
         GameEvents.eventsChannelInstance.onSpawnObject -= SpawnObject;
-        GameEvents.eventsChannelInstance.onUpgradeFood -= UpgradeFood;
     }
     #endregion
 

@@ -6,8 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FoodProperties", menuName = "Game Economy/Food Properties")]
 public class FoodProperties : ScriptableObject
 {
-    public int foodCost;
-    public int damage;
+    public float foodCost;
+    public float damage;
     public float staminaTime;
     public float destructionTime;
 }
