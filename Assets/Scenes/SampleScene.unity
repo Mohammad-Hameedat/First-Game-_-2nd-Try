@@ -1244,7 +1244,6 @@ MonoBehaviour:
   upgradeFood: {fileID: 1082591539}
   currencyText: {fileID: 617309895}
   moneyAmount: 0
-  gmInstance: {fileID: 1690839831}
 --- !u!1 &1333480598
 GameObject:
   m_ObjectHideFlags: 0
@@ -1370,12 +1369,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followerPrefab: {fileID: 330837507758328382, guid: 9a696a01e46e38943abac0710abd878f, type: 3}
   targetPrefab: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
+  inSceneMoney: 0
   foodTypes:
-  - {fileID: 11400000, guid: 0eaa17e7bad000e458b53ea0601cd2f6, type: 2}
-  - {fileID: 11400000, guid: eb9cf03ac2d73454e982d298b7733afb, type: 2}
-  - {fileID: 11400000, guid: 4c3cd8035f60c414da2e4238413fc891, type: 2}
-  - {fileID: 11400000, guid: 620a89b2e4aa3cc4585d56a2febf0daa, type: 2}
-  - {fileID: 11400000, guid: 02d456610936a89468c32e666025106f, type: 2}
+  - {fileID: 11400000, guid: fc592f2c99ac3464292fa527674ea0c0, type: 2}
+  - {fileID: 11400000, guid: 0e11fc2cd685b6c449948e764863c4c7, type: 2}
+  - {fileID: 11400000, guid: 3a3ef8bbf6f68e940bda77dfb509d5ca, type: 2}
+  - {fileID: 11400000, guid: dcd5b3ec58665f046b100514ed4631fa, type: 2}
+  - {fileID: 11400000, guid: 4ce1d25ca99ce014bb62a7a51e9014ea, type: 2}
 --- !u!4 &1690839833
 Transform:
   m_ObjectHideFlags: 0

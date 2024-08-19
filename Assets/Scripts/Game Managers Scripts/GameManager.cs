@@ -154,14 +154,14 @@ public class GameManager : MonoBehaviour
 
     void UpgradeFood()
     {
-        if (inSceneMoney >= foodUpgradeCost && currentFoodIndex <= foodTypes.Length - 1)
+        if (inSceneMoney >= foodUpgradeCost && currentFoodIndex < foodTypes.Length - 1)
         {
             // Deduct the cost of the food upgrade from the in-scene money
             currentFoodIndex = (currentFoodIndex + 1) % foodTypes.Length;
             inSceneMoney -= foodUpgradeCost;
             GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
-            Debug.Log("Current food index = " + currentFoodIndex);
+            Debug.Log("Current food index = " + currentFoodIndex + ", And food type is: " + foodTypes[currentFoodIndex].name);
         }
     }
 
