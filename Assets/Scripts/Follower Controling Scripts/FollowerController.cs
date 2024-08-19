@@ -18,9 +18,8 @@ public class FollowerController : MonoBehaviour
     #region Hunger Situation Variables
 
     [SerializeField] float timeBeforeGettingHungry = 0f;
-    float hungerStartingTime = 5f;
-    //float hungerEndingTime = 8f;
-    float timeBeforeDying = 15f;
+    [SerializeField] float hungerStartingTime = 5f;
+    [SerializeField] float timeBeforeDying = 15f;
     #endregion
 
     private void Start()
@@ -48,6 +47,11 @@ public class FollowerController : MonoBehaviour
         else if (lastNearestObject != null && (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold && IsHungry())
         {
             timeBeforeGettingHungry = 0f;
+
+            FoodProperties hungerConfigs = lastNearestObject.GetComponent<Target>().foodConfig;
+            hungerStartingTime = hungerConfigs.staminaTime;
+            timeBeforeDying = hungerConfigs.destructionTime;
+
             RemoveTargetObjectFromList(lastNearestObject);
             Destroy(lastNearestObject);
         }
