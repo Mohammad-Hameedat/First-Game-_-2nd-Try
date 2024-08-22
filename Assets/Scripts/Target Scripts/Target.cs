@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
+    public int objectID;
+
     public FoodProperties foodConfig;
 
     private void Update()
