@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,17 +15,16 @@ public class GameManager : MonoBehaviour
     public GameObject followerPrefab;
     public GameObject targetPrefab;
 
-
-    public GameObject planeBackground;
     #endregion
 
 
     #region Spawn Objects Managers
     [Header("Spawn Object")]
-    [SerializeField] int inSceneMoney = 300;
 
     Vector3 clampedSpawnPosition;
-    float spawnDelay = 0.25f;
+
+    float spawnDelay = 0.1f;
+    [SerializeField] int inSceneMoney;
     #endregion
 
 
@@ -39,15 +39,13 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Upgrade Costs
-    int followerUpgradeCost = 100;
+    int followerUpgradeCost = 200;
     int foodUpgradeCost = 300;
 
     #endregion
 
     #endregion
 
-    float screenWidht;
-    float screenHeight;
 
     private void Awake()
     {
@@ -71,53 +69,9 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(HandleClicksAndTouches());
 
-        //BackgroundScale();
-
-        screenWidht = Screen.width;
-        screenHeight = Screen.height;
-
-        StartCoroutine(BackgroundScale());
-
     }
 
 
-    IEnumerator BackgroundScale()
-    {
-        while (true)
-        {
-
-            float currentScreenWidth = Screen.width;
-            float currentScreenHeight = Screen.height;
-
-
-            if (currentScreenWidth != screenWidht || currentScreenHeight != screenHeight)
-            {
-                //Debug.Log("Screen size changed");
-
-                float distance = (planeBackground.transform.position - Camera.main.transform.position).z;
-
-                screenWidht = currentScreenWidth;
-                //Debug.Log(screenWidht);
-                screenHeight = currentScreenHeight;
-                //Debug.Log(screenHeight);
-
-                yield return new WaitForSeconds(.01f);
-
-                Vector3 testPosition = Camera.main.ScreenToWorldPoint(new Vector3(screenWidht, screenHeight, distance));
-
-                Debug.Log("Test position: " + testPosition);
-                Debug.Log("Camera Aspect: " + Camera.main.aspect);
-
-                Debug.Log(testPosition.x / Camera.main.aspect);
-
-                planeBackground.transform.localScale = new Vector3(testPosition.x / Camera.main.orthographicSize * 2f, 1f, testPosition.y / Camera.main.orthographicSize);
-            }
-            yield return null;
-        }
-    }
-
-
-    #region click and touch handling
     IEnumerator HandleClicksAndTouches()
     {
         while (true)
@@ -145,49 +99,22 @@ public class GameManager : MonoBehaviour
             {
                 // Convert the input position to a world position
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(inputPosition);
-
                 // Clamp the world position to be within the camera view
                 clampedSpawnPosition = positioningManager.ClampPositionWithInView(worldPosition);
 
-                Ray ray = Camera.main.ScreenPointToRay(inputPosition);
-                RaycastHit hit;
-
-
-
-                if (Physics.Raycast(ray, out hit, 21f))
+                // Check if the mouse click or touch is over a UI element
+                if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    switch (hit.collider.gameObject.layer)
-                    {
-                        case 5:
-                            yield return new WaitForSeconds(.1f);
-
-                            break;
-
-
-                        case 8:
-                            Destroy(hit.collider.gameObject);
-                            inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().moneyConfig.moneyValue;
-                            GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
-                            yield return new WaitForSeconds(.1f);
-
-                            break;
-
-
-                        default:
-                            SpawnObject(2);
-                            yield return new WaitForSeconds(spawnDelay);
-
-                            break;
-                    }
+                    //Spawn a target object instance in the position of the mouse click or touch
+                    SpawnObject(2);
+                    yield return new WaitForSeconds(spawnDelay);
                 }
             }
+
             yield return null;
         }
     }
-    #endregion
 
-
-    #region Spawning Mnagers
     // A function that will be called to spawn an object
     public void SpawnObject(int objectType)
     {
@@ -202,7 +129,10 @@ public class GameManager : MonoBehaviour
                 {
                     // Get a random position depending on the camera viewport
                     clampedSpawnPosition = positioningManager.GetNewRandomPosition();
-                    _spawnedObject = Instantiate(followerPrefab, clampedSpawnPosition, Quaternion.identity);
+                    _spawnedObject = Instantiate(followerPrefab);
+                    _spawnedObject.transform.position = clampedSpawnPosition;
+
+
 
                     inSceneMoney -= followerUpgradeCost;
                 }
@@ -234,10 +164,13 @@ public class GameManager : MonoBehaviour
             Debug.Log("Current food index = " + currentFoodIndex + ", And food type is: " + foodTypes[currentFoodIndex].name);
         }
     }
-    #endregion
 
 
-    #region Event Subscriptions
+
+
+
+
+
     private void OnEnable()
     {
         GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
@@ -249,6 +182,5 @@ public class GameManager : MonoBehaviour
         GameEvents.eventsChannelInstance.onSpawnObject -= SpawnObject;
         GameEvents.eventsChannelInstance.onUpgradeFood -= UpgradeFood;
     }
-    #endregion
 
 }
