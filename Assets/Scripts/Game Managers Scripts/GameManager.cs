@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
     public GameObject followerPrefab;
     public GameObject targetPrefab;
 
-
-    public GameObject planeBackground;
     #endregion
 
 
@@ -46,8 +44,7 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    float screenWidht;
-    float screenHeight;
+
 
     private void Awake()
     {
@@ -63,61 +60,19 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        inSceneMoney = 300;
+        inSceneMoney = 99999999;
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
 
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
         StartCoroutine(HandleClicksAndTouches());
-
-        //BackgroundScale();
-
-        screenWidht = Screen.width;
-        screenHeight = Screen.height;
-
-        StartCoroutine(BackgroundScale());
-
     }
 
 
-    IEnumerator BackgroundScale()
-    {
-        while (true)
-        {
-
-            float currentScreenWidth = Screen.width;
-            float currentScreenHeight = Screen.height;
 
 
-            if (currentScreenWidth != screenWidht || currentScreenHeight != screenHeight)
-            {
-                //Debug.Log("Screen size changed");
-
-                float distance = (planeBackground.transform.position - Camera.main.transform.position).z;
-
-                screenWidht = currentScreenWidth;
-                //Debug.Log(screenWidht);
-                screenHeight = currentScreenHeight;
-                //Debug.Log(screenHeight);
-
-                yield return new WaitForSeconds(.01f);
-
-                Vector3 testPosition = Camera.main.ScreenToWorldPoint(new Vector3(screenWidht, screenHeight, distance));
-
-                Debug.Log("Test position: " + testPosition);
-                Debug.Log("Camera Aspect: " + Camera.main.aspect);
-
-                Debug.Log(testPosition.x / Camera.main.aspect);
-
-                planeBackground.transform.localScale = new Vector3(testPosition.x / Camera.main.orthographicSize * 2f, 1f, testPosition.y / Camera.main.orthographicSize);
-            }
-            yield return null;
-        }
-    }
-
-
-    #region click and touch handling
+    #region Input Handling
     IEnumerator HandleClicksAndTouches()
     {
         while (true)
@@ -134,11 +89,13 @@ public class GameManager : MonoBehaviour
             }
             else if (Input.touchCount > 0)
             {
-                // Get the first touch onlt if there are multiple touches and get the touch position
+                // Get the first touch only if there are multiple touches and get the touch position
                 Touch touch = Input.GetTouch(0);
                 inputPosition = touch.position;
                 isInputActive = true;
             }
+
+            // quick check to see if the input is active
 
             // quick check to see if the input is active
             if (isInputActive)
@@ -160,7 +117,7 @@ public class GameManager : MonoBehaviour
                     {
                         case 5:
                             yield return new WaitForSeconds(.1f);
-
+                            isInputActive = false;
                             break;
 
 
