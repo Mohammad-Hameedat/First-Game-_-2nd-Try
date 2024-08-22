@@ -61,16 +61,19 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        inSceneMoney = 300;
+        inSceneMoney = 99999999;
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
 
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
         StartCoroutine(HandleClicksAndTouches());
-
     }
 
+
+
+
+    #region Input Handling
 
     IEnumerator HandleClicksAndTouches()
     {
@@ -88,11 +91,13 @@ public class GameManager : MonoBehaviour
             }
             else if (Input.touchCount > 0)
             {
-                // Get the first touch onlt if there are multiple touches and get the touch position
+                // Get the first touch only if there are multiple touches and get the touch position
                 Touch touch = Input.GetTouch(0);
                 inputPosition = touch.position;
                 isInputActive = true;
             }
+
+            // quick check to see if the input is active
 
             // quick check to see if the input is active
             if (isInputActive)
@@ -105,6 +110,29 @@ public class GameManager : MonoBehaviour
                 // Check if the mouse click or touch is over a UI element
                 if (!EventSystem.current.IsPointerOverGameObject())
                 {
+                    switch (hit.collider.gameObject.layer)
+                    {
+                        case 5:
+                            yield return new WaitForSeconds(.1f);
+                            isInputActive = false;
+                            break;
+
+
+                        case 8:
+                            Destroy(hit.collider.gameObject);
+                            inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().moneyConfig.moneyValue;
+                            GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+                            yield return new WaitForSeconds(.1f);
+
+                            break;
+
+
+                        default:
+                            SpawnObject(2);
+                            yield return new WaitForSeconds(spawnDelay);
+
+                            break;
+                    }
                     //Spawn a target object instance in the position of the mouse click or touch
                     SpawnObject(2);
                     yield return new WaitForSeconds(spawnDelay);
