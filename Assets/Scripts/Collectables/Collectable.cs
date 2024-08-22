@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Target : MonoBehaviour
+public class Collectable : MonoBehaviour
 {
-    public FoodProperties foodConfig;
+    public MoneyProperties moneyConfig;
 
     private void Update()
     {
