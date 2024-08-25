@@ -1,11 +1,9 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager gameManagerInstance;
-
-
     #region References
     [Header("Prefabs")]
 
@@ -45,19 +43,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-
-    private void Awake()
-    {
-        if (gameManagerInstance == null)
-        {
-            gameManagerInstance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     void Start()
     {
         inSceneMoney = 99999999;
@@ -96,46 +81,42 @@ public class GameManager : MonoBehaviour
             }
 
             // quick check to see if the input is active
-
-            // quick check to see if the input is active
             if (isInputActive)
             {
+
+                if (EventSystem.current.IsPointerOverGameObject() || Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                {
+                    yield return new WaitForSeconds(.1f);
+                    continue; // Skip further processing if over a UI element
+                }
+
                 // Convert the input position to a world position
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(inputPosition);
 
                 // Clamp the world position to be within the camera view
                 clampedSpawnPosition = positioningManager.ClampPositionWithInView(worldPosition);
 
+
                 Ray ray = Camera.main.ScreenPointToRay(inputPosition);
                 RaycastHit hit;
 
+                Physics.Raycast(ray, out hit, 21f);
 
 
-                if (Physics.Raycast(ray, out hit, 21f))
+                if (hit.collider.gameObject.layer == 8)
                 {
-                    switch (hit.collider.gameObject.layer)
-                    {
-                        case 5:
-                            yield return new WaitForSeconds(.1f);
-                            isInputActive = false;
-                            break;
+                    inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().moneyConfig.moneyValue;
+                    GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
 
-                        case 8:
-                            Destroy(hit.collider.gameObject);
-                            inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().moneyConfig.moneyValue;
-                            GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
-                            yield return new WaitForSeconds(.1f);
+                    Destroy(hit.collider.gameObject);
 
-                            break;
-
-
-                        default:
-                            SpawnObject(2);
-                            yield return new WaitForSeconds(spawnDelay);
-
-                            break;
-                    }
+                    yield return new WaitForSeconds(.15f);
+                }
+                else
+                {
+                    SpawnObject(2);
+                    yield return new WaitForSeconds(spawnDelay);
                 }
             }
             yield return null;
@@ -187,8 +168,6 @@ public class GameManager : MonoBehaviour
             currentFoodIndex = (currentFoodIndex + 1) % foodTypes.Length;
             inSceneMoney -= foodUpgradeCost;
             GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
-
-            Debug.Log("Current food index = " + currentFoodIndex + ", And food type is: " + foodTypes[currentFoodIndex].name);
         }
     }
     #endregion

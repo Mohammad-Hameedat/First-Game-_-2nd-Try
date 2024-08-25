@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class FollowerController : MonoBehaviour
@@ -161,7 +160,6 @@ public class FollowerController : MonoBehaviour
         {
             if (numberOfEatenObjects >= 3)
             {
-                Debug.Log("Money spawned");
                 float randomTime = Random.Range(moneyTypes[currentMoneyIndex].defaultTimeToInitiate, moneyTypes[currentMoneyIndex].defaultTimeToInitiate + 3f);
                 yield return new WaitForSeconds(randomTime);
                 Instantiate(moneyPrefab, transform.position, Quaternion.identity);

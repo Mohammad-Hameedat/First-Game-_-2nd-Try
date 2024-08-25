@@ -1,10 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 public class FollowerMovement : MonoBehaviour
 {
@@ -162,12 +157,11 @@ public class FollowerMovement : MonoBehaviour
     {
         while (true)
         {
-            if (boundsManager.PositionCheck())
-            {
-                targetPosition = boundsManager.GetNewRandomPosition();
-                yield return new WaitForSeconds(2f);
-            }
-            yield return null;
+            yield return new WaitUntil(() => boundsManager.PositionCheck());
+
+            targetPosition = boundsManager.GetNewRandomPosition();
+
+            yield return new WaitForSeconds(2f);
         }
     }
 
