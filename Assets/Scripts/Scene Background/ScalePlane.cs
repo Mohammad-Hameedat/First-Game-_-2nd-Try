@@ -29,8 +29,6 @@ public class ScalePlane : MonoBehaviour
                 gameScreenWidht = screenWidthInPixels;
                 gameScreenHeight = screenHeightInPixels;
 
-                Debug.Log("Screen Changed");
-
                 // Manually calculate the aspect ratio
                 float aspectRatio = screenWidthInPixels / screenHeightInPixels;
 
@@ -40,11 +38,12 @@ public class ScalePlane : MonoBehaviour
                 // Calculate the screen width in world units using the manually calculated aspect ratio
                 float screenWidth = screenHeight * aspectRatio;
 
-                yield return new WaitForSeconds(.01f); // wait for screen size to be updated avoiding error ocurration
+                yield return new WaitForSeconds(.01f); // wait for screen size to be updated avoiding error ocurration in the <<<<<EDITOR ONLY>>>>>
 
                 transform.localScale = new Vector3(screenWidth, 1f, screenHeight);
             }
             yield return null;
         }
     }
+
 }

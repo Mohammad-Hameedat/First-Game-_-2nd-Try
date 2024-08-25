@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
 
 public class BoundsAndPositioningManager : MonoBehaviour
@@ -52,7 +49,6 @@ public class BoundsAndPositioningManager : MonoBehaviour
         if (positionInCameraViewport.x <= xMin + threshold || positionInCameraViewport.x >= xMax - threshold || positionInCameraViewport.y <= yMin + threshold || positionInCameraViewport.y >= yMax - threshold)
         {
             return true;
-
         }
         else
         {
