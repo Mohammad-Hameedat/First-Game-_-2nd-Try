@@ -11,7 +11,7 @@ public class Target : MonoBehaviour
 
         if (transform.transform.position.y < 1f)
         {
-            FollowerController.RemoveTargetObjectFromList(gameObject);
+            ChildEnemyFoodEaterController.RemoveTargetObjectFromList(gameObject);
 
             Destroy(gameObject);
         }

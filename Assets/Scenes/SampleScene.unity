@@ -1381,14 +1381,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followerPrefab: {fileID: 330837507758328382, guid: 9a696a01e46e38943abac0710abd878f, type: 3}
-  targetPrefab: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
+  targetPrefab_Food: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
+  enemy_FoodEaterPrefab: {fileID: 1735303277889347158, guid: 9eab71e4898caff4ebd7b657f598f7d5, type: 3}
   inSceneMoney: 0
   foodTypes:
   - {fileID: 11400000, guid: fc592f2c99ac3464292fa527674ea0c0, type: 2}
   - {fileID: 11400000, guid: 0e11fc2cd685b6c449948e764863c4c7, type: 2}
   - {fileID: 11400000, guid: 3a3ef8bbf6f68e940bda77dfb509d5ca, type: 2}
-  - {fileID: 11400000, guid: dcd5b3ec58665f046b100514ed4631fa, type: 2}
-  - {fileID: 11400000, guid: 4ce1d25ca99ce014bb62a7a51e9014ea, type: 2}
+  testobject: {fileID: 1735303277889347158, guid: 9eab71e4898caff4ebd7b657f598f7d5, type: 3}
 --- !u!4 &1690839833
 Transform:
   m_ObjectHideFlags: 0

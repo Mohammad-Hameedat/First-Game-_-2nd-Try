@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
         GameEvents.eventsChannelInstance.onUpdateCoins -= GetMoneyValue;
 
         spawnObject.onClick.RemoveAllListeners();
-        //upgradeFood.onClick.RemoveAllListeners();
+        upgradeFood.onClick.RemoveAllListeners();
     }
 
 
