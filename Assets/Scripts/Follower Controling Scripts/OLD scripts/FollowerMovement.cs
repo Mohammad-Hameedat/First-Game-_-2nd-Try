@@ -5,31 +5,23 @@ public class FollowerMovement : MonoBehaviour
 {
     #region Follower Controller References
     [Header("Follower Controller References")]
-
     FollowerController followerController;
-
     BoundsAndPositioningManager boundsManager;
-
     #endregion
 
     #region Utility Controllers
     [Header("Utility Controllers")]
-
     private Rigidbody rb;
     int numberOfTargets;
-
     #endregion
 
     #region Movement Controllers
     [Header("Movement controllers")]
-
     float minDistance = 1f;
     float desiredVelocity;
-
     [SerializeField] float movementSpeed;
     [SerializeField] float accelerationDuration;
     float timeBeforeChangingVelocity = 0f;
-
     [SerializeField] Vector3 targetPosition;
     #endregion
 
@@ -88,11 +80,11 @@ public class FollowerMovement : MonoBehaviour
 
         Vector3 positionDifference = followerController.CheckTargetDirection() - transform.position;
 
-        Vector3 directionToTarget = positionDifference.normalized;
+        Vector3 movementDirection = positionDifference.normalized;
 
         movementSpeed = desiredVelocity;
 
-        rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime);
+        rb.velocity = Vector3.Lerp(rb.velocity, movementDirection * movementSpeed, Time.fixedDeltaTime);
     }
 
     void MovingInRandomDirection()

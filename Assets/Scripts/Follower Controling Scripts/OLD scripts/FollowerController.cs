@@ -43,6 +43,11 @@ public class FollowerController : MonoBehaviour
         lastPosition = transform.position;
 
         StartCoroutine(SpawnMoney());
+
+        //var t = GetComponent<MainFishCHILDScript>();
+
+        //var r = t.IsHungry();
+
     }
 
     private void Update()
@@ -66,17 +71,7 @@ public class FollowerController : MonoBehaviour
         // Check if the last nearest target object is in follower's range and if the follower is hungry or not
         else if (lastNearestObject != null && (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold && IsHungry())
         {
-            // Eat the target object
-            numberOfEatenObjects++;
-
-            timeBeforeGettingHungry = 0f;
-
-            FoodProperties hungerConfigs = lastNearestObject.GetComponent<Target>().foodConfig;
-            hungerStartingTime = hungerConfigs.staminaTime;
-            timeBeforeDying = hungerConfigs.destructionTime;
-
-            RemoveTargetObjectFromList(lastNearestObject);
-            Destroy(lastNearestObject);
+            HandleTargetObjectInteraction(lastNearestObject);
         }
         #endregion
 
@@ -104,6 +99,23 @@ public class FollowerController : MonoBehaviour
         // Check if nearestObject is null before accessing its transform OR Return some default position or handle the case where there is no nearest object
         return nearestObject != null ? nearestObject.transform.position : Vector3.zero;
     }
+
+
+    void HandleTargetObjectInteraction(GameObject targetObject)
+    {
+        // Eat the target object
+        numberOfEatenObjects++;
+
+        timeBeforeGettingHungry = 0f;
+
+        FoodProperties hungerConfigs = lastNearestObject.GetComponent<Target>().foodConfig;
+        hungerStartingTime = hungerConfigs.staminaTime;
+        timeBeforeDying = hungerConfigs.destructionTime;
+
+        RemoveTargetObjectFromList(lastNearestObject);
+        Destroy(lastNearestObject);
+    }
+
     #endregion
 
 
@@ -117,13 +129,11 @@ public class FollowerController : MonoBehaviour
     public static void AddTargetObjectToList(GameObject targetObject)
     {
         targetObjects.Add(targetObject);
-        //Debug.Log("Number of Target Object Added = " + targetObjects.Count);
     }
 
     public static void RemoveTargetObjectFromList(GameObject targetObject)
     {
         targetObjects.Remove(targetObject);
-        //Debug.Log("Number of Target Object Removed = " + targetObjects.Count);
     }
     #endregion
 
@@ -133,9 +143,6 @@ public class FollowerController : MonoBehaviour
     private void HungerHandler()
     {
         timeBeforeGettingHungry += Time.deltaTime;
-
-        // Change the color of the follower based on the follower level
-        //float changingColorDuration = Mathf.Clamp01((timeBeforeGettingHungry - hungerStartingTime) / (hungerEndingTime / hungerStartingTime));
 
         if (timeBeforeGettingHungry >= timeBeforeDying)
         {

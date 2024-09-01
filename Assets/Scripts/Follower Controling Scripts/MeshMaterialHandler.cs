@@ -7,13 +7,13 @@ public class MeshMaterialHandler : MonoBehaviour
 
     public Material[] materials;
 
-    FollowerController followerController;
+    ChildMainFishFollowerController followerController;
 
     private MeshRenderer meshRenderer;
 
     void Start()
     {
-        followerController = GetComponent<FollowerController>();
+        followerController = GetComponent<ChildMainFishFollowerController>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.material = materials[0];
     }

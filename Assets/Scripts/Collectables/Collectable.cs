@@ -4,16 +4,33 @@ public class Collectable : MonoBehaviour
 {
     public MoneyProperties moneyConfig;
 
+    float speed = 1.5f;
+
+    #region Destroying Managers
+    [Header("Destroying Managers")]
+
+    [SerializeField] float elapsedTime = 0f;
+    float timeBeforeDestroy = 3f;
+
+    float positionBeforeDestroy = 1f;
+    #endregion
+
     private void Update()
     {
-        transform.position += Vector3.down * Time.deltaTime;
-
-
-        if (transform.transform.position.y < 1f)
+        if (transform.transform.position.y > positionBeforeDestroy)
         {
-            FollowerController.RemoveTargetObjectFromList(gameObject);
+            transform.position += Vector3.down * speed * Time.deltaTime;
+        }
+        else
+        {
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime >= timeBeforeDestroy)
+            {
+                FollowerController.RemoveTargetObjectFromList(gameObject);
+                Destroy(gameObject);
+            }
 
-            Destroy(gameObject);
+
         }
     }
 

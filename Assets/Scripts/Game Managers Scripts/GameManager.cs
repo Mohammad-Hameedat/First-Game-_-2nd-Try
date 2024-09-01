@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     private BoundsAndPositioningManager positioningManager;
 
     public GameObject followerPrefab;
-    public GameObject targetPrefab;
+    public GameObject targetPrefab_Food;
+    public GameObject enemy_FoodEaterPrefab;
 
     #endregion
 
@@ -43,17 +44,24 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
+    #region Child Controllers
+    ChildMainFishFollowerController childFollowerController_InstanceScript;
+
+    #endregion
+
+
+
     void Start()
     {
+        childFollowerController_InstanceScript = followerPrefab.GetComponent<ChildMainFishFollowerController>();
+
         inSceneMoney = 99999999;
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
-
 
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
         StartCoroutine(HandleClicksAndTouches());
     }
-
 
 
 
@@ -80,6 +88,8 @@ public class GameManager : MonoBehaviour
                 isInputActive = true;
             }
 
+
+
             // quick check to see if the input is active
             if (isInputActive)
             {
@@ -103,7 +113,7 @@ public class GameManager : MonoBehaviour
                 Physics.Raycast(ray, out hit, 21f);
 
 
-                if (hit.collider.gameObject.layer == 8)
+                if (hit.collider != null && hit.collider.gameObject.layer == 8)
                 {
                     inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().moneyConfig.moneyValue;
                     GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
@@ -118,6 +128,18 @@ public class GameManager : MonoBehaviour
                     SpawnObject(2);
                     yield return new WaitForSeconds(spawnDelay);
                 }
+
+
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                // test case to spawn a test object 
+                // <<<<<<Will be deleted later>>>>>
+                // <<<<<<Will be deleted later>>>>>
+                // <<<<<<Will be deleted later>>>>>
+                SpawnObject(3);
+
+                yield return new WaitForSeconds(spawnDelay);
             }
             yield return null;
         }
@@ -149,12 +171,21 @@ public class GameManager : MonoBehaviour
             case 2:
                 if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost)
                 {
-                    _spawnedObject = Instantiate(targetPrefab, clampedSpawnPosition, Quaternion.identity);
+                    _spawnedObject = Instantiate(targetPrefab_Food, clampedSpawnPosition, Quaternion.identity);
                     _spawnedObject.GetComponent<Target>().foodConfig = foodTypes[currentFoodIndex];
 
-                    FollowerController.AddTargetObjectToList(_spawnedObject);
+                    childFollowerController_InstanceScript.AddTargetObjectToList(_spawnedObject);
+
+                    //FollowerController.AddTargetObjectToList(_spawnedObject);
+
                     inSceneMoney -= foodTypes[currentFoodIndex].foodCost;
                 }
+                break;
+            // If the object type is 3, spawn the enemy prefab
+            case 3:
+                clampedSpawnPosition = positioningManager.GetNewRandomPosition();
+                _spawnedObject = Instantiate(enemy_FoodEaterPrefab, clampedSpawnPosition, Quaternion.identity);
+
                 break;
         }
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);

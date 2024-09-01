@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 9117618963926205328}
   - component: {fileID: 5256065076421666316}
   - component: {fileID: 7500384487506561570}
-  - component: {fileID: -3045796256441333033}
-  - component: {fileID: 8106767070859157984}
+  - component: {fileID: 8968137015724446795}
+  - component: {fileID: 8842681905336199702}
   - component: {fileID: -2094870482213120977}
-  - component: {fileID: 1385408229765960468}
   - component: {fileID: 8599191380073339155}
+  - component: {fileID: 1385408229765960468}
   m_Layer: 6
   m_Name: Follower
   m_TagString: Untagged
@@ -88,7 +88,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-3045796256441333033
+--- !u!114 &8968137015724446795
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,20 +97,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 330837507758328382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e739f5e5b8bc44a49b1eecbf69ee5e55, type: 3}
+  m_Script: {fileID: 11500000, guid: 142212062628f8c4195c39c34bb8030a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lastNearestObject: {fileID: 0}
   numberOfEatenObjects: 0
   timeBeforeGettingHungry: 0
   hungerStartingTime: 5
-  timeBeforeDying: 14
-  moneyPrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
-  moneyTypes:
-  - {fileID: 11400000, guid: dcb864b5ea095df488a4241e0148678c, type: 2}
-  - {fileID: 11400000, guid: a39507f9676230f4b96bc7fa9d6e12e7, type: 2}
-  - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
---- !u!114 &8106767070859157984
+  timeBeforeDying: 15
+  moneyPrefab: {fileID: 0}
+  moneyTypes: []
+  currentMoneyIndex: 0
+--- !u!114 &8842681905336199702
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,13 +117,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 330837507758328382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 767f3644a9058a343a044f77173a2bff, type: 3}
+  m_Script: {fileID: 11500000, guid: afcd6aef39af52c4aae13cc28fd23957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 0
   accelerationDuration: 0
   targetPosition: {x: 0, y: 0, z: 0}
-  currentSpeed: 0
 --- !u!114 &-2094870482213120977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,6 +140,18 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d6e7475a477721949a7fa2353ffb7e32, type: 2}
   - {fileID: 2100000, guid: 0e3ad63f883b06b458c1ef2d59167313, type: 2}
   - {fileID: 2100000, guid: 6bded294da3a9cf47bdb6b9259f86b49, type: 2}
+--- !u!114 &8599191380073339155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330837507758328382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &1385408229765960468
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -170,15 +179,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8599191380073339155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
