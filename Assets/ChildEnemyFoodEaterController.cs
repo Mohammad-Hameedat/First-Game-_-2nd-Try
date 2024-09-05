@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class ChildEnemyFoodEaterController : BaseFollowerController
 {
-    //public new List<GameObject> foodTargetObjectsList = new List<GameObject>();
+    // <<<<<<Will be deleted later>>>>>
+    // <<<<<<Will be deleted later>>>>>
+    // <<<<<<Will be deleted later>>>>>
+    public List<GameObject> getList;
 
-    public List<GameObject> foodTargetsListInEnemyScript;
 
     protected override void Start()
     {
+        targetObjectsList = GameManager.mainFishiesObjectsList;
+
+
         timeBeforeGettingHungry = 0f;
         hungerStartingTime = 8f;
-        timeBeforeDying = 15f;
+        timeBeforeDestruction = 15f;
 
         base.Start();
     }
 
     protected void Update()
     {
-
-        foodTargetsListInEnemyScript = foodTargetObjectsList;
-
+        // <<<<<<Will be deleted later>>>>>
+        // <<<<<<Will be deleted later>>>>>
+        // <<<<<<Will be deleted later>>>>>
+        getList = GameManager.mainFishiesObjectsList;
     }
-
 }
