@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class ChildMainFishFollowerController : BaseFollowerController
 {
-
     // <<<<<<Will be deleted later>>>>>
     // <<<<<<Will be deleted later>>>>>
     // <<<<<<Will be deleted later>>>>>
-    public List<GameObject> GetList;
-
+    public List <GameObject> GetList1;
 
     protected override void Start()
     {
-        timeBeforeGettingHungry = 0f;
+        targetObjectsList = GameManager.foodTargetObjectsList;
+
+        //timeBeforeGettingHungry = 0f;
         hungerStartingTime = 8f;
-        timeBeforeDying = 15f;
+        timeBeforeDestruction = 15f;
 
         base.Start();
 
@@ -28,11 +28,11 @@ public class ChildMainFishFollowerController : BaseFollowerController
         // <<<<<<Will be deleted later>>>>>
         // <<<<<<Will be deleted later>>>>>
         // <<<<<<Will be deleted later>>>>>
-        GetList = foodTargetObjectsList;
+        GetList1 = targetObjectsList;
+
 
         HungerHandler();
     }
-
 
 
     private IEnumerator SpawnMoney()

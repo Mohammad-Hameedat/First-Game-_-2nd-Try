@@ -1,13 +1,19 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
-    #region References
+    #region GameObjects Lists
+    public static List<GameObject> mainFishiesObjectsList = new List<GameObject>();
+    public static List<GameObject> foodTargetObjectsList = new List<GameObject>();
+    public static List<GameObject> enemyTargetObjectsList = new List<GameObject>();
+    #endregion
+
+    #region GameObjects' References
     [Header("Prefabs")]
 
-    private BoundsAndPositioningManager positioningManager;
 
     public GameObject followerPrefab;
     public GameObject targetPrefab_Food;
@@ -44,8 +50,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-    #region Child Controllers
-    ChildMainFishFollowerController childFollowerController_InstanceScript;
+    #region Scripts References
+    private BoundsAndPositioningManager positioningManager;
 
     #endregion
 
@@ -53,14 +59,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        childFollowerController_InstanceScript = followerPrefab.GetComponent<ChildMainFishFollowerController>();
-
         inSceneMoney = 99999999;
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
         StartCoroutine(HandleClicksAndTouches());
+
+        SpawnObject(1);
     }
 
 
@@ -156,7 +162,7 @@ public class GameManager : MonoBehaviour
         // Switch statement to determine which object to spawn
         switch (objectType)
         {
-            // If the object type is 1, spawn the follower prefab
+            // If the object type is 1, spawn an instance from follower prefab
             case 1:
                 if (inSceneMoney >= followerUpgradeCost)
                 {
@@ -164,28 +170,31 @@ public class GameManager : MonoBehaviour
                     clampedSpawnPosition = positioningManager.GetNewRandomPosition();
                     _spawnedObject = Instantiate(followerPrefab, clampedSpawnPosition, Quaternion.identity);
 
+                    mainFishiesObjectsList.Add(_spawnedObject);
+
                     inSceneMoney -= followerUpgradeCost;
                 }
                 break;
-            // If the object type is 2, spawn the target prefab
+            // If the object type is 2, spawn an instance from target prefab
             case 2:
                 if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost)
                 {
                     _spawnedObject = Instantiate(targetPrefab_Food, clampedSpawnPosition, Quaternion.identity);
                     _spawnedObject.GetComponent<Target>().foodConfig = foodTypes[currentFoodIndex];
 
-                    childFollowerController_InstanceScript.AddTargetObjectToList(_spawnedObject);
 
-                    //FollowerController.AddTargetObjectToList(_spawnedObject);
+                    foodTargetObjectsList.Add(_spawnedObject);
+
 
                     inSceneMoney -= foodTypes[currentFoodIndex].foodCost;
                 }
                 break;
-            // If the object type is 3, spawn the enemy prefab
+            // If the object type is 3, spawn an instance from enemy prefab
             case 3:
                 clampedSpawnPosition = positioningManager.GetNewRandomPosition();
                 _spawnedObject = Instantiate(enemy_FoodEaterPrefab, clampedSpawnPosition, Quaternion.identity);
 
+                enemyTargetObjectsList.Add(_spawnedObject);
                 break;
         }
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);

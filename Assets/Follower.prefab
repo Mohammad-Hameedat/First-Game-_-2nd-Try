@@ -102,12 +102,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lastNearestObject: {fileID: 0}
   numberOfEatenObjects: 0
-  timeBeforeGettingHungry: 0
+  timeBeforeGettingHungry: -999
   hungerStartingTime: 5
-  timeBeforeDying: 15
+  timeBeforeDestruction: 15
   moneyPrefab: {fileID: 0}
   moneyTypes: []
   currentMoneyIndex: 0
+  GetList1: []
 --- !u!114 &8842681905336199702
 MonoBehaviour:
   m_ObjectHideFlags: 0

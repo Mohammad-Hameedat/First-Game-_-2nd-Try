@@ -124,3 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb932b2e26ed2144f80df1041503bf27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastNearestObject: {fileID: 0}
+  numberOfEatenObjects: 0
+  timeBeforeGettingHungry: 0
+  hungerStartingTime: 5
+  timeBeforeDestruction: 15
+  moneyPrefab: {fileID: 0}
+  moneyTypes: []
+  currentMoneyIndex: 0
+  getList: []

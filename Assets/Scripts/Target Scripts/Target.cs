@@ -11,10 +11,13 @@ public class Target : MonoBehaviour
 
         if (transform.transform.position.y < 1f)
         {
-            ChildEnemyFoodEaterController.RemoveTargetObjectFromList(gameObject);
-
             Destroy(gameObject);
         }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.foodTargetObjectsList.Remove(gameObject);
     }
 
 }

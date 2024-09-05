@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseFollowerController : MonoBehaviour
+public abstract class BaseFollowerController : MonoBehaviour
 {
     #region Target Objects Management
-    protected static List<GameObject> foodTargetObjectsList = new List<GameObject>();
+    protected static List<GameObject> targetObjectsList = new List<GameObject>();
 
 
     #region Nearest Object Tracking
@@ -22,7 +22,7 @@ public class BaseFollowerController : MonoBehaviour
     [Header("Hunger Situation Variables")]
     [SerializeField] protected float timeBeforeGettingHungry = 0f;
     [SerializeField] protected float hungerStartingTime = 5f;
-    [SerializeField] protected float timeBeforeDying = 15f;
+    [SerializeField] protected float timeBeforeDestruction = 15f;
     #endregion
 
     #region Money Properties
@@ -36,6 +36,8 @@ public class BaseFollowerController : MonoBehaviour
     {
         lastPosition = transform.position;
     }
+
+
 
     //protected virtual void Update()
     //{
@@ -62,7 +64,7 @@ public class BaseFollowerController : MonoBehaviour
         float nearestDistance = Mathf.Infinity;
         GameObject nearestObject = null;
 
-        foreach (GameObject targetObject in foodTargetObjectsList)
+        foreach (GameObject targetObject in targetObjectsList)
         {
             float distance = (transform.position - targetObject.transform.position).sqrMagnitude;
 
@@ -84,29 +86,17 @@ public class BaseFollowerController : MonoBehaviour
 
         FoodProperties hungerConfigs = lastNearestObject.GetComponent<Target>().foodConfig;
         hungerStartingTime = hungerConfigs.staminaTime;
-        timeBeforeDying = hungerConfigs.destructionTime;
+        timeBeforeDestruction = hungerConfigs.destructionTime;
 
-        RemoveTargetObjectFromList(lastNearestObject);
         Destroy(lastNearestObject);
     }
 
     #endregion
 
     #region Target Objects Management
-
     public virtual int GetNumberOfTargetObjects()
     {
-        return foodTargetObjectsList.Count;
-    }
-
-    public virtual void AddTargetObjectToList(GameObject targetObject)
-    {
-        foodTargetObjectsList.Add(targetObject);
-    }
-
-    public static void RemoveTargetObjectFromList(GameObject targetObject)
-    {
-        foodTargetObjectsList.Remove(targetObject);
+        return targetObjectsList.Count;
     }
     #endregion
 
@@ -116,7 +106,7 @@ public class BaseFollowerController : MonoBehaviour
     {
         timeBeforeGettingHungry += Time.deltaTime;
 
-        if (timeBeforeGettingHungry >= timeBeforeDying)
+        if (timeBeforeGettingHungry >= timeBeforeDestruction)
         {
             Destroy(gameObject);
         }
@@ -128,8 +118,5 @@ public class BaseFollowerController : MonoBehaviour
     }
     #endregion
 
-    #region Money System
 
-
-    #endregion
 }

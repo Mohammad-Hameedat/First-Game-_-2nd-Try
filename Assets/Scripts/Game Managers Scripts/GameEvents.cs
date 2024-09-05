@@ -8,8 +8,11 @@ public class GameEvents : MonoBehaviour
 
     // Events
     public event Action<int> onSpawnObject;
+
     public event Action<int> onUpdateCoins;
+
     public event Action onUpgradeFood;
+
 
     private void Awake()
     {
