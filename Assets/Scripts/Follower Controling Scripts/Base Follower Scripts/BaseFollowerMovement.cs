@@ -12,13 +12,13 @@ public class BaseFollowerMovement : MonoBehaviour
      * and assign it to the correct controller in the child class Start method,
      * like this: baseFollowerController = GetComponent<ChildFollowerController>();
      */
-    protected virtual BaseFollowerController baseFollowerController { get; set; }
+    protected virtual BaseFollowerController followerControllerSetter { get; set; }
     #endregion
 
     #region Utility Controllers
     [Header("Utility Controllers")]
     protected Rigidbody rb;
-    protected int numberOfTargets;
+    protected int numberOfTargetsInList;
     #endregion
 
     #region Movement Controllers
@@ -46,27 +46,34 @@ public class BaseFollowerMovement : MonoBehaviour
 
     protected virtual void Update()
     {
-        numberOfTargets = baseFollowerController.GetNumberOfTargetObjects();
+        if (numberOfTargetsInList != followerControllerSetter.GetNumberOfTargetObjectsInList())
+        {
+            numberOfTargetsInList = followerControllerSetter.GetNumberOfTargetObjectsInList();
+        }
+
         transform.position = boundsManager.ClampPositionWithInView(transform.position);
     }
 
 
     #region Moving Direction Controllers
 
+
+    // Move the object towards the target object
     protected virtual void MovingTowardsTarget()
     {
         MovementSpeed();
-        Vector3 positionDifference = baseFollowerController.CheckTargetDirection() - transform.position;
+        Vector3 positionDifference = followerControllerSetter.CheckTargetDirection() - transform.position;
         Vector3 movementDirection = positionDifference.normalized;
         movementSpeed = desiredVelocity;
         rb.velocity = Vector3.Lerp(rb.velocity, movementDirection * movementSpeed, Time.fixedDeltaTime);
     }
 
+    // Randomize the movement direction of the object
     protected virtual void MovingInRandomDirection()
     {
         RandomMovementSpeed();
         Vector3 positionDifference;
-        if ((targetPosition - transform.position).sqrMagnitude >= minDistance * minDistance)
+        if ((targetPosition - transform.position).magnitude >= minDistance * minDistance)
         {
             positionDifference = targetPosition - transform.position;
         }
@@ -84,6 +91,7 @@ public class BaseFollowerMovement : MonoBehaviour
 
     #region Movement Speed Controllers
 
+    // Set the movement speed of the object
     protected virtual void MovementSpeed()
     {
         if (timeBeforeChangingVelocity < accelerationDuration)
@@ -93,6 +101,7 @@ public class BaseFollowerMovement : MonoBehaviour
         desiredVelocity = 4f;
     }
 
+    // Randomize the movement speed of the object
     protected virtual void RandomMovementSpeed()
     {
         timeBeforeChangingVelocity += Time.deltaTime;
@@ -103,9 +112,10 @@ public class BaseFollowerMovement : MonoBehaviour
             timeBeforeChangingVelocity = 0f;
         }
     }
-
     #endregion
 
+
+    // Check the position of the object and get a new random position if the object is close to the edge of the movement-area+
     protected virtual IEnumerator CheckPosition()
     {
         while (true)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Target : MonoBehaviour
+public class Food : MonoBehaviour
 {
     public FoodProperties foodConfig;
 

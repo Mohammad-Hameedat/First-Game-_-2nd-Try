@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3690475546548994272}
   - component: {fileID: -9122321545823792178}
   m_Layer: 8
-  m_Name: Money
+  m_Name: Collectable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,5 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0b1ab709f193e4bbbcb9498308d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyConfig: {fileID: 11400000, guid: dcb864b5ea095df488a4241e0148678c, type: 2}
+  moneyConfig:
+  - {fileID: 11400000, guid: dcb864b5ea095df488a4241e0148678c, type: 2}
+  - {fileID: 11400000, guid: a39507f9676230f4b96bc7fa9d6e12e7, type: 2}
+  - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
   elapsedTime: 0

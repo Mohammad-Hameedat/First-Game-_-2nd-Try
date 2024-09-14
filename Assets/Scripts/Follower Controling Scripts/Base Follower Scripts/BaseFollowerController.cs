@@ -5,15 +5,15 @@ using UnityEngine;
 public abstract class BaseFollowerController : MonoBehaviour
 {
     #region Target Objects Management
-    protected static List<GameObject> targetObjectsList = new List<GameObject>();
+    protected List<GameObject> targetObjectsList = new List<GameObject>();
 
 
     #region Nearest Object Tracking
     [Header("Nearest Object Tracking")]
     [SerializeField] protected GameObject lastNearestObject = null;
     protected Vector3 lastPosition;
-    protected float positionChangeThreshold = 1.5f; // Set a threshold for significant position change
-    protected float inRangeThreshold = 1.5f; // Set a threshold for the distance between the follower and the target object
+    protected float positionChangeThreshold { get; set; } = 1.5f;  // Set a threshold for significant position change
+    protected float inRangeThreshold { get; set; } = 1.5f; // Set a threshold for the distance between the follower and the target object
     [SerializeField] protected int numberOfEatenObjects = 0;
     #endregion
     #endregion
@@ -48,30 +48,70 @@ public abstract class BaseFollowerController : MonoBehaviour
 
     #region Nearest Object Tracking System
 
+    // Check the nearest object and return the direction of the target object
     public virtual Vector3 CheckTargetDirection()
     {
-        if (lastNearestObject != null && (transform.position - lastPosition).sqrMagnitude <= positionChangeThreshold)
+        if (lastNearestObject != null)
         {
-            return lastNearestObject.transform.position;
-        }
-        else if (lastNearestObject != null && (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold && IsHungry())
-        {
-            HandleTargetObjectInteraction(lastNearestObject);
+            float positionDeltaSqr = (transform.position - lastPosition).sqrMagnitude;
+
+            if (positionDeltaSqr <= positionChangeThreshold)
+            {
+                // If the object hasn't moved significantly, keep the same target
+                return lastNearestObject.transform.position;
+            }
+            else if (IsInRange())
+            {
+                // If in range, handle interaction
+                HandleTargetObjectInteraction(lastNearestObject);
+            }
         }
 
         lastPosition = transform.position;
+        return GetNearestObjectPosition();
+    }
 
+    // Check if the object is within range of the nearest object
+    protected bool IsInRange()
+    {
+        if (lastNearestObject == null)
+            return false;
+
+        return (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold;
+    }
+
+    // Get the nearest object position
+    protected virtual Vector3 GetNearestObjectPosition()
+    {
         float nearestDistance = Mathf.Infinity;
         GameObject nearestObject = null;
 
+        Vector3 currentPosition = transform.position;
+
         foreach (GameObject targetObject in targetObjectsList)
         {
-            float distance = (transform.position - targetObject.transform.position).sqrMagnitude;
-
-            if (distance < nearestDistance)
+            if (targetObject == null)
             {
-                nearestDistance = distance;
-                nearestObject = targetObject;
+                continue;
+            }
+            else
+            {
+                Vector3 directionToTarget = targetObject.transform.position - currentPosition;
+                float distanceSqr = directionToTarget.sqrMagnitude;
+
+                if (distanceSqr < nearestDistance)
+                {
+                    nearestDistance = distanceSqr;
+                    nearestObject = targetObject;
+
+                    float inRangeThresholdSqr = inRangeThreshold * inRangeThreshold;
+
+                    // Early exit if within interaction range
+                    if (distanceSqr <= inRangeThresholdSqr)
+                    {
+                        break;
+                    }
+                }
             }
         }
 
@@ -79,12 +119,14 @@ public abstract class BaseFollowerController : MonoBehaviour
         return nearestObject != null ? nearestObject.transform.position : Vector3.zero;
     }
 
+
+    // Check the nearest object and return the nearest object
     protected virtual void HandleTargetObjectInteraction(GameObject targetObject)
     {
         numberOfEatenObjects++;
         timeBeforeGettingHungry = 0f;
 
-        FoodProperties hungerConfigs = lastNearestObject.GetComponent<Target>().foodConfig;
+        FoodProperties hungerConfigs = lastNearestObject.GetComponent<Food>().foodConfig;
         hungerStartingTime = hungerConfigs.staminaTime;
         timeBeforeDestruction = hungerConfigs.destructionTime;
 
@@ -94,7 +136,9 @@ public abstract class BaseFollowerController : MonoBehaviour
     #endregion
 
     #region Target Objects Management
-    public virtual int GetNumberOfTargetObjects()
+
+    // Get the number of target objects in the list
+    public virtual int GetNumberOfTargetObjectsInList()
     {
         return targetObjectsList.Count;
     }
@@ -102,6 +146,7 @@ public abstract class BaseFollowerController : MonoBehaviour
 
     #region Hunger System
 
+    // Handle the hunger situation of the object
     protected virtual void HungerHandler()
     {
         timeBeforeGettingHungry += Time.deltaTime;
@@ -112,11 +157,15 @@ public abstract class BaseFollowerController : MonoBehaviour
         }
     }
 
+    // Check if the object is hungry
     public virtual bool IsHungry()
     {
         return timeBeforeGettingHungry >= hungerStartingTime;
     }
     #endregion
+
+
+    protected abstract void OnDestroy();
 
 
 }
