@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 8472715088401205617}
   - component: {fileID: 2064627684003483350}
   - component: {fileID: -3030225013171975970}
-  - component: {fileID: -1959064728636071650}
+  - component: {fileID: -4514920913289797889}
+  - component: {fileID: 1158557788474460349}
+  - component: {fileID: -7640273746041153083}
   m_Layer: 0
   m_Name: Food Eater - Enemy
   m_TagString: Untagged
@@ -112,7 +114,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-1959064728636071650
+--- !u!114 &-4514920913289797889
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1735303277889347158}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb932b2e26ed2144f80df1041503bf27, type: 3}
+  m_Script: {fileID: 11500000, guid: 7efb24ad01dce0a459014eba9e340845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lastNearestObject: {fileID: 0}
@@ -129,7 +131,37 @@ MonoBehaviour:
   timeBeforeGettingHungry: 0
   hungerStartingTime: 5
   timeBeforeDestruction: 15
-  moneyPrefab: {fileID: 0}
-  moneyTypes: []
+  moneyPrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
+  moneyTypes:
+  - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
   currentMoneyIndex: 0
-  getList: []
+  showListContent: []
+  targetPrefab_Food: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
+  foodsList: []
+--- !u!114 &1158557788474460349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f56bbb6b6e3aae469ccfd12dcbe49e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 0
+  accelerationDuration: 0
+  targetPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &-7640273746041153083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

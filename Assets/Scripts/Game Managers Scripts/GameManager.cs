@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
     #region GameObjects Lists
     public static List<GameObject> mainFishiesObjectsList = new List<GameObject>();
     public static List<GameObject> foodTargetObjectsList = new List<GameObject>();
-    public static List<GameObject> enemyTargetObjectsList = new List<GameObject>();
+    public static List<GameObject> enemiesTargetObjectsList = new List<GameObject>();
+    public static List<GameObject> collectablesObjectsList = new List<GameObject>();
     #endregion
 
     #region GameObjects' References
@@ -100,7 +101,7 @@ public class GameManager : MonoBehaviour
             if (isInputActive)
             {
 
-                if (EventSystem.current.IsPointerOverGameObject() || Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                if (EventSystem.current.IsPointerOverGameObject() || (Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)))
                 {
                     yield return new WaitForSeconds(.1f);
                     continue; // Skip further processing if over a UI element
@@ -180,7 +181,7 @@ public class GameManager : MonoBehaviour
                 if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost)
                 {
                     _spawnedObject = Instantiate(targetPrefab_Food, clampedSpawnPosition, Quaternion.identity);
-                    _spawnedObject.GetComponent<Target>().foodConfig = foodTypes[currentFoodIndex];
+                    _spawnedObject.GetComponent<Food>().foodConfig = foodTypes[currentFoodIndex];
 
 
                     foodTargetObjectsList.Add(_spawnedObject);
@@ -194,7 +195,7 @@ public class GameManager : MonoBehaviour
                 clampedSpawnPosition = positioningManager.GetNewRandomPosition();
                 _spawnedObject = Instantiate(enemy_FoodEaterPrefab, clampedSpawnPosition, Quaternion.identity);
 
-                enemyTargetObjectsList.Add(_spawnedObject);
+                enemiesTargetObjectsList.Add(_spawnedObject);
                 break;
         }
         GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);

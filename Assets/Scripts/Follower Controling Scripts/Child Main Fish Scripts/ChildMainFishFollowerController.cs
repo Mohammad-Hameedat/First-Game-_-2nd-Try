@@ -7,7 +7,7 @@ public class ChildMainFishFollowerController : BaseFollowerController
     // <<<<<<Will be deleted later>>>>>
     // <<<<<<Will be deleted later>>>>>
     // <<<<<<Will be deleted later>>>>>
-    public List <GameObject> GetList1;
+    public List<GameObject> GetList1;
 
     protected override void Start()
     {
@@ -41,12 +41,19 @@ public class ChildMainFishFollowerController : BaseFollowerController
         {
             if (numberOfEatenObjects >= 3)
             {
-                float randomTime = Random.Range(moneyTypes[currentMoneyIndex].defaultTimeToInitiate, moneyTypes[currentMoneyIndex].defaultTimeToInitiate + 3f);
-                yield return new WaitForSeconds(randomTime);
+                float randomTimeBeforeNextMoneySpawn = Random.Range(moneyTypes[currentMoneyIndex].defaultTimeToInitiate, moneyTypes[currentMoneyIndex].defaultTimeToInitiate + 3f);
+                yield return new WaitForSeconds(randomTimeBeforeNextMoneySpawn);
                 Instantiate(moneyPrefab, transform.position, Quaternion.identity);
                 moneyPrefab.GetComponent<Collectable>().moneyConfig = moneyTypes[currentMoneyIndex];
             }
             yield return null;
         }
     }
+
+
+    protected override void OnDestroy()
+    {
+        GameManager.mainFishiesObjectsList.Remove(gameObject);
+    }
+
 }

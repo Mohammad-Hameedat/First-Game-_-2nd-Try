@@ -26,7 +26,6 @@ public class Collectable : MonoBehaviour
             elapsedTime += Time.deltaTime;
             if (elapsedTime >= timeBeforeDestroy)
             {
-                FollowerController.RemoveTargetObjectFromList(gameObject);
                 Destroy(gameObject);
             }
 
