@@ -8,11 +8,11 @@ public class BaseFollowerMovement : MonoBehaviour
     protected BoundsAndPositioningManager boundsManager;
 
 
-    /* You have to get to this variable from the child class
-     * and assign it to the correct controller in the child class Start method,
+    /* You have to set to this variable from the child class
+     * and assign it to the correct controller in child's movment script in the Start method,
      * like this: baseFollowerController = GetComponent<ChildFollowerController>();
      */
-    protected virtual BaseFollowerController followerControllerSetter { get; set; }
+    protected virtual BaseFollowerController FollowerControllerSetter { get; set; }
     #endregion
 
     #region Utility Controllers
@@ -23,12 +23,12 @@ public class BaseFollowerMovement : MonoBehaviour
 
     #region Movement Controllers
     [Header("Movement controllers")]
-    protected float minDistance = 1f;
+    protected float minDistanceTowardsRandomTarget = 1.5f;
     protected float desiredVelocity;
     [SerializeField] protected float movementSpeed;
     [SerializeField] protected float accelerationDuration;
-    protected float timeBeforeChangingVelocity = 0f;
-    [SerializeField] protected Vector3 targetPosition;
+    [SerializeField] protected float timeBeforeChangingVelocity = 0f;
+    [SerializeField] protected Vector3 randomTargetPosition;
     #endregion
 
     protected virtual void Start()
@@ -36,22 +36,21 @@ public class BaseFollowerMovement : MonoBehaviour
         boundsManager = GetComponent<BoundsAndPositioningManager>();
         rb = GetComponent<Rigidbody>();
 
-        desiredVelocity = .5f;
+        desiredVelocity = 0.5f;
         accelerationDuration = Random.Range(2f, 4f);
 
-        targetPosition = boundsManager.GetNewRandomPosition();
+        randomTargetPosition = boundsManager.GetNewRandomPosition();
 
         StartCoroutine(CheckPosition());
     }
 
     protected virtual void Update()
     {
-        if (numberOfTargetsInList != followerControllerSetter.GetNumberOfTargetObjectsInList())
-        {
-            numberOfTargetsInList = followerControllerSetter.GetNumberOfTargetObjectsInList();
-        }
 
-        transform.position = boundsManager.ClampPositionWithInView(transform.position);
+        numberOfTargetsInList = FollowerControllerSetter.GetNumberOfTargetObjectsInList(); // Get the number of target objects in the list from the follower controller script
+
+
+        transform.position = boundsManager.ClampPositionWithInView(transform.position); // Clamp the position of the object to the camera view
     }
 
 
@@ -59,10 +58,11 @@ public class BaseFollowerMovement : MonoBehaviour
 
 
     // Move the object towards the target object
-    protected virtual void MovingTowardsTarget()
+    protected virtual void MovingTowardsTargetDirection()
     {
-        MovementSpeed();
-        Vector3 positionDifference = followerControllerSetter.CheckTargetDirection() - transform.position;
+        MovingTowardsTargetSpeed();
+        Vector3 directionTowardsTargetThreshold = new(0, 0.5f, 0); // Set a threshold for the direction towards the target object because the target object also moves (downwards)
+        Vector3 positionDifference = (FollowerControllerSetter.CheckTargetDirection() - transform.position) - directionTowardsTargetThreshold;
         Vector3 movementDirection = positionDifference.normalized;
         movementSpeed = desiredVelocity;
         rb.velocity = Vector3.Lerp(rb.velocity, movementDirection * movementSpeed, Time.fixedDeltaTime);
@@ -72,29 +72,25 @@ public class BaseFollowerMovement : MonoBehaviour
     protected virtual void MovingInRandomDirection()
     {
         RandomMovementSpeed();
-        Vector3 positionDifference;
-        if ((targetPosition - transform.position).magnitude >= minDistance * minDistance)
+        Vector3 positionDifference = randomTargetPosition - transform.position;
+
+        if (positionDifference.sqrMagnitude <= minDistanceTowardsRandomTarget * minDistanceTowardsRandomTarget)
         {
-            positionDifference = targetPosition - transform.position;
+            randomTargetPosition = boundsManager.GetNewRandomPosition();
         }
-        else
-        {
-            targetPosition = boundsManager.GetNewRandomPosition();
-            positionDifference = targetPosition - transform.position;
-        }
+
         Vector3 directionToTarget = positionDifference.normalized;
         movementSpeed = desiredVelocity;
         rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime);
     }
-
     #endregion
 
-    #region Movement Speed Controllers
 
+    #region Movement Speed Controllers
     // Set the movement speed of the object
-    protected virtual void MovementSpeed()
+    protected virtual void MovingTowardsTargetSpeed()
     {
-        if (timeBeforeChangingVelocity < accelerationDuration)
+        if (timeBeforeChangingVelocity < accelerationDuration) // This to prevent the object from moving too fast after it eats the target object
         {
             timeBeforeChangingVelocity = accelerationDuration + 1f;
         }
@@ -104,11 +100,11 @@ public class BaseFollowerMovement : MonoBehaviour
     // Randomize the movement speed of the object
     protected virtual void RandomMovementSpeed()
     {
-        timeBeforeChangingVelocity += Time.deltaTime;
+        timeBeforeChangingVelocity += Time.fixedDeltaTime;
         if (timeBeforeChangingVelocity >= accelerationDuration)
         {
-            desiredVelocity = Random.Range(.5f, 2f);
-            accelerationDuration = Random.Range(2f, 4f);
+            desiredVelocity = Random.Range(0.5f, 2f);
+            accelerationDuration = Random.Range(2f, 8f);
             timeBeforeChangingVelocity = 0f;
         }
     }
@@ -120,9 +116,9 @@ public class BaseFollowerMovement : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitUntil(() => boundsManager.PositionCheck());
-            targetPosition = boundsManager.GetNewRandomPosition();
-            yield return new WaitForSeconds(2f);
+            yield return new WaitUntil(() => boundsManager.PositionCheck()); // Wait until the object is close to the edge of the movement-area to avoid getting random positions too frequently
+            randomTargetPosition = boundsManager.GetNewRandomPosition();
+            yield return new WaitForSeconds(2f); // Wait for 2 seconds before checking the position again
         }
     }
 }

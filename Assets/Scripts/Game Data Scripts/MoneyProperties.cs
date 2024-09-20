@@ -6,5 +6,4 @@ using UnityEngine;
 public class MoneyProperties : ScriptableObject
 {
     public int moneyValue;
-    public float defaultTimeToInitiate;
 }

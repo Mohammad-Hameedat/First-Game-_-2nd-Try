@@ -4,15 +4,15 @@ public class ChildMainFishFollowerMovement : BaseFollowerMovement
 {
     protected override void Start()
     {
-        followerControllerSetter = GetComponent<ChildMainFishFollowerController>();
+        FollowerControllerSetter = GetComponent<ChildMainFishFollowerController>();
         base.Start();
     }
 
     private void FixedUpdate()
     {
-        if (numberOfTargetsInList > 0 && followerControllerSetter.IsHungry())
+        if (numberOfTargetsInList > 0 && FollowerControllerSetter.IsHungry() && GameManager.enemiesTargetObjectsList.Count == 0)
         {
-            MovingTowardsTarget();
+            MovingTowardsTargetDirection();
         }
         else
         {
@@ -26,7 +26,7 @@ public class ChildMainFishFollowerMovement : BaseFollowerMovement
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, targetPosition);
+        Gizmos.DrawLine(transform.position, randomTargetPosition);
 
 
         //Gizmos.color = Color.green;

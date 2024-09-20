@@ -1,18 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChildEnemyFoodEaterController : ChildEnemyController
 {
 
-    public GameObject targetPrefab_Food;
+    public GameObject foodPrefab;
 
-    [SerializeField] private List<GameObject> foodsList = new List<GameObject>();
+    [SerializeField] private List<GameObject> foodsList = new();
 
-
-
-    public IEnumerable<GameObject> combinedList = new List<GameObject>();
+    private IEnumerable<GameObject> combinedEatableTargetsList = new List<GameObject>();
 
 
     protected override void Start()
@@ -21,7 +19,7 @@ public class ChildEnemyFoodEaterController : ChildEnemyController
 
         foodsList = GameManager.foodTargetObjectsList;
 
-        combinedList = targetObjectsList.Concat(foodsList);
+        combinedEatableTargetsList = targetObjectsList.Concat(foodsList);
 
 
         health = 30;
@@ -40,47 +38,41 @@ public class ChildEnemyFoodEaterController : ChildEnemyController
     protected override Vector3 GetNearestObjectPosition()
     {
         float nearestDistance = Mathf.Infinity;
-        GameObject nearestObject = null;
+        GameObject nearestTargetObject = null;
 
         Vector3 currentPosition = transform.position;
 
-        foreach (GameObject targetObject in combinedList) // The loop iterates through the combined list of main fishies and food objects to find the nearest object to the enemy instead of just the main fishies list
+        foreach (GameObject targetObject in combinedEatableTargetsList) // The loop iterates through the combined list of main fishies and food objects to find the nearest object to the enemy instead of just the main fishies list
         {
-            if (targetObject == null)
-            {
-                continue;
-            }
-            else
-            {
-                Vector3 directionToTarget = targetObject.transform.position - currentPosition;
-                float distanceSqr = directionToTarget.sqrMagnitude;
+            Vector3 directionToTarget = targetObject.transform.position - currentPosition;
+            float distanceSqr = directionToTarget.sqrMagnitude;
 
-                if (distanceSqr < nearestDistance)
+            if (distanceSqr < nearestDistance)
+            {
+                nearestDistance = distanceSqr;
+                nearestTargetObject = targetObject;
+
+                float inRangeThresholdSqr = nearestDistanceToTargetToEat * nearestDistanceToTargetToEat;
+
+                // Early exit if within interaction range
+                if (distanceSqr <= inRangeThresholdSqr)
                 {
-                    nearestDistance = distanceSqr;
-                    nearestObject = targetObject;
-
-                    float inRangeThresholdSqr = inRangeThreshold * inRangeThreshold;
-
-                    // Early exit if within interaction range
-                    if (distanceSqr <= inRangeThresholdSqr)
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
         }
 
-        lastNearestObject = nearestObject;
-        return nearestObject != null ? nearestObject.transform.position : Vector3.zero;
+        lastNearestTargetObject = nearestTargetObject;
+        return nearestTargetObject != null ? nearestTargetObject.transform.position : Vector3.zero;
     }
 
 
     protected override void HandleTargetObjectInteraction(GameObject targetObject)
     {
-        if (targetObject.GetType() == targetPrefab_Food.GetType())
+        if (targetObject.GetComponent<Food>() != null)
         {
-            health -= targetObject.GetComponent<Food>().foodConfig.damage;
+            Food foodInstance = targetObject.GetComponent<Food>();
+            health -= foodInstance.foodConfig.damage;
         }
         else
         {
@@ -89,11 +81,7 @@ public class ChildEnemyFoodEaterController : ChildEnemyController
 
         Destroy(targetObject);
 
-        if (numberOfEatenObjects >= health)
-        {
-            Destroy(gameObject);
-        }
-        else if (health <= 0)
+        if (numberOfEatenObjects >= health || health <= 0)
         {
             Destroy(gameObject);
         }
@@ -101,8 +89,14 @@ public class ChildEnemyFoodEaterController : ChildEnemyController
         {
             timeBeforeGettingHungry = 0f;
             numberOfObjectsToEat += nextNumberOfObjectsToEat;
-            hungerStartingTime = Random.Range(6f, 15f); // Hunger starting duration is between 6 and 15 seconds
+            hungerStartingTime = Random.Range(3f, 10f); // Hunger starting duration is between 6 and 15 seconds
         }
+    }
+
+
+    public override int GetNumberOfTargetObjectsInList()
+    {
+        return combinedEatableTargetsList.Count();
     }
 
     protected override void OnDestroy()

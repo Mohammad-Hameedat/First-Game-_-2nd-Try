@@ -1,122 +1,100 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BaseFollowerController : MonoBehaviour
 {
     #region Target Objects Management
-    protected List<GameObject> targetObjectsList = new List<GameObject>();
+    protected List<GameObject> targetObjectsList = new();
 
 
     #region Nearest Object Tracking
     [Header("Nearest Object Tracking")]
-    [SerializeField] protected GameObject lastNearestObject = null;
-    protected Vector3 lastPosition;
-    protected float positionChangeThreshold { get; set; } = 1.5f;  // Set a threshold for significant position change
-    protected float inRangeThreshold { get; set; } = 1.5f; // Set a threshold for the distance between the follower and the target object
-    [SerializeField] protected int numberOfEatenObjects = 0;
+    [SerializeField] protected GameObject lastNearestTargetObject = null; // The last nearest object detected by the follower
+    protected float nearestDistanceToTargetToEat = 1f; // Set a threshold for the distance between the follower and the target object before eating it
+    protected float closeTargetsRangeThreshold = 3f; // Set a threshold for the detection range of the target object
+
+    [SerializeField] protected int numberOfEatenObjects = 0; // The number of objects eaten by the follower
     #endregion
     #endregion
 
     #region Hunger Situation Variables
     [Header("Hunger Situation Variables")]
-    [SerializeField] protected float timeBeforeGettingHungry = 0f;
-    [SerializeField] protected float hungerStartingTime = 5f;
-    [SerializeField] protected float timeBeforeDestruction = 15f;
+    [SerializeField] protected float timeBeforeGettingHungry = 0f; // The time before the object gets hungry
+    [SerializeField] protected float hungerStartingTime = 5f; // The time before the object gets hungry after eating a target object
+    [SerializeField] protected float timeBeforeDestruction = 15f; // The time before the object gets destroyed after getting hungry
     #endregion
 
     #region Money Properties
     [Header("Money configurations")]
-    public GameObject moneyPrefab;
-    public MoneyProperties[] moneyTypes;
-    [SerializeField] protected int currentMoneyIndex = 0;
+    public GameObject moneyPrefab; // The money prefab to be spawned by the follower
+    public MoneyProperties[] moneyTypes; // The money types that can be spawned by the follower
+    [SerializeField] protected int currentMoneyIndex = 0; // The current money index to select the money type to be spawned by the follower
     #endregion
 
-    protected virtual void Start()
-    {
-        lastPosition = transform.position;
-    }
+    protected abstract void Start();
 
-
-
-    //protected virtual void Update()
-    //{
-    //    HungerHandler();
-    //}
-
-
+    protected abstract void Update();
 
     #region Nearest Object Tracking System
 
     // Check the nearest object and return the direction of the target object
     public virtual Vector3 CheckTargetDirection()
     {
-        if (lastNearestObject != null)
+        // Handle the target object interaction if the object is close enough to eat
+        if (lastNearestTargetObject != null && IsCloseEnoughToEat())
         {
-            float positionDeltaSqr = (transform.position - lastPosition).sqrMagnitude;
-
-            if (positionDeltaSqr <= positionChangeThreshold)
-            {
-                // If the object hasn't moved significantly, keep the same target
-                return lastNearestObject.transform.position;
-            }
-            else if (IsInRange())
-            {
-                // If in range, handle interaction
-                HandleTargetObjectInteraction(lastNearestObject);
-            }
+            HandleTargetObjectInteraction(lastNearestTargetObject);
         }
 
-        lastPosition = transform.position;
+        //lastPosition = transform.position;
         return GetNearestObjectPosition();
     }
 
     // Check if the object is within range of the nearest object
-    protected bool IsInRange()
+    protected bool IsCloseEnoughToEat()
     {
-        if (lastNearestObject == null)
-            return false;
+        float distance = (lastNearestTargetObject.transform.position - transform.position).magnitude;
 
-        return (transform.position - lastNearestObject.transform.position).sqrMagnitude <= inRangeThreshold;
+        return distance <= nearestDistanceToTargetToEat; // A range threshold squared to determine if the object is within range
     }
 
     // Get the nearest object position
     protected virtual Vector3 GetNearestObjectPosition()
     {
-        float nearestDistance = Mathf.Infinity;
-        GameObject nearestObject = null;
-
         Vector3 currentPosition = transform.position;
 
-        foreach (GameObject targetObject in targetObjectsList)
+        if (lastNearestTargetObject != null && (lastNearestTargetObject.transform.position - currentPosition).sqrMagnitude <= closeTargetsRangeThreshold * closeTargetsRangeThreshold)
         {
-            if (targetObject == null)
-            {
-                continue;
-            }
-            else
+            return lastNearestTargetObject.transform.position;
+        }
+        else
+        {
+            GameObject nearestObject = null;
+            float nearestDistance = Mathf.Infinity;
+
+            foreach (GameObject targetObject in targetObjectsList)
             {
                 Vector3 directionToTarget = targetObject.transform.position - currentPosition;
-                float distanceSqr = directionToTarget.sqrMagnitude;
+                float closestDistanceRangeThreshold = directionToTarget.sqrMagnitude;
 
-                if (distanceSqr < nearestDistance)
+                if (closestDistanceRangeThreshold < nearestDistance)
                 {
-                    nearestDistance = distanceSqr;
+                    nearestDistance = closestDistanceRangeThreshold;
                     nearestObject = targetObject;
 
-                    float inRangeThresholdSqr = inRangeThreshold * inRangeThreshold;
-
-                    // Early exit if within interaction range
-                    if (distanceSqr <= inRangeThresholdSqr)
+                    if (lastNearestTargetObject.IsDestroyed())
                     {
                         break;
                     }
                 }
             }
-        }
 
-        lastNearestObject = nearestObject;
-        return nearestObject != null ? nearestObject.transform.position : Vector3.zero;
+            lastNearestTargetObject = nearestObject;
+            return nearestObject != null ? nearestObject.transform.position : Vector3.zero;
+
+        }
     }
 
 
@@ -126,11 +104,11 @@ public abstract class BaseFollowerController : MonoBehaviour
         numberOfEatenObjects++;
         timeBeforeGettingHungry = 0f;
 
-        FoodProperties hungerConfigs = lastNearestObject.GetComponent<Food>().foodConfig;
+        FoodProperties hungerConfigs = lastNearestTargetObject.GetComponent<Food>().foodConfig;
         hungerStartingTime = hungerConfigs.staminaTime;
         timeBeforeDestruction = hungerConfigs.destructionTime;
 
-        Destroy(lastNearestObject);
+        Destroy(lastNearestTargetObject);
     }
 
     #endregion
@@ -166,6 +144,4 @@ public abstract class BaseFollowerController : MonoBehaviour
 
 
     protected abstract void OnDestroy();
-
-
 }
