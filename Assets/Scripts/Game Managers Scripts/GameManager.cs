@@ -6,10 +6,10 @@ using UnityEngine.EventSystems;
 public class GameManager : MonoBehaviour
 {
     #region GameObjects Lists
-    public static List<GameObject> mainFishiesObjectsList = new List<GameObject>();
-    public static List<GameObject> foodTargetObjectsList = new List<GameObject>();
-    public static List<GameObject> enemiesTargetObjectsList = new List<GameObject>();
-    public static List<GameObject> collectablesObjectsList = new List<GameObject>();
+    public static List<GameObject> mainFishObjectsList = new();
+    public static List<GameObject> foodTargetObjectsList = new();
+    public static List<GameObject> enemiesTargetObjectsList = new();
+    public static List<GameObject> collectablesObjectsList = new();
     #endregion
 
     #region GameObjects' References
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int inSceneMoney = 300;
 
     Vector3 clampedSpawnPosition;
-    float spawnDelay = 0.25f;
+    readonly float spawnDelay = 0.001f;
     #endregion
 
 
@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Upgrade Costs
-    int followerUpgradeCost = 100;
-    int foodUpgradeCost = 300;
+    const int followerInstantiateCost = 100;
+    const int foodUpgradeCost = 300;
 
     #endregion
 
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         inSceneMoney = 99999999;
-        GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+        GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
@@ -116,19 +116,18 @@ public class GameManager : MonoBehaviour
 
                 Ray ray = Camera.main.ScreenPointToRay(inputPosition);
                 RaycastHit hit;
-
                 Physics.Raycast(ray, out hit, 21f);
 
 
                 if (hit.collider != null && hit.collider.gameObject.layer == 8)
                 {
                     inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().moneyConfig.moneyValue;
-                    GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+                    GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
 
                     Destroy(hit.collider.gameObject);
 
-                    yield return new WaitForSeconds(.15f);
+                    yield return new WaitForSeconds(.05f);
                 }
                 else
                 {
@@ -165,20 +164,21 @@ public class GameManager : MonoBehaviour
         {
             // If the object type is 1, spawn an instance from follower prefab
             case 1:
-                if (inSceneMoney >= followerUpgradeCost)
+                if (inSceneMoney >= followerInstantiateCost)
                 {
                     // Get a random position depending on the camera viewport
                     clampedSpawnPosition = positioningManager.GetNewRandomPosition();
                     _spawnedObject = Instantiate(followerPrefab, clampedSpawnPosition, Quaternion.identity);
 
-                    mainFishiesObjectsList.Add(_spawnedObject);
+                    mainFishObjectsList.Add(_spawnedObject);
 
-                    inSceneMoney -= followerUpgradeCost;
+                    inSceneMoney -= followerInstantiateCost;
+                    GameEvents.EventsChannelInstance.RefresheMainFishesNumber(mainFishObjectsList.Count);
                 }
                 break;
             // If the object type is 2, spawn an instance from target prefab
             case 2:
-                if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost)
+                if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost || enemiesTargetObjectsList.Count > 0)
                 {
                     _spawnedObject = Instantiate(targetPrefab_Food, clampedSpawnPosition, Quaternion.identity);
                     _spawnedObject.GetComponent<Food>().foodConfig = foodTypes[currentFoodIndex];
@@ -186,8 +186,14 @@ public class GameManager : MonoBehaviour
 
                     foodTargetObjectsList.Add(_spawnedObject);
 
-
-                    inSceneMoney -= foodTypes[currentFoodIndex].foodCost;
+                    if (enemiesTargetObjectsList.Count > 0)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        inSceneMoney -= foodTypes[currentFoodIndex].foodCost;
+                    }
                 }
                 break;
             // If the object type is 3, spawn an instance from enemy prefab
@@ -198,7 +204,10 @@ public class GameManager : MonoBehaviour
                 enemiesTargetObjectsList.Add(_spawnedObject);
                 break;
         }
-        GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+        if (_spawnedObject != null) // If the object is spawned, update the in-scene money
+        {
+            GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+        }
     }
 
     void UpgradeFood()
@@ -208,7 +217,7 @@ public class GameManager : MonoBehaviour
             // Deduct the cost of the food upgrade from the in-scene money
             currentFoodIndex = (currentFoodIndex + 1) % foodTypes.Length;
             inSceneMoney -= foodUpgradeCost;
-            GameEvents.eventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+            GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
         }
     }
     #endregion
@@ -217,14 +226,14 @@ public class GameManager : MonoBehaviour
     #region Event Subscriptions
     private void OnEnable()
     {
-        GameEvents.eventsChannelInstance.onSpawnObject += SpawnObject;
-        GameEvents.eventsChannelInstance.onUpgradeFood += UpgradeFood;
+        GameEvents.EventsChannelInstance.OnSpawnObject += SpawnObject;
+        GameEvents.EventsChannelInstance.OnUpgradeFood += UpgradeFood;
     }
 
     private void OnDisable()
     {
-        GameEvents.eventsChannelInstance.onSpawnObject -= SpawnObject;
-        GameEvents.eventsChannelInstance.onUpgradeFood -= UpgradeFood;
+        GameEvents.EventsChannelInstance.OnSpawnObject -= SpawnObject;
+        GameEvents.EventsChannelInstance.OnUpgradeFood -= UpgradeFood;
     }
     #endregion
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ChildEnemyMovement : BaseFollowerMovement
@@ -8,25 +6,27 @@ public class ChildEnemyMovement : BaseFollowerMovement
 
     protected override void Start()
     {
-        followerControllerSetter = GetComponent<ChildEnemyController>();
+        FollowerControllerSetter = GetComponent<ChildEnemyController>();
         base.Start();
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
-
-        if ((numberOfTargetsInList > 0 && followerControllerSetter.IsHungry()))
+        if (numberOfTargetsInList > 0 && FollowerControllerSetter.IsHungry())
         {
-            MovingTowardsTarget();
+            MovingTowardsTargetDirection();
         }
         else
         {
             MovingInRandomDirection();
         }
-
     }
 
-    protected override void MovementSpeed()
+
+
+
+
+    protected override void MovingTowardsTargetSpeed()
     {
         if (timeBeforeChangingVelocity < accelerationDuration)
         {
@@ -40,7 +40,7 @@ public class ChildEnemyMovement : BaseFollowerMovement
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, targetPosition);
+        Gizmos.DrawLine(transform.position, randomTargetPosition);
 
 
         //Gizmos.color = Color.green;

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &406720176294981580
+--- !u!1 &4858843760271760619
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7876782018611082653}
-  - component: {fileID: 8239124958611158134}
-  - component: {fileID: 5824144278014378054}
-  - component: {fileID: 3690475546548994272}
-  - component: {fileID: -9122321545823792178}
-  m_Layer: 8
-  m_Name: Collectable
+  - component: {fileID: 8079996880025553490}
+  - component: {fileID: 9207781136352554878}
+  - component: {fileID: 7375336140120031527}
+  - component: {fileID: 1289825604616782096}
+  - component: {fileID: -6552996906715364545}
+  m_Layer: 0
+  m_Name: Food Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7876782018611082653
+--- !u!4 &8079996880025553490
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406720176294981580}
+  m_GameObject: {fileID: 4858843760271760619}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 0, y: 8, z: -2}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8239124958611158134
+--- !u!33 &9207781136352554878
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406720176294981580}
+  m_GameObject: {fileID: 4858843760271760619}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5824144278014378054
+--- !u!23 &7375336140120031527
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406720176294981580}
+  m_GameObject: {fileID: 4858843760271760619}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 579d167621596b0419dc2ebf58efe561, type: 2}
+  - {fileID: 2100000, guid: 815726b91e0e2d34a84b7ddc790e5b86, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,13 +85,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3690475546548994272
+--- !u!135 &1289825604616782096
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406720176294981580}
+  m_GameObject: {fileID: 4858843760271760619}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -102,24 +102,20 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-9122321545823792178
+--- !u!114 &-6552996906715364545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406720176294981580}
+  m_GameObject: {fileID: 4858843760271760619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a0b1ab709f193e4bbbcb9498308d528, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cf78e656e9a1ee4193e001241a25420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyConfig:
-  - {fileID: 11400000, guid: dcb864b5ea095df488a4241e0148678c, type: 2}
-  - {fileID: 11400000, guid: a39507f9676230f4b96bc7fa9d6e12e7, type: 2}
-  - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
-  elapsedTime: 0
+  foodConfig: {fileID: 0}

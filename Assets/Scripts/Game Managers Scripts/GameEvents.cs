@@ -4,21 +4,23 @@ using UnityEngine;
 public class GameEvents : MonoBehaviour
 {
     // Reference to the instance of the GameEvents class
-    public static GameEvents eventsChannelInstance;
+    public static GameEvents EventsChannelInstance;
 
     // Events
-    public event Action<int> onSpawnObject;
+    public event Action<int> OnSpawnObject;
 
-    public event Action<int> onUpdateCoins;
+    public event Action<int> OnUpdateCoins;
 
-    public event Action onUpgradeFood;
+    public event Action OnUpgradeFood;
+
+    public event Action<int> OnRefreshMainFishesNumber;
 
 
     private void Awake()
     {
-        if (eventsChannelInstance == null)
+        if (EventsChannelInstance == null)
         {
-            eventsChannelInstance = this;
+            EventsChannelInstance = this;
         }
         else
         {
@@ -30,16 +32,22 @@ public class GameEvents : MonoBehaviour
     public void SpawnObjects(int objectType)
     {
         // If there are subscribers to the event, invoke the event
-        onSpawnObject?.Invoke(obj: objectType);
+        OnSpawnObject?.Invoke(obj: objectType);
     }
 
     public void UpdateInGameSceneMoney(int coins)
     {
-        onUpdateCoins?.Invoke(coins);
+        OnUpdateCoins?.Invoke(coins);
     }
 
     public void UpgradeFood()
     {
-        onUpgradeFood?.Invoke();
+        OnUpgradeFood?.Invoke();
     }
+
+    public void RefresheMainFishesNumber(int mainFishesNumber)
+    {
+        OnRefreshMainFishesNumber?.Invoke(mainFishesNumber);
+    }
+
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &330837507758328382
+--- !u!1 &1735303277889347158
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,53 +8,52 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9117618963926205328}
-  - component: {fileID: 5256065076421666316}
-  - component: {fileID: 7500384487506561570}
-  - component: {fileID: 8968137015724446795}
-  - component: {fileID: 8842681905336199702}
-  - component: {fileID: -2094870482213120977}
-  - component: {fileID: 8599191380073339155}
-  - component: {fileID: 1385408229765960468}
-  m_Layer: 6
-  m_Name: Follower
+  - component: {fileID: 6712832377832957158}
+  - component: {fileID: 8472715088401205617}
+  - component: {fileID: 2064627684003483350}
+  - component: {fileID: -3030225013171975970}
+  - component: {fileID: -4514920913289797889}
+  - component: {fileID: -8521249273812328517}
+  - component: {fileID: -7640273746041153083}
+  m_Layer: 0
+  m_Name: Food Eater - Enemy Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9117618963926205328
+--- !u!4 &6712832377832957158
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
+  m_GameObject: {fileID: 1735303277889347158}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: -2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5256065076421666316
+--- !u!33 &8472715088401205617
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
+  m_GameObject: {fileID: 1735303277889347158}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &7500384487506561570
+--- !u!23 &2064627684003483350
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
+  m_GameObject: {fileID: 1735303277889347158}
   m_Enabled: 1
-  m_CastShadows: 0
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -66,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4a2abd4f67aefc24b9c6cca2d197adc7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -88,81 +87,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8968137015724446795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 142212062628f8c4195c39c34bb8030a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lastNearestObject: {fileID: 0}
-  numberOfEatenObjects: 0
-  timeBeforeGettingHungry: -9999
-  hungerStartingTime: 5
-  timeBeforeDestruction: 15
-  moneyPrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
-  moneyTypes:
-  - {fileID: 11400000, guid: dcb864b5ea095df488a4241e0148678c, type: 2}
-  - {fileID: 11400000, guid: a39507f9676230f4b96bc7fa9d6e12e7, type: 2}
-  - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
-  currentMoneyIndex: 0
-  GetList1: []
---- !u!114 &8842681905336199702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afcd6aef39af52c4aae13cc28fd23957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 0
-  accelerationDuration: 0
-  targetPosition: {x: 0, y: 0, z: 0}
---- !u!114 &-2094870482213120977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99deccee521590c4883bb65ad46633a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHungry: 0
-  materials:
-  - {fileID: 2100000, guid: d6e7475a477721949a7fa2353ffb7e32, type: 2}
-  - {fileID: 2100000, guid: 0e3ad63f883b06b458c1ef2d59167313, type: 2}
-  - {fileID: 2100000, guid: 6bded294da3a9cf47bdb6b9259f86b49, type: 2}
---- !u!114 &8599191380073339155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!54 &1385408229765960468
+--- !u!54 &-3030225013171975970
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330837507758328382}
+  m_GameObject: {fileID: 1735303277889347158}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -183,3 +114,52 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-4514920913289797889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7efb24ad01dce0a459014eba9e340845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastNearestObject: {fileID: 0}
+  numberOfEatenObjects: 0
+  timeBeforeGettingHungry: 0
+  hungerStartingTime: 5
+  timeBeforeDestruction: 15
+  moneyPrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
+  moneyTypes:
+  - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
+  currentMoneyIndex: 0
+  showListContent: []
+  health: 0
+  foodPrefab: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
+  foodsList: []
+--- !u!114 &-8521249273812328517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1128d476783e36349b80679a2ff5f89d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-7640273746041153083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

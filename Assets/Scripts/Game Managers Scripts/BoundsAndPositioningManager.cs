@@ -4,8 +4,8 @@ public class BoundsAndPositioningManager : MonoBehaviour
 {
 
     #region Movement Area Variables
-    float xMin = 0.05f, xMax = 0.95f, yMin = 0.05f, yMax = 0.80f;
-    float threshold = 0.01f;
+    readonly float xMin = 0.05f, xMax = 0.95f, yMin = 0.05f, yMax = 0.80f;
+    readonly float threshold = 0.01f;
     #endregion
 
 

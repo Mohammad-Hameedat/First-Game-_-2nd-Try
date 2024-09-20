@@ -9,28 +9,25 @@ public class ChildEnemyController : BaseFollowerController
     // <<<<<<Will be deleted later>>>>>
     public List<GameObject> showListContent;
 
-    protected int numberOfObjectsToEat = 3;
+    protected int numberOfObjectsToEat = 10;
     protected int nextNumberOfObjectsToEat = 3;
 
 
-    protected int health;
+    [SerializeField] protected int health;
 
 
     protected override void Start()
     {
-        positionChangeThreshold = .5f;
-        inRangeThreshold = 1.75f;
+        nearestDistanceToTargetToEat = 2f;
 
-        targetObjectsList = GameManager.mainFishiesObjectsList; // May be overridden in the child classes
+        targetObjectsList = GameManager.mainFishObjectsList; // May be overridden in the child classes
 
         timeBeforeGettingHungry = 0f;
-        hungerStartingTime = Random.Range(0f, 5f);
-
-        base.Start();
+        hungerStartingTime = Random.Range(2f, 5f);
     }
 
 
-    protected virtual void Update()
+    protected override void Update()
     {
 
         // <<<<<<Will be deleted later>>>>>
@@ -38,36 +35,43 @@ public class ChildEnemyController : BaseFollowerController
         // <<<<<<Will be deleted later>>>>>
         showListContent = targetObjectsList;
 
-        DetectAndDestroyNearestObjects();
-
         HungerHandler();
+    }
+
+    protected virtual void LateUpdate()
+    {
+        DetectAndDestroyNearestObjects();
+    }
+
+    public override Vector3 CheckTargetDirection()
+    {
+        // Handle the target object interaction if the object is close enough to eat
+        if (lastNearestTargetObject != null && IsCloseEnoughToEat())
+        {
+            HandleTargetObjectInteraction(lastNearestTargetObject);
+        }
+
+        //lastPosition = transform.position;
+        return lastNearestTargetObject.transform.position;
     }
 
 
     protected virtual void DetectAndDestroyNearestObjects()
     {
-        Vector3 nearestPosition = GetNearestObjectPosition();
-        float distanceSqr = (transform.position - nearestPosition).sqrMagnitude;
+        Vector3 nearestTargetPosition = GetNearestObjectPosition();
 
-        float inRangeThresholdSqr = inRangeThreshold * inRangeThreshold;
-
-        if (distanceSqr <= inRangeThresholdSqr)
+        float distanceSqr = (nearestTargetPosition - transform.position).sqrMagnitude;
+        if (distanceSqr <= nearestDistanceToTargetToEat * nearestDistanceToTargetToEat)
         {
-            HandleTargetObjectInteraction(lastNearestObject);
+            HandleTargetObjectInteraction(lastNearestTargetObject);
         }
-
-
-        //if ((transform.position - GetNearestObjectPosition()).magnitude <= inRangeThreshold)
-        //{
-        //    HandleTargetObjectInteraction(lastNearestObject);
-        //}
     }
 
     protected override void HandleTargetObjectInteraction(GameObject targetObject)
     {
         numberOfEatenObjects++;
 
-        Destroy(lastNearestObject);
+        Destroy(lastNearestTargetObject);
 
         if (numberOfEatenObjects >= numberOfObjectsToEat)
         {
@@ -75,8 +79,6 @@ public class ChildEnemyController : BaseFollowerController
             numberOfObjectsToEat += nextNumberOfObjectsToEat;
             hungerStartingTime = Random.Range(6f, 15f); // Hunger starting duration is between 6 and 15 seconds
         }
-
-
     }
 
     protected override void HungerHandler()
