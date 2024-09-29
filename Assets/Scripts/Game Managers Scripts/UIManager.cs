@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.EventsChannelInstance.OnUpdateCoins += GetMoneyValue;
+        GameEvents.EventsChannelInstance.OnRefreshInGameSceneMoney += GetMoneyValue;
 
         GameEvents.EventsChannelInstance.OnRefreshMainFishesNumber += GetMainFishesNumber;
 
@@ -36,9 +36,10 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameEvents.EventsChannelInstance.OnUpdateCoins -= GetMoneyValue;
+        GameEvents.EventsChannelInstance.OnRefreshInGameSceneMoney -= GetMoneyValue;
         GameEvents.EventsChannelInstance.OnRefreshMainFishesNumber -= GetMainFishesNumber;
 
+        // Unsubscribe all listeners from the buttons
         spawnObject.onClick.RemoveAllListeners();
         upgradeFood.onClick.RemoveAllListeners();
     }
