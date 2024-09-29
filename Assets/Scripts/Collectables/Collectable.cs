@@ -2,35 +2,29 @@ using UnityEngine;
 
 public class Collectable : MonoBehaviour
 {
-    public MoneyProperties moneyConfig;
+    public CollectableProperties collectableConfig;
 
-    float speed = 1.5f;
 
     #region Destroying Managers
     [Header("Destroying Managers")]
-
     [SerializeField] float elapsedTime = 0f;
-    float timeBeforeDestroy = 3f;
 
-    float positionBeforeDestroy = 1f;
+    float lastPositionBeforeDestruction = 1f;
     #endregion
 
     private void Update()
     {
-        if (transform.transform.position.y > positionBeforeDestroy)
+        if (transform.transform.position.y > lastPositionBeforeDestruction)
         {
-            transform.position += Vector3.down * speed * Time.deltaTime;
+            transform.position += Vector3.down * collectableConfig.collectableMovementSpeed * Time.deltaTime;
         }
         else
         {
             elapsedTime += Time.deltaTime;
-            if (elapsedTime >= timeBeforeDestroy)
+            if (elapsedTime >= collectableConfig.TimeBeforeDestroy)
             {
                 Destroy(gameObject);
             }
-
-
         }
     }
-
 }

@@ -23,12 +23,21 @@ public class BaseFollowerMovement : MonoBehaviour
 
     #region Movement Controllers
     [Header("Movement controllers")]
-    protected float minDistanceTowardsRandomTarget = 1.5f;
+
     protected float desiredVelocity;
-    [SerializeField] protected float movementSpeed;
     [SerializeField] protected float accelerationDuration;
+    [SerializeField] protected float movementSpeed;
+
+
     [SerializeField] protected float timeBeforeChangingVelocity = 0f;
     [SerializeField] protected Vector3 randomTargetPosition;
+    #endregion
+
+
+    // These variables are for testing purposes
+    #region Testing Variables
+    [Header("Testing Variables")]
+    public float currentSpeed;
     #endregion
 
     protected virtual void Start()
@@ -40,28 +49,22 @@ public class BaseFollowerMovement : MonoBehaviour
         accelerationDuration = Random.Range(2f, 4f);
 
         randomTargetPosition = boundsManager.GetNewRandomPosition();
-
         StartCoroutine(CheckPosition());
     }
 
     protected virtual void Update()
     {
-
         numberOfTargetsInList = FollowerControllerSetter.GetNumberOfTargetObjectsInList(); // Get the number of target objects in the list from the follower controller script
-
-
         transform.position = boundsManager.ClampPositionWithInView(transform.position); // Clamp the position of the object to the camera view
     }
 
 
     #region Moving Direction Controllers
-
-
     // Move the object towards the target object
     protected virtual void MovingTowardsTargetDirection()
     {
         MovingTowardsTargetSpeed();
-        Vector3 directionTowardsTargetThreshold = new(0, 0.5f, 0); // Set a threshold for the direction towards the target object because the target object also moves (downwards)
+        Vector3 directionTowardsTargetThreshold = new(0, 0.5f, 0); // Set a threshold for the direction towards the target object because the target object also moves at the same time (downwards)
         Vector3 positionDifference = (FollowerControllerSetter.CheckTargetDirection() - transform.position) - directionTowardsTargetThreshold;
         Vector3 movementDirection = positionDifference.normalized;
         movementSpeed = desiredVelocity;
@@ -73,12 +76,10 @@ public class BaseFollowerMovement : MonoBehaviour
     {
         RandomMovementSpeed();
         Vector3 positionDifference = randomTargetPosition - transform.position;
-
-        if (positionDifference.sqrMagnitude <= minDistanceTowardsRandomTarget * minDistanceTowardsRandomTarget)
+        if (positionDifference.sqrMagnitude <= FollowerControllerSetter.followerProperties.minDistanceTowardsRandomTarget * FollowerControllerSetter.followerProperties.minDistanceTowardsRandomTarget)
         {
             randomTargetPosition = boundsManager.GetNewRandomPosition();
         }
-
         Vector3 directionToTarget = positionDifference.normalized;
         movementSpeed = desiredVelocity;
         rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * movementSpeed, Time.fixedDeltaTime);
@@ -87,14 +88,15 @@ public class BaseFollowerMovement : MonoBehaviour
 
 
     #region Movement Speed Controllers
-    // Set the movement speed of the object
+    // Set the movement speed of the object and prevent it from moving too fast after eating the target object
     protected virtual void MovingTowardsTargetSpeed()
     {
         if (timeBeforeChangingVelocity < accelerationDuration) // This to prevent the object from moving too fast after it eats the target object
         {
             timeBeforeChangingVelocity = accelerationDuration + 1f;
         }
-        desiredVelocity = 4f;
+
+        desiredVelocity = FollowerControllerSetter.followerProperties.maxFollowingDesiredVelocity;
     }
 
     // Randomize the movement speed of the object
@@ -103,8 +105,9 @@ public class BaseFollowerMovement : MonoBehaviour
         timeBeforeChangingVelocity += Time.fixedDeltaTime;
         if (timeBeforeChangingVelocity >= accelerationDuration)
         {
-            desiredVelocity = Random.Range(0.5f, 2f);
-            accelerationDuration = Random.Range(2f, 8f);
+            desiredVelocity = Random.Range(FollowerControllerSetter.followerProperties.minRandomDesiredVelocity, FollowerControllerSetter.followerProperties.maxRandomDesiredVelocity);
+            accelerationDuration = Random.Range(FollowerControllerSetter.followerProperties.minAccelerationDuration, FollowerControllerSetter.followerProperties.maxAccelerationDuration);
+
             timeBeforeChangingVelocity = 0f;
         }
     }

@@ -1516,8 +1516,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followerPrefab: {fileID: 330837507758328382, guid: 9a696a01e46e38943abac0710abd878f, type: 3}
-  targetPrefab_Food: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
+  foodPrefab: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
   enemy_FoodEaterPrefab: {fileID: 1735303277889347158, guid: 9eab71e4898caff4ebd7b657f598f7d5, type: 3}
+  enemy_ClorpPrefab: {fileID: 1735303277889347158, guid: 95ad1deadced9034e9f2afa882a75a68, type: 3}
   inSceneMoney: 0
   foodTypes:
   - {fileID: 11400000, guid: fc592f2c99ac3464292fa527674ea0c0, type: 2}

@@ -1,37 +1,36 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BaseFollowerController : MonoBehaviour
 {
-    #region Target Objects Management
+    #region References
+    [Header("References")]
+    public FollowerProperties followerProperties;
     protected List<GameObject> targetObjectsList = new();
-
-
-    #region Nearest Object Tracking
-    [Header("Nearest Object Tracking")]
-    [SerializeField] protected GameObject lastNearestTargetObject = null; // The last nearest object detected by the follower
-    protected float nearestDistanceToTargetToEat = 1f; // Set a threshold for the distance between the follower and the target object before eating it
-    protected float closeTargetsRangeThreshold = 3f; // Set a threshold for the detection range of the target object
-
-    [SerializeField] protected int numberOfEatenObjects = 0; // The number of objects eaten by the follower
-    #endregion
     #endregion
 
-    #region Hunger Situation Variables
-    [Header("Hunger Situation Variables")]
-    [SerializeField] protected float timeBeforeGettingHungry = 0f; // The time before the object gets hungry
-    [SerializeField] protected float hungerStartingTime = 5f; // The time before the object gets hungry after eating a target object
-    [SerializeField] protected float timeBeforeDestruction = 15f; // The time before the object gets destroyed after getting hungry
-    #endregion
 
-    #region Money Properties
-    [Header("Money configurations")]
-    public GameObject moneyPrefab; // The money prefab to be spawned by the follower
-    public MoneyProperties[] moneyTypes; // The money types that can be spawned by the follower
+    #region Utility Controllers
+    [Header("Utility Controllers")]
+    [SerializeField] protected int currentNumberOfEatenObjects = 0; // The number of objects eaten by the follower
     [SerializeField] protected int currentMoneyIndex = 0; // The current money index to select the money type to be spawned by the follower
     #endregion
+
+
+    #region Target Objects Management
+    [Header("Nearest Object Tracking")]
+    [SerializeField] protected GameObject lastNearestTargetObject = null; // The last nearest object detected by the follower
+    #endregion
+
+
+    #region Hunger Situation Variables
+    [Header("Hunger Situation Handlers")]
+    [SerializeField] protected float hungerTimeCounter = 0f; // The time before the object gets hungry
+    [SerializeField] protected float hungerStartingTime; // The time before the object gets hungry after eating a target object
+    [SerializeField] protected float destructionTime; // The time before the object gets destroyed after getting hungry
+    #endregion
+
 
     protected abstract void Start();
 
@@ -56,19 +55,21 @@ public abstract class BaseFollowerController : MonoBehaviour
     protected bool IsCloseEnoughToEat()
     {
         float distance = (lastNearestTargetObject.transform.position - transform.position).magnitude;
-
-        return distance <= nearestDistanceToTargetToEat; // A range threshold squared to determine if the object is within range
+        return distance <= followerProperties.nearestDistanceToEatATarget; // A range threshold squared to determine if the object is within range
     }
 
     // Get the nearest object position
     protected virtual Vector3 GetNearestObjectPosition()
     {
         Vector3 currentPosition = transform.position;
+        float closerTargetsDetectionRangeThresholdSqr = followerProperties.closeTargetsRangeThreshold * followerProperties.closeTargetsRangeThreshold;
 
-        if (lastNearestTargetObject != null && (lastNearestTargetObject.transform.position - currentPosition).sqrMagnitude <= closeTargetsRangeThreshold * closeTargetsRangeThreshold)
+        // Check if the last nearest target object is still in the closer detection range of the follower
+        if (lastNearestTargetObject != null && (lastNearestTargetObject.transform.position - currentPosition).sqrMagnitude <= closerTargetsDetectionRangeThresholdSqr)
         {
             return lastNearestTargetObject.transform.position;
         }
+        // If the last nearest object is not in the range of the follower, find the nearest target object
         else
         {
             GameObject nearestObject = null;
@@ -76,18 +77,18 @@ public abstract class BaseFollowerController : MonoBehaviour
 
             foreach (GameObject targetObject in targetObjectsList)
             {
-                Vector3 directionToTarget = targetObject.transform.position - currentPosition;
-                float closestDistanceRangeThreshold = directionToTarget.sqrMagnitude;
-
-                if (closestDistanceRangeThreshold < nearestDistance)
+                if (lastNearestTargetObject.IsDestroyed())
                 {
-                    nearestDistance = closestDistanceRangeThreshold;
-                    nearestObject = targetObject;
+                    break;
+                }
 
-                    if (lastNearestTargetObject.IsDestroyed())
-                    {
-                        break;
-                    }
+                Vector3 directionToTarget = targetObject.transform.position - currentPosition;
+                float closestTargetDistance = directionToTarget.sqrMagnitude;
+
+                if (closestTargetDistance < nearestDistance)
+                {
+                    nearestDistance = closestTargetDistance;
+                    nearestObject = targetObject;
                 }
             }
 
@@ -101,20 +102,20 @@ public abstract class BaseFollowerController : MonoBehaviour
     // Check the nearest object and return the nearest object
     protected virtual void HandleTargetObjectInteraction(GameObject targetObject)
     {
-        numberOfEatenObjects++;
-        timeBeforeGettingHungry = 0f;
+        currentNumberOfEatenObjects++;
+        hungerTimeCounter = 0f;
 
-        FoodProperties hungerConfigs = lastNearestTargetObject.GetComponent<Food>().foodConfig;
-        hungerStartingTime = hungerConfigs.staminaTime;
-        timeBeforeDestruction = hungerConfigs.destructionTime;
+        FoodProperties foodStaminaConfigs = lastNearestTargetObject.GetComponent<Food>().foodConfig;
+        hungerStartingTime = foodStaminaConfigs.staminaTime;
+        destructionTime = foodStaminaConfigs.destructionTime;
 
         Destroy(lastNearestTargetObject);
     }
-
     #endregion
 
-    #region Target Objects Management
 
+
+    #region Target Objects Management
     // Get the number of target objects in the list
     public virtual int GetNumberOfTargetObjectsInList()
     {
@@ -122,14 +123,14 @@ public abstract class BaseFollowerController : MonoBehaviour
     }
     #endregion
 
-    #region Hunger System
 
+    #region Hunger System
     // Handle the hunger situation of the object
     protected virtual void HungerHandler()
     {
-        timeBeforeGettingHungry += Time.deltaTime;
+        hungerTimeCounter += Time.deltaTime;
 
-        if (timeBeforeGettingHungry >= timeBeforeDestruction)
+        if (hungerTimeCounter >= destructionTime)
         {
             Destroy(gameObject);
         }
@@ -138,7 +139,7 @@ public abstract class BaseFollowerController : MonoBehaviour
     // Check if the object is hungry
     public virtual bool IsHungry()
     {
-        return timeBeforeGettingHungry >= hungerStartingTime;
+        return hungerTimeCounter >= hungerStartingTime;
     }
     #endregion
 

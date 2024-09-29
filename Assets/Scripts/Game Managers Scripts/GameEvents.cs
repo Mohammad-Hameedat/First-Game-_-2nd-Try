@@ -7,12 +7,9 @@ public class GameEvents : MonoBehaviour
     public static GameEvents EventsChannelInstance;
 
     // Events
-    public event Action<int> OnSpawnObject;
-
-    public event Action<int> OnUpdateCoins;
-
     public event Action OnUpgradeFood;
-
+    public event Action<int> OnSpawnObject;
+    public event Action<int> OnRefreshInGameSceneMoney;
     public event Action<int> OnRefreshMainFishesNumber;
 
 
@@ -28,6 +25,11 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public void UpgradeFood()
+    {
+        OnUpgradeFood?.Invoke();
+    }
+
     // Invoking the event
     public void SpawnObjects(int objectType)
     {
@@ -37,17 +39,21 @@ public class GameEvents : MonoBehaviour
 
     public void UpdateInGameSceneMoney(int coins)
     {
-        OnUpdateCoins?.Invoke(coins);
-    }
-
-    public void UpgradeFood()
-    {
-        OnUpgradeFood?.Invoke();
+        OnRefreshInGameSceneMoney?.Invoke(coins);
     }
 
     public void RefresheMainFishesNumber(int mainFishesNumber)
     {
         OnRefreshMainFishesNumber?.Invoke(mainFishesNumber);
+    }
+
+
+    private void OnDisable()
+    {
+        OnSpawnObject = null;
+        OnRefreshInGameSceneMoney = null;
+        OnUpgradeFood = null;
+        OnRefreshMainFishesNumber = null;
     }
 
 }

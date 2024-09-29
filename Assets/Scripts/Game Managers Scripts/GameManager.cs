@@ -8,54 +8,47 @@ public class GameManager : MonoBehaviour
     #region GameObjects Lists
     public static List<GameObject> mainFishObjectsList = new();
     public static List<GameObject> foodTargetObjectsList = new();
-    public static List<GameObject> enemiesTargetObjectsList = new();
+    public static List<GameObject> enemyObjectsList = new();
     public static List<GameObject> collectablesObjectsList = new();
     #endregion
 
     #region GameObjects' References
     [Header("Prefabs")]
-
-
     public GameObject followerPrefab;
-    public GameObject targetPrefab_Food;
+    public GameObject foodPrefab;
     public GameObject enemy_FoodEaterPrefab;
+    public GameObject enemy_ClorpPrefab;
 
+    #region Scripts References
+    private BoundsAndPositioningManager positioningManager;
+    #endregion
     #endregion
 
 
     #region Spawn Objects Managers
     [Header("Spawn Object")]
     [SerializeField] int inSceneMoney = 300;
-
     Vector3 clampedSpawnPosition;
-    readonly float spawnDelay = 0.001f;
+
+    // This is the delay value between clicks or touches
+    const float spawnDelay = 0.001f;
     #endregion
 
 
     #region Upgradables
-    #region Food Properties
 
+    #region Food Properties
     [Header("Food Properties")]
     public FoodProperties[] foodTypes;
     int currentFoodIndex = 0;
-
-
     #endregion
+
 
     #region Upgrade Costs
     const int followerInstantiateCost = 100;
     const int foodUpgradeCost = 300;
-
     #endregion
-
     #endregion
-
-
-    #region Scripts References
-    private BoundsAndPositioningManager positioningManager;
-
-    #endregion
-
 
 
     void Start()
@@ -66,6 +59,9 @@ public class GameManager : MonoBehaviour
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
         StartCoroutine(HandleClicksAndTouches());
+
+        // Enemy Spawner
+        StartCoroutine(SpawnEnemy());
 
         SpawnObject(1);
     }
@@ -121,7 +117,7 @@ public class GameManager : MonoBehaviour
 
                 if (hit.collider != null && hit.collider.gameObject.layer == 8)
                 {
-                    inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().moneyConfig.moneyValue;
+                    inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().collectableConfig.collectableValue;
                     GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
 
 
@@ -136,16 +132,6 @@ public class GameManager : MonoBehaviour
                 }
 
 
-            }
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                // test case to spawn a test object 
-                // <<<<<<Will be deleted later>>>>>
-                // <<<<<<Will be deleted later>>>>>
-                // <<<<<<Will be deleted later>>>>>
-                SpawnObject(3);
-
-                yield return new WaitForSeconds(spawnDelay);
             }
             yield return null;
         }
@@ -178,15 +164,15 @@ public class GameManager : MonoBehaviour
                 break;
             // If the object type is 2, spawn an instance from target prefab
             case 2:
-                if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost || enemiesTargetObjectsList.Count > 0)
+                if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost || enemyObjectsList.Count > 0)
                 {
-                    _spawnedObject = Instantiate(targetPrefab_Food, clampedSpawnPosition, Quaternion.identity);
+                    _spawnedObject = Instantiate(foodPrefab, clampedSpawnPosition, Quaternion.identity);
                     _spawnedObject.GetComponent<Food>().foodConfig = foodTypes[currentFoodIndex];
 
 
                     foodTargetObjectsList.Add(_spawnedObject);
 
-                    if (enemiesTargetObjectsList.Count > 0)
+                    if (enemyObjectsList.Count > 0)
                     {
                         break;
                     }
@@ -196,13 +182,6 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 break;
-            // If the object type is 3, spawn an instance from enemy prefab
-            case 3:
-                clampedSpawnPosition = positioningManager.GetNewRandomPosition();
-                _spawnedObject = Instantiate(enemy_FoodEaterPrefab, clampedSpawnPosition, Quaternion.identity);
-
-                enemiesTargetObjectsList.Add(_spawnedObject);
-                break;
         }
         if (_spawnedObject != null) // If the object is spawned, update the in-scene money
         {
@@ -210,6 +189,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    private IEnumerator SpawnEnemy()
+    {
+        while (true)
+        {
+            if (enemyObjectsList.Count == 0)
+            {
+                yield return new WaitForSeconds(3f);
+                clampedSpawnPosition = positioningManager.GetNewRandomPosition();
+                GameObject enemyInstance = Instantiate(enemy_ClorpPrefab, clampedSpawnPosition, Quaternion.identity);
+
+                enemyObjectsList.Add(enemyInstance);
+            }
+            yield return null;
+        }
+    }
+    #endregion
+
+
+    // A function that will be called to upgrade the food
     void UpgradeFood()
     {
         if (inSceneMoney >= foodUpgradeCost && currentFoodIndex < foodTypes.Length - 1)
@@ -220,12 +219,12 @@ public class GameManager : MonoBehaviour
             GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
         }
     }
-    #endregion
 
 
     #region Event Subscriptions
     private void OnEnable()
     {
+        // Invoked by UI buttons
         GameEvents.EventsChannelInstance.OnSpawnObject += SpawnObject;
         GameEvents.EventsChannelInstance.OnUpgradeFood += UpgradeFood;
     }

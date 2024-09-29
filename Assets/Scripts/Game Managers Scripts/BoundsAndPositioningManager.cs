@@ -33,7 +33,7 @@ public class BoundsAndPositioningManager : MonoBehaviour
     public Vector3 GetNewRandomPosition()
     {
         // Get the new random position
-        Vector3 newPosition = new Vector3(Random.Range(xMin, xMax), Random.Range(yMin, yMax), 0);
+        Vector3 newPosition = new(Random.Range(xMin, xMax), Random.Range(yMin, yMax), 0);
         Vector3 clampedRandomPosition = Camera.main.ViewportToWorldPoint(newPosition);
         clampedRandomPosition.z = -2;
 
