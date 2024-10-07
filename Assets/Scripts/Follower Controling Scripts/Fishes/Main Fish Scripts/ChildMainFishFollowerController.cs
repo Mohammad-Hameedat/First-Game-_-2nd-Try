@@ -14,7 +14,9 @@ public class ChildMainFishFollowerController : BaseFollowerController
 
     protected override void Start()
     {
-        targetObjectsList = GameManager.foodTargetObjectsList;
+        targetObjectsList = GameManager.currentActiveFoodTargetObjectsList;
+
+        currentMoneyIndex = 0;
 
         hungerStartingTime = followerProperties.hungerStartingTime;
         destructionTime = followerProperties.destructionTime;
@@ -39,7 +41,7 @@ public class ChildMainFishFollowerController : BaseFollowerController
 
     protected override void HungerHandler()
     {
-        if (GameManager.enemyObjectsList.Count > 0)
+        if (GameManager.currentActiveEnemyObjectsList.Count > 0)
         {
             return;
         }
@@ -61,16 +63,15 @@ public class ChildMainFishFollowerController : BaseFollowerController
         {
             if (currentNumberOfEatenObjects >= 3)
             {
-                Instantiate(followerProperties.collectablePrefab, transform.position, Quaternion.identity); // Spawn the money prefab
+                GameObject collectableInstance = Instantiate(collectablePrefab, transform.position, Quaternion.identity); // Spawn the money prefab
 
                 /*
                  * Set the money configuration - Will be changed later
                  * Note: Must be changed when the follower eats a number of target objects that is over than 10
                  * Note: can be changed be setting If conditions to check the number of eaten objects
                  */
-                followerProperties.collectablePrefab.GetComponent<Collectable>().collectableConfig = followerProperties.collectableConfigs[currentMoneyIndex]; // Set the money configuration
+                collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.collectableConfigs[currentMoneyIndex]; // Set the money configuration
             }
-
 
             float randomTimeBeforeNextMoneySpawn = Random.Range(7f, 15f); // Randomize the time before the next money spawn
             yield return new WaitForSeconds(randomTimeBeforeNextMoneySpawn); // Wait for the random time before the next money spawn
@@ -78,11 +79,11 @@ public class ChildMainFishFollowerController : BaseFollowerController
     }
 
 
-    protected override void OnDestroy()
+    protected override void OnDisable()
     {
         if (!this.gameObject.scene.isLoaded) return;
-        GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.mainFishObjectsList.Count);
-        GameManager.mainFishObjectsList.Remove(gameObject);
+        GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.currentActiveMainFishObjectsList.Count);
+        GameManager.currentActiveMainFishObjectsList.Remove(gameObject);
     }
 
 }

@@ -118,5 +118,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0b1ab709f193e4bbbcb9498308d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyConfig: {fileID: 11400000, guid: dcb864b5ea095df488a4241e0148678c, type: 2}
+  collectableConfig: {fileID: 0}
   elapsedTime: 0

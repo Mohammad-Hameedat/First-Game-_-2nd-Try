@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
     #region GameObjects Lists
-    public static List<GameObject> mainFishObjectsList = new();
-    public static List<GameObject> foodTargetObjectsList = new();
-    public static List<GameObject> enemyObjectsList = new();
-    public static List<GameObject> collectablesObjectsList = new();
+    [Header("Game Objects Lists")]
+    public static List<GameObject> currentActiveMainFishObjectsList = new();
+    public static List<GameObject> currentActiveFoodTargetObjectsList = new();
+    public static List<GameObject> currentActiveEnemyObjectsList = new();
+    //public static List<GameObject> collectablesObjectsList = new();
+
+    public List<GameObject> enemyObjectsList = new();
     #endregion
 
     #region GameObjects' References
@@ -30,26 +34,27 @@ public class GameManager : MonoBehaviour
     [SerializeField] int inSceneMoney = 300;
     Vector3 clampedSpawnPosition;
 
-    // This is the delay value between clicks or touches
+    // This is the delay value between clicks or touches, <<<<<<<< and will be replaced later with a value from the food properties >>>>>>>>
     const float spawnDelay = 0.001f;
     #endregion
 
 
     #region Upgradables
-
-    #region Food Properties
-    [Header("Food Properties")]
+    [Header("Upgradable Objects")]
     public FoodProperties[] foodTypes;
-    int currentFoodIndex = 0;
-    #endregion
+    public WeaponProperties[] weaponTypes = new WeaponProperties[10];
 
 
-    #region Upgrade Costs
+    #region Upgrades and Costs managers
     const int followerInstantiateCost = 100;
     const int foodUpgradeCost = 300;
+
+    int currentFoodIndex = 0;
+    int currentWeaponIndex = 0;
     #endregion
     #endregion
 
+    private bool isTypeOfFoodEater = false; // New flag to track whether the current enemy is a Food Eater
 
     void Start()
     {
@@ -92,11 +97,9 @@ public class GameManager : MonoBehaviour
             }
 
 
-
             // quick check to see if the input is active
             if (isInputActive)
             {
-
                 if (EventSystem.current.IsPointerOverGameObject() || (Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)))
                 {
                     yield return new WaitForSeconds(.1f);
@@ -105,7 +108,6 @@ public class GameManager : MonoBehaviour
 
                 // Convert the input position to a world position
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(inputPosition);
-
                 // Clamp the world position to be within the camera view
                 clampedSpawnPosition = positioningManager.ClampPositionWithInView(worldPosition);
 
@@ -115,40 +117,62 @@ public class GameManager : MonoBehaviour
                 Physics.Raycast(ray, out hit, 21f);
 
 
+
+                // Is a collectable object
                 if (hit.collider != null && hit.collider.gameObject.layer == 8)
                 {
-                    inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().collectableConfig.collectableValue;
-                    GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
-
-
-                    Destroy(hit.collider.gameObject);
-
+                    HandleCollectableClick(hit);
                     yield return new WaitForSeconds(.05f);
                 }
+                // Or is an enemy object
+                else if (currentActiveEnemyObjectsList.Count > 0)
+                {
+                    // Allow spawning food anywhere
+                    if (isTypeOfFoodEater)
+                    {
+                        SpawnObject(2);
+                        yield return new WaitForSeconds(spawnDelay);
+                    }
+                    // Or damage the enemy
+                    else
+                    {
+                        ChildEnemyController enemyController = hit.collider.gameObject.GetComponent<ChildEnemyController>();
+                        enemyController?.TakeDamage(weaponTypes[currentWeaponIndex].weaponDamage);
+                        yield return new WaitForSeconds(weaponTypes[currentWeaponIndex].fireDelay);
+                    }
+                }
+                // OR spawn an object
                 else
                 {
                     SpawnObject(2);
                     yield return new WaitForSeconds(spawnDelay);
                 }
-
-
             }
             yield return null;
         }
     }
+
+
+    private void HandleCollectableClick(RaycastHit hit)
+    {
+        inSceneMoney += hit.collider.gameObject.GetComponent<Collectable>().collectableConfig.collectableValue;
+        GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+        Destroy(hit.collider.gameObject);
+    }
+
     #endregion
 
 
     #region Spawning Mnagers
-    // A function that will be called to spawn an object
+    // A function that will be called to spawn an object on request
     public void SpawnObject(int objectType)
     {
         GameObject _spawnedObject = null;
 
-        // Switch statement to determine which object to spawn
+        // Determine which object type to spawn
         switch (objectType)
         {
-            // If the object type is 1, spawn an instance from follower prefab
+            // Spawn an instance of Main Fish prefab
             case 1:
                 if (inSceneMoney >= followerInstantiateCost)
                 {
@@ -156,29 +180,23 @@ public class GameManager : MonoBehaviour
                     clampedSpawnPosition = positioningManager.GetNewRandomPosition();
                     _spawnedObject = Instantiate(followerPrefab, clampedSpawnPosition, Quaternion.identity);
 
-                    mainFishObjectsList.Add(_spawnedObject);
-
+                    currentActiveMainFishObjectsList.Add(_spawnedObject);
                     inSceneMoney -= followerInstantiateCost;
-                    GameEvents.EventsChannelInstance.RefresheMainFishesNumber(mainFishObjectsList.Count);
+                    GameEvents.EventsChannelInstance.RefresheMainFishesNumber(currentActiveMainFishObjectsList.Count);
                 }
                 break;
-            // If the object type is 2, spawn an instance from target prefab
+            // Spawn an instance of Food prefab
             case 2:
-                if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost || enemyObjectsList.Count > 0)
+                if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost || currentActiveEnemyObjectsList.Count > 0)
                 {
                     _spawnedObject = Instantiate(foodPrefab, clampedSpawnPosition, Quaternion.identity);
                     _spawnedObject.GetComponent<Food>().foodConfig = foodTypes[currentFoodIndex];
 
-
-                    foodTargetObjectsList.Add(_spawnedObject);
-
-                    if (enemyObjectsList.Count > 0)
-                    {
-                        break;
-                    }
-                    else
+                    currentActiveFoodTargetObjectsList.Add(_spawnedObject);
+                    if (currentActiveEnemyObjectsList.Count == 0)
                     {
                         inSceneMoney -= foodTypes[currentFoodIndex].foodCost;
+                        break;
                     }
                 }
                 break;
@@ -190,17 +208,23 @@ public class GameManager : MonoBehaviour
     }
 
 
+    // A function that will be called to spawn an enemy automatically
     private IEnumerator SpawnEnemy()
     {
         while (true)
         {
-            if (enemyObjectsList.Count == 0)
+            if (currentActiveEnemyObjectsList.Count == 0)
             {
                 yield return new WaitForSeconds(3f);
                 clampedSpawnPosition = positioningManager.GetNewRandomPosition();
-                GameObject enemyInstance = Instantiate(enemy_ClorpPrefab, clampedSpawnPosition, Quaternion.identity);
 
-                enemyObjectsList.Add(enemyInstance);
+                GameObject tempEnemyInstance = enemyObjectsList[Random.Range(0, enemyObjectsList.Count)];
+                GameObject enemyInstance = Instantiate(tempEnemyInstance, clampedSpawnPosition, Quaternion.identity);
+                //GameObject enemyInstance = Instantiate(enemy_FoodEaterPrefab, clampedSpawnPosition, Quaternion.identity);
+
+                currentActiveEnemyObjectsList.Add(enemyInstance);
+
+                CheckEnemyType(enemyInstance);
             }
             yield return null;
         }
@@ -208,7 +232,24 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-    // A function that will be called to upgrade the food
+    #region Utility Functions
+    // A function that checks the type of the spawned enemy object
+    private void CheckEnemyType(GameObject enemy)
+    {
+        ChildEnemyController tempEnemyInstance = enemy.GetComponent<ChildEnemyController>();
+
+        if (tempEnemyInstance.GetComponent<ChildEnemyController>() is ChildEnemyFoodEaterController)
+        {
+            isTypeOfFoodEater = true;
+        }
+        else
+        {
+            isTypeOfFoodEater = false;
+        }
+    }
+
+
+    // A function that upgrades the food type on request
     void UpgradeFood()
     {
         if (inSceneMoney >= foodUpgradeCost && currentFoodIndex < foodTypes.Length - 1)
@@ -221,18 +262,33 @@ public class GameManager : MonoBehaviour
     }
 
 
+    // A function that upgrades the weapon type on request
+    void UpgradeWeapon()
+    {
+        if (inSceneMoney >= weaponTypes[currentWeaponIndex].weaponCost && currentWeaponIndex < weaponTypes.Length - 1)
+        {
+            currentWeaponIndex = (currentWeaponIndex + 1) % weaponTypes.Length;
+            inSceneMoney -= weaponTypes[currentWeaponIndex].weaponCost;
+            Debug.Log("Current Weapon Index: " + currentWeaponIndex + " Weapon Cost: " + weaponTypes[currentWeaponIndex].weaponCost + " " + weaponTypes[currentWeaponIndex].name);
+            GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+        }
+    }
+    #endregion
+
+
     #region Event Subscriptions
     private void OnEnable()
     {
-        // Invoked by UI buttons
         GameEvents.EventsChannelInstance.OnSpawnObject += SpawnObject;
         GameEvents.EventsChannelInstance.OnUpgradeFood += UpgradeFood;
+        GameEvents.EventsChannelInstance.OnUpgradeWeapon += UpgradeWeapon;
     }
 
     private void OnDisable()
     {
         GameEvents.EventsChannelInstance.OnSpawnObject -= SpawnObject;
         GameEvents.EventsChannelInstance.OnUpgradeFood -= UpgradeFood;
+        GameEvents.EventsChannelInstance.OnUpgradeWeapon -= UpgradeWeapon;
     }
     #endregion
 

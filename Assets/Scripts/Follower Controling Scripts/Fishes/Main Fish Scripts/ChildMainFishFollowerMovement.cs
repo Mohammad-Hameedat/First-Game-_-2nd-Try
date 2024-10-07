@@ -16,7 +16,7 @@ public class ChildMainFishFollowerMovement : BaseFollowerMovement
 
     private void FixedUpdate()
     {
-        if (numberOfTargetsInList > 0 && FollowerControllerSetter.IsHungry() && GameManager.enemyObjectsList.Count == 0)
+        if (numberOfTargetsInList > 0 && FollowerControllerSetter.IsHungry() && GameManager.currentActiveEnemyObjectsList.Count == 0)
         {
             MovingTowardsTargetDirection();
         }

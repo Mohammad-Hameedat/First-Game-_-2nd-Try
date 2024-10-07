@@ -17,7 +17,7 @@ public class Food : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.foodTargetObjectsList.Remove(gameObject);
+        GameManager.currentActiveFoodTargetObjectsList.Remove(gameObject);
     }
 
 }

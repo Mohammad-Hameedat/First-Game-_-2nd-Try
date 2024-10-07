@@ -25,9 +25,9 @@ public class ChildEnemyController : BaseFollowerController
         nextNumberOfObjectsToEat = enemyProperties.nextNumberOfObjectsToEat;
 
         // Right now, the money index is set to 2 and later it must be implemented in different ways
-        currentMoneyIndex = 2;
+        currentMoneyIndex = 0;
 
-        targetObjectsList = GameManager.mainFishObjectsList; // May be overridden in the child classes
+        targetObjectsList = GameManager.currentActiveMainFishObjectsList; // May be overridden in the child classes
 
         hungerStartingTime = Random.Range(2f, 5f);
     }
@@ -83,6 +83,23 @@ public class ChildEnemyController : BaseFollowerController
         }
     }
 
+    public virtual void TakeDamage(int damage)
+    {
+        health -= Mathf.Abs(damage); // Damage is always positive so no once can cheat the system
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+
+        Debug.Log("Enemy Health: " + health);
+    }
+
+    public virtual int GetHealth()
+    {
+        return health;
+    }
+
 
     protected override Vector3 GetNearestObjectPosition()
     {
@@ -131,14 +148,13 @@ public class ChildEnemyController : BaseFollowerController
         hungerTimeCounter += Time.deltaTime;
     }
 
-
-    protected override void OnDestroy()
+    protected override void OnDisable()
     {
         if (!this.gameObject.scene.isLoaded) return;
 
-        Instantiate(followerProperties.collectablePrefab, transform.position, Quaternion.identity);
-        followerProperties.collectablePrefab.GetComponent<Collectable>().collectableConfig = followerProperties.collectableConfigs[currentMoneyIndex];
+        GameObject collectableInstance = Instantiate(collectablePrefab, transform.position, Quaternion.identity);
+        collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.collectableConfigs[currentMoneyIndex];
 
-        GameManager.enemyObjectsList.Remove(gameObject);
+        GameManager.currentActiveEnemyObjectsList.Remove(gameObject);
     }
 }

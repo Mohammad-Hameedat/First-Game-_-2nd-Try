@@ -8,9 +8,10 @@ public class BaseFollowerMovement : MonoBehaviour
     protected BoundsAndPositioningManager boundsManager;
 
 
-    /* You have to set to this variable from the child class
+    /* 
+     * You have to set to this variable from the child classes
      * and assign it to the correct controller in child's movment script in the Start method,
-     * like this: baseFollowerController = GetComponent<ChildFollowerController>();
+     * like this, in start function: baseFollowerController = GetComponent<ChildFollowerController>();
      */
     protected virtual BaseFollowerController FollowerControllerSetter { get; set; }
     #endregion

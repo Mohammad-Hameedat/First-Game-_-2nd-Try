@@ -6,6 +6,7 @@ public abstract class BaseFollowerController : MonoBehaviour
 {
     #region References
     [Header("References")]
+    public GameObject collectablePrefab;
     public FollowerProperties followerProperties;
     protected List<GameObject> targetObjectsList = new();
     #endregion
@@ -144,5 +145,5 @@ public abstract class BaseFollowerController : MonoBehaviour
     #endregion
 
 
-    protected abstract void OnDestroy();
+    protected abstract void OnDisable();
 }

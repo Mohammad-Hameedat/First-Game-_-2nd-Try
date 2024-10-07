@@ -8,6 +8,7 @@ public class GameEvents : MonoBehaviour
 
     // Events
     public event Action OnUpgradeFood;
+    public event Action OnUpgradeWeapon;
     public event Action<int> OnSpawnObject;
     public event Action<int> OnRefreshInGameSceneMoney;
     public event Action<int> OnRefreshMainFishesNumber;
@@ -30,6 +31,11 @@ public class GameEvents : MonoBehaviour
         OnUpgradeFood?.Invoke();
     }
 
+    public void UpgradeWeapon()
+    {
+        OnUpgradeWeapon?.Invoke();
+    }
+
     // Invoking the event
     public void SpawnObjects(int objectType)
     {
@@ -50,9 +56,10 @@ public class GameEvents : MonoBehaviour
 
     private void OnDisable()
     {
+        OnUpgradeFood = null;
+        OnUpgradeWeapon = null;
         OnSpawnObject = null;
         OnRefreshInGameSceneMoney = null;
-        OnUpgradeFood = null;
         OnRefreshMainFishesNumber = null;
     }
 

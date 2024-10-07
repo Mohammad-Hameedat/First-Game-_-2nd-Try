@@ -4,7 +4,6 @@ using UnityEngine;
 public class FollowerProperties : ScriptableObject
 {
     [Header("Money configurations")]
-    public GameObject collectablePrefab; // The prefab of the money object that will be spawned when the follower object gets hungry
     public CollectableProperties[] collectableConfigs; // The money types that can be spawned by the follower
 
 
