@@ -3,8 +3,12 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("UI Buttons")]
     public Button spawnObject;
     public Button upgradeFood;
+    public Button upgradeGun;
+
+    [Header("UI Texts")]
     public TMPro.TextMeshProUGUI currenctAvailableMoney;
     public TMPro.TextMeshProUGUI numberOfMainFishesInScene;
 
@@ -23,14 +27,19 @@ public class UIManager : MonoBehaviour
         numberOfMainFishesInScene.text = mainFishesNumber.ToString();
     }
 
+    void UpgradeWeapon()
+    {
+
+    }
+
     private void OnEnable()
     {
         GameEvents.EventsChannelInstance.OnRefreshInGameSceneMoney += GetMoneyValue;
-
         GameEvents.EventsChannelInstance.OnRefreshMainFishesNumber += GetMainFishesNumber;
 
         spawnObject.onClick.AddListener(() => GameEvents.EventsChannelInstance.SpawnObjects(1));
         upgradeFood.onClick.AddListener(() => GameEvents.EventsChannelInstance.UpgradeFood());
+        upgradeGun.onClick.AddListener(() => GameEvents.EventsChannelInstance.UpgradeWeapon());
     }
 
 

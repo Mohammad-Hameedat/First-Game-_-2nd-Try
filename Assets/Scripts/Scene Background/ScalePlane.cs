@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class ScalePlane : MonoBehaviour
 {
-
-
     float gameScreenWidht;
     float gameScreenHeight;
 

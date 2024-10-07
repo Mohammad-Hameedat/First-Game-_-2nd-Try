@@ -53,8 +53,8 @@ public class ChildEnemyClorpController : ChildEnemyController
     }
 
 
-    protected override void OnDestroy()
+    protected override void OnDisable()
     {
-        base.OnDestroy();
+        base.OnDisable();
     }
 }

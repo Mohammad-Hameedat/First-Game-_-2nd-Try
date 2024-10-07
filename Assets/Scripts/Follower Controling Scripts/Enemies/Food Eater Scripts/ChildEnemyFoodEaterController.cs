@@ -15,7 +15,7 @@ public class ChildEnemyFoodEaterController : ChildEnemyController
     protected override void Start()
     {
         base.Start();
-        foodsList = GameManager.foodTargetObjectsList;
+        foodsList = GameManager.currentActiveFoodTargetObjectsList;
         combinedEatableTargetsList = targetObjectsList.Concat(foodsList);
     }
 
@@ -105,6 +105,11 @@ public class ChildEnemyFoodEaterController : ChildEnemyController
         base.DetectAndDestroyNearestObjects();
     }
 
+    public override void TakeDamage(int damage)
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override void HungerHandler()
     {
         base.HungerHandler();
@@ -115,8 +120,8 @@ public class ChildEnemyFoodEaterController : ChildEnemyController
         return base.IsHungry();
     }
 
-    protected override void OnDestroy()
+    protected override void OnDisable()
     {
-        base.OnDestroy();
+        base.OnDisable();
     }
 }

@@ -15,7 +15,8 @@ GameObject:
   - component: {fileID: -4514920913289797889}
   - component: {fileID: -8521249273812328517}
   - component: {fileID: -7640273746041153083}
-  m_Layer: 0
+  - component: {fileID: -148866605681826552}
+  m_Layer: 9
   m_Name: Enemy - Food Eater - 1st Enemy Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followerProperties: {fileID: 11400000, guid: a5af2242f456df943935eb743c139caa, type: 2}
+  collectablePrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
   currentNumberOfEatenObjects: 0
   currentMoneyIndex: 0
   lastNearestTargetObject: {fileID: 0}
@@ -167,3 +169,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-148866605681826552
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
