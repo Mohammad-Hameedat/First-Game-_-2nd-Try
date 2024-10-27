@@ -33,6 +33,12 @@ public abstract class BaseFollowerController : MonoBehaviour
     #endregion
 
 
+
+
+    //private int frameInterval = 5; // Interval to distribute nearest object checks
+    //private int currentObjectIndex = 0; // Tracks the current object being processed across frames
+
+
     protected abstract void Start();
 
     protected abstract void Update();
@@ -58,6 +64,61 @@ public abstract class BaseFollowerController : MonoBehaviour
         float distance = (lastNearestTargetObject.transform.position - transform.position).magnitude;
         return distance <= followerProperties.nearestDistanceToEatATarget; // A range threshold squared to determine if the object is within range
     }
+
+    /*
+    // Get the nearest object position, but spread the work over multiple frames
+    protected virtual Vector3 GetNearestObjectPosition()
+    {
+        // Only run the check every X frames for performance reasons
+        if (Time.frameCount % frameInterval != 0)
+        {
+            return lastNearestTargetObject != null ? lastNearestTargetObject.transform.position : Vector3.zero;
+        }
+
+        Vector3 currentPosition = transform.position;
+        float closerTargetsDetectionRangeThresholdSqr = followerProperties.closeTargetsRangeThreshold * followerProperties.closeTargetsRangeThreshold;
+
+        // Check if the last nearest target object is still in the closer detection range of the follower
+        if (lastNearestTargetObject != null && (lastNearestTargetObject.transform.position - currentPosition).sqrMagnitude <= closerTargetsDetectionRangeThresholdSqr)
+        {
+            return lastNearestTargetObject.transform.position;
+        }
+        // If the last nearest object is not in the range of the follower, find the nearest target object
+        else
+        {
+            GameObject nearestObject = null;
+            float nearestDistance = Mathf.Infinity;
+
+            // Loop over only a subset of target objects each frame to distribute the load
+            for (int i = 0; i < targetObjectsList.Count; i++)
+            {
+                // Limit processing each frame to avoid checking all objects at once
+                if (i % frameInterval == currentObjectIndex)
+                {
+                    GameObject targetObject = targetObjectsList[i];
+                    if (targetObject == null) continue;
+
+                    Vector3 directionToTarget = targetObject.transform.position - currentPosition;
+                    float closestTargetDistance = directionToTarget.sqrMagnitude;
+
+                    if (closestTargetDistance < nearestDistance)
+                    {
+                        nearestDistance = closestTargetDistance;
+                        nearestObject = targetObject;
+                    }
+                }
+            }
+
+            // Cycle through objects across frames
+            currentObjectIndex = (currentObjectIndex + 1) % frameInterval;
+
+            lastNearestTargetObject = nearestObject;
+            return nearestObject != null ? nearestObject.transform.position : Vector3.zero;
+        }
+    }
+    */
+
+
 
     // Get the nearest object position
     protected virtual Vector3 GetNearestObjectPosition()
@@ -98,6 +159,7 @@ public abstract class BaseFollowerController : MonoBehaviour
 
         }
     }
+
 
 
     // Check the nearest object and return the nearest object

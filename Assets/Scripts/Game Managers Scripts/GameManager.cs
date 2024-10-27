@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,12 +16,21 @@ public class GameManager : MonoBehaviour
     public List<GameObject> enemyObjectsList = new();
     #endregion
 
-    #region GameObjects' References
+
+
+    #region Data types References
+
+    #region Scriptable Objects References
+    public GameData transferableGameData;
+    #endregion
+
+    #region Game Objects References
     [Header("Prefabs")]
     public GameObject followerPrefab;
     public GameObject foodPrefab;
     public GameObject enemy_FoodEaterPrefab;
     public GameObject enemy_ClorpPrefab;
+    #endregion
 
     #region Scripts References
     private BoundsAndPositioningManager positioningManager;
@@ -29,14 +38,16 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
+
     #region Spawn Objects Managers
     [Header("Spawn Object")]
     [SerializeField] int inSceneMoney = 300;
     Vector3 clampedSpawnPosition;
 
-    // This is the delay value between clicks or touches, <<<<<<<< and will be replaced later with a value from the food properties >>>>>>>>
+    // This is the delay value between clicks or touches, <<<<<<<< and will be replaced later with a value from a scriptable object >>>>>>>>
     const float spawnDelay = 0.001f;
     #endregion
+
 
 
     #region Upgradables
@@ -45,21 +56,29 @@ public class GameManager : MonoBehaviour
     public WeaponProperties[] weaponTypes = new WeaponProperties[10];
 
 
+
     #region Upgrades and Costs managers
     const int followerInstantiateCost = 100;
     const int foodUpgradeCost = 300;
+    int eggUpgradeCost = 1000;
 
     int currentFoodIndex = 0;
     int currentWeaponIndex = 0;
+    int currentEggIndex = 0;
     #endregion
     #endregion
 
     private bool isTypeOfFoodEater = false; // New flag to track whether the current enemy is a Food Eater
+    private int maxEggLevel = 2; // Maximum level of the egg
 
     void Start()
     {
+        ClearTheStaticLists();
+
         inSceneMoney = 99999999;
         GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+        GameEvents.EventsChannelInstance.RefreshEggCost(eggUpgradeCost);
+
 
         positioningManager = GetComponent<BoundsAndPositioningManager>();
 
@@ -141,7 +160,7 @@ public class GameManager : MonoBehaviour
                         yield return new WaitForSeconds(weaponTypes[currentWeaponIndex].fireDelay);
                     }
                 }
-                // OR spawn an object
+                // OR Spawn a food object
                 else
                 {
                     SpawnObject(2);
@@ -219,8 +238,12 @@ public class GameManager : MonoBehaviour
                 clampedSpawnPosition = positioningManager.GetNewRandomPosition();
 
                 GameObject tempEnemyInstance = enemyObjectsList[Random.Range(0, enemyObjectsList.Count)];
+
+
                 GameObject enemyInstance = Instantiate(tempEnemyInstance, clampedSpawnPosition, Quaternion.identity);
                 //GameObject enemyInstance = Instantiate(enemy_FoodEaterPrefab, clampedSpawnPosition, Quaternion.identity);
+
+
 
                 currentActiveEnemyObjectsList.Add(enemyInstance);
 
@@ -273,6 +296,63 @@ public class GameManager : MonoBehaviour
             GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
         }
     }
+
+
+    // A function that upgrades the egg type on request
+    void UpgradeEgg()
+    {
+        if (currentEggIndex < maxEggLevel && inSceneMoney >= eggUpgradeCost)
+        {
+            PerformEggUpgrade();
+        }
+        else if (currentEggIndex == maxEggLevel)
+        {
+            AdvanceToNextLevel();
+        }
+    }
+
+    private void PerformEggUpgrade()
+    {
+        inSceneMoney -= eggUpgradeCost;
+        eggUpgradeCost *= 2; // Double the cost of the next upgrade
+        currentEggIndex++; // Increase the level of the egg
+        GameEvents.EventsChannelInstance.RefreshEggCost(eggUpgradeCost);
+        GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
+    }
+
+    private void AdvanceToNextLevel()
+    {
+        GameSaveDataContainer gameSaveDataContainer = SaveLoadManager.LoadData();
+        transferableGameData.selectedLevel++;
+
+        if (!gameSaveDataContainer.unlockedLevelsList.Contains(transferableGameData.selectedLevel))
+        {
+            gameSaveDataContainer.unlockedLevelsList.Add(transferableGameData.selectedLevel);
+            SaveLoadManager.SaveData(gameSaveDataContainer.unlockedLevelsList);
+        }
+
+        LoadNextScene(gameSaveDataContainer);
+    }
+
+    private void LoadNextScene(GameSaveDataContainer gameSaveDataContainer)
+    {
+        ClearTheStaticLists();
+
+
+        string nextScene = gameSaveDataContainer.unlockedLevelsList.Count > 3 ?
+                           "SpecialAnimalsSelectionScene" :
+                           "Level " + transferableGameData.selectedLevel;
+        SceneManager.LoadScene(nextScene);
+    }
+
+    private void ClearTheStaticLists()
+    {
+        // Clear the lists of the current active objects in a current scene
+        currentActiveMainFishObjectsList.Clear();
+        currentActiveFoodTargetObjectsList.Clear();
+        currentActiveEnemyObjectsList.Clear();
+    }
+
     #endregion
 
 
@@ -280,15 +360,19 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.EventsChannelInstance.OnSpawnObject += SpawnObject;
+
         GameEvents.EventsChannelInstance.OnUpgradeFood += UpgradeFood;
         GameEvents.EventsChannelInstance.OnUpgradeWeapon += UpgradeWeapon;
+        GameEvents.EventsChannelInstance.OnUpgradeEgg += UpgradeEgg;
     }
 
     private void OnDisable()
     {
         GameEvents.EventsChannelInstance.OnSpawnObject -= SpawnObject;
+
         GameEvents.EventsChannelInstance.OnUpgradeFood -= UpgradeFood;
         GameEvents.EventsChannelInstance.OnUpgradeWeapon -= UpgradeWeapon;
+        GameEvents.EventsChannelInstance.OnUpgradeEgg -= UpgradeEgg;
     }
     #endregion
 

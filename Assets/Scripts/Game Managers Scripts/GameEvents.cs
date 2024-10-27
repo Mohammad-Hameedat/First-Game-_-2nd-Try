@@ -9,9 +9,13 @@ public class GameEvents : MonoBehaviour
     // Events
     public event Action OnUpgradeFood;
     public event Action OnUpgradeWeapon;
+    public event Action OnUpgradeEgg;
+
     public event Action<int> OnSpawnObject;
-    public event Action<int> OnRefreshInGameSceneMoney;
-    public event Action<int> OnRefreshMainFishesNumber;
+
+    public event Action<int> OnRefreshInSceneMoney;
+    public event Action<int> OnRefreshMainFishesCounter;
+    public event Action<int> OnRefreshEggCost;
 
 
     private void Awake()
@@ -36,21 +40,33 @@ public class GameEvents : MonoBehaviour
         OnUpgradeWeapon?.Invoke();
     }
 
+    public void UpgradeEgg()
+    {
+        OnUpgradeEgg?.Invoke();
+    }
+
+
+
     // Invoking the event
     public void SpawnObjects(int objectType)
     {
         // If there are subscribers to the event, invoke the event
-        OnSpawnObject?.Invoke(obj: objectType);
+        OnSpawnObject?.Invoke(objectType);
     }
 
-    public void UpdateInGameSceneMoney(int coins)
+    public void UpdateInGameSceneMoney(int inSceneMoney)
     {
-        OnRefreshInGameSceneMoney?.Invoke(coins);
+        OnRefreshInSceneMoney?.Invoke(inSceneMoney);
     }
 
     public void RefresheMainFishesNumber(int mainFishesNumber)
     {
-        OnRefreshMainFishesNumber?.Invoke(mainFishesNumber);
+        OnRefreshMainFishesCounter?.Invoke(mainFishesNumber);
+    }
+
+    public void RefreshEggCost(int eggCost)
+    {
+        OnRefreshEggCost?.Invoke(eggCost);
     }
 
 
@@ -59,8 +75,9 @@ public class GameEvents : MonoBehaviour
         OnUpgradeFood = null;
         OnUpgradeWeapon = null;
         OnSpawnObject = null;
-        OnRefreshInGameSceneMoney = null;
-        OnRefreshMainFishesNumber = null;
+        OnRefreshInSceneMoney = null;
+        OnRefreshMainFishesCounter = null;
+        OnRefreshEggCost = null;
     }
 
 }

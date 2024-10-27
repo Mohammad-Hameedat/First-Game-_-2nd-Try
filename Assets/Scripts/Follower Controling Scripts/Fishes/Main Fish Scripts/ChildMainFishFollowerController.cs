@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChildMainFishFollowerController : BaseFollowerController
@@ -82,8 +80,9 @@ public class ChildMainFishFollowerController : BaseFollowerController
     protected override void OnDisable()
     {
         if (!this.gameObject.scene.isLoaded) return;
-        GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.currentActiveMainFishObjectsList.Count);
         GameManager.currentActiveMainFishObjectsList.Remove(gameObject);
+
+        GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.currentActiveMainFishObjectsList.Count);
     }
 
 }
