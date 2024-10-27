@@ -1,56 +1,63 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class UIManager : MonoBehaviour
 {
     [Header("UI Buttons")]
     public Button spawnObject;
     public Button upgradeFood;
-    public Button upgradeGun;
+    public Button upgradeWeapon;
+    public Button UpgradeEgg_NextLevel;
 
     [Header("UI Texts")]
-    public TMPro.TextMeshProUGUI currenctAvailableMoney;
-    public TMPro.TextMeshProUGUI numberOfMainFishesInScene;
+    public TextMeshProUGUI currentInSceneMoneyText;
+    public TextMeshProUGUI currentInSceneMainFishesText;
+    public TextMeshProUGUI eggCostText;
 
-    int moneyAmount = 0;
-    int mainFishesNumber = 0;
 
-    void GetMoneyValue(int coinsValue)
+    void RefreshMoneyValue(int coinsValue)
     {
-        moneyAmount = coinsValue;
-        currenctAvailableMoney.text = moneyAmount.ToString() + "$";
+        currentInSceneMoneyText.text = coinsValue.ToString() + "$";
     }
 
-    void GetMainFishesNumber(int mainFishesValue)
+    void RefreshMainFishesCounter(int mainFishesCounter)
     {
-        mainFishesNumber = mainFishesValue;
-        numberOfMainFishesInScene.text = mainFishesNumber.ToString();
+        currentInSceneMainFishesText.text = mainFishesCounter.ToString();
     }
 
-    void UpgradeWeapon()
+    void RefreshEggCost(int eggCost)
     {
-
+        eggCostText.text = eggCost.ToString() + "$";
     }
+
 
     private void OnEnable()
     {
-        GameEvents.EventsChannelInstance.OnRefreshInGameSceneMoney += GetMoneyValue;
-        GameEvents.EventsChannelInstance.OnRefreshMainFishesNumber += GetMainFishesNumber;
+        GameEvents.EventsChannelInstance.OnRefreshInSceneMoney += RefreshMoneyValue;
+        GameEvents.EventsChannelInstance.OnRefreshMainFishesCounter += RefreshMainFishesCounter;
+        GameEvents.EventsChannelInstance.OnRefreshEggCost += RefreshEggCost;
 
         spawnObject.onClick.AddListener(() => GameEvents.EventsChannelInstance.SpawnObjects(1));
+
         upgradeFood.onClick.AddListener(() => GameEvents.EventsChannelInstance.UpgradeFood());
-        upgradeGun.onClick.AddListener(() => GameEvents.EventsChannelInstance.UpgradeWeapon());
+        upgradeWeapon.onClick.AddListener(() => GameEvents.EventsChannelInstance.UpgradeWeapon());
+        UpgradeEgg_NextLevel.onClick.AddListener(() => GameEvents.EventsChannelInstance.UpgradeEgg());
     }
 
 
     private void OnDisable()
     {
-        GameEvents.EventsChannelInstance.OnRefreshInGameSceneMoney -= GetMoneyValue;
-        GameEvents.EventsChannelInstance.OnRefreshMainFishesNumber -= GetMainFishesNumber;
+        GameEvents.EventsChannelInstance.OnRefreshInSceneMoney -= RefreshMoneyValue;
+        GameEvents.EventsChannelInstance.OnRefreshMainFishesCounter -= RefreshMainFishesCounter;
+        GameEvents.EventsChannelInstance.OnRefreshEggCost -= RefreshEggCost;
 
         // Unsubscribe all listeners from the buttons
         spawnObject.onClick.RemoveAllListeners();
         upgradeFood.onClick.RemoveAllListeners();
+        upgradeWeapon.onClick.RemoveAllListeners();
+        UpgradeEgg_NextLevel.onClick.RemoveAllListeners();
     }
 
 

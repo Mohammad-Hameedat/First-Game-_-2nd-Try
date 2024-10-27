@@ -100,18 +100,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 142212062628f8c4195c39c34bb8030a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectablePrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
+  followerProperties: {fileID: 11400000, guid: a386bb24ff28d3047a150b0cdc90dae2, type: 2}
+  currentNumberOfEatenObjects: 0
+  currentMoneyIndex: 0
   lastNearestTargetObject: {fileID: 0}
-  numberOfEatenObjects: 0
   hungerTimeCounter: 0
   hungerStartingTime: 5
   destructionTime: 15
-  moneyPrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
-  moneyTypes:
-  - {fileID: 11400000, guid: dcb864b5ea095df488a4241e0148678c, type: 2}
-  - {fileID: 11400000, guid: a39507f9676230f4b96bc7fa9d6e12e7, type: 2}
-  - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
-  currentMoneyIndex: 0
-  followerProperties: {fileID: 11400000, guid: a386bb24ff28d3047a150b0cdc90dae2, type: 2}
   GetList1: []
 --- !u!114 &8842681905336199702
 MonoBehaviour:
@@ -125,10 +121,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afcd6aef39af52c4aae13cc28fd23957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 0
   accelerationDuration: 0
+  movementSpeed: 0
   timeBeforeChangingVelocity: 0
   randomTargetPosition: {x: 0, y: 0, z: 0}
+  currentSpeed: 0
 --- !u!114 &-2094870482213120977
 MonoBehaviour:
   m_ObjectHideFlags: 0
