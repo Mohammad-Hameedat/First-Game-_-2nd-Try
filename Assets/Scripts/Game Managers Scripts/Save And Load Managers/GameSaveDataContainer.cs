@@ -12,6 +12,4 @@ public class GameSaveDataContainer
     {
         unlockedLevelsList = new List<int>();
     }
-
-
 }

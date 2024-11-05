@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class ChildEnemyFoodEaterController : ChildEnemyController
 {
-
-    public GameObject foodPrefab;
-
-
     [SerializeField] private List<GameObject> foodsList = new();
     private IEnumerable<GameObject> combinedEatableTargetsList = new List<GameObject>();
 

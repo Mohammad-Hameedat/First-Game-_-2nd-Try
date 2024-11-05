@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-
     #region Data types References
 
     #region Scriptable Objects References
@@ -38,16 +37,16 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-
     #region Spawn Objects Managers
     [Header("Spawn Object")]
     [SerializeField] int inSceneMoney = 300;
     Vector3 clampedSpawnPosition;
 
+    float enemySpawnDelay = 60f;
+
     // This is the delay value between clicks or touches, <<<<<<<< and will be replaced later with a value from a scriptable object >>>>>>>>
     const float spawnDelay = 0.001f;
     #endregion
-
 
 
     #region Upgradables
@@ -68,12 +67,16 @@ public class GameManager : MonoBehaviour
     #endregion
     #endregion
 
+
     private bool isTypeOfFoodEater = false; // New flag to track whether the current enemy is a Food Eater
     private int maxEggLevel = 2; // Maximum level of the egg
 
+
+
+
     void Start()
     {
-        ClearTheStaticLists();
+        ClearStaticLists();
 
         inSceneMoney = 99999999;
         GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
@@ -85,7 +88,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(HandleClicksAndTouches());
 
         // Enemy Spawner
-        StartCoroutine(SpawnEnemy());
+        //StartCoroutine(SpawnEnemy());
 
         SpawnObject(1);
     }
@@ -234,7 +237,7 @@ public class GameManager : MonoBehaviour
         {
             if (currentActiveEnemyObjectsList.Count == 0)
             {
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(enemySpawnDelay);
                 clampedSpawnPosition = positioningManager.GetNewRandomPosition();
 
                 GameObject tempEnemyInstance = enemyObjectsList[Random.Range(0, enemyObjectsList.Count)];
@@ -336,7 +339,7 @@ public class GameManager : MonoBehaviour
 
     private void LoadNextScene(GameSaveDataContainer gameSaveDataContainer)
     {
-        ClearTheStaticLists();
+        ClearStaticLists();
 
 
         string nextScene = gameSaveDataContainer.unlockedLevelsList.Count > 3 ?
@@ -345,7 +348,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(nextScene);
     }
 
-    private void ClearTheStaticLists()
+    private void ClearStaticLists()
     {
         // Clear the lists of the current active objects in a current scene
         currentActiveMainFishObjectsList.Clear();
