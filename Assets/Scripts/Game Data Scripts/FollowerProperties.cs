@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Follower Properties", menuName = "Follower Data/Follower Properties")]
 public class FollowerProperties : ScriptableObject
 {
+    public GameObject collectablePrefab; // The prefab of the collectable object that the follower will spawn
+
     [Header("Money configurations")]
     public CollectableProperties[] collectableConfigs; // The money types that can be spawned by the follower
 
@@ -15,6 +17,7 @@ public class FollowerProperties : ScriptableObject
     [Header("Movement Configurations")]
     public float minRandomDesiredVelocity; // The minimum desired velocity for the follower
     public float maxRandomDesiredVelocity; // The maximum desired velocity for the follower
+
     public float maxFollowingDesiredVelocity; // The maximum desired velocity for the follower when following a target object
 
     public float minAccelerationDuration; // The minimum acceleration duration for the follower
@@ -32,7 +35,7 @@ public class FollowerProperties : ScriptableObject
 
 
     [Header("Health Configurations")]
-    public int health; // The health of the follower object (Enemy Follower)
+    public int maxHealth; // The health of the follower object (Enemy Follower)
 
 
     [Header("Random Target Configurations")]
