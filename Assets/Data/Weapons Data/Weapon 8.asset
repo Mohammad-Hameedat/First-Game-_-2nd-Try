@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80c35d21c6e0b5548810105425e11cdc, type: 3}
   m_Name: Weapon 8
   m_EditorClassIdentifier: 
-  weaponDamage: 9
-  weaponCost: 3000
-  fireDelay: 0.12
+  weaponDamage: 8
+  weaponCost: 2200
+  fireDelay: 0.16

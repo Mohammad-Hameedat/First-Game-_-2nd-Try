@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a9752b0c8e144801967e6897679604b, type: 3}
+  m_Name: vHierarchy Data
+  m_EditorClassIdentifier: 
+  sceneDatas_byGuid:
+    keys:
+    - 9fc0d4010bbf28b4594072e72b8655ab
+    values:
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-883318420-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1690839831-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1157081290-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-2088931378-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-2122178203-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-963194225-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-705507993-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-759427923-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-762708538-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-963296692-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1829359039-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1333480598-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1481859856-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1953548878-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-696970557-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1082591537-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1271192009-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-221049781-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-617309893-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-693691900-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1602868751-0
+        values:
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 3
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 3
+          iconNameOrGuid: Light Icon
+        - colorIndex: 3
+          iconNameOrGuid: MeshCollider Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 2
+          iconNameOrGuid: 
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 6
+          iconNameOrGuid: 

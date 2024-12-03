@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyProperties : ScriptableObject
 {
     [Header("Health Configurations")]
-    public int health; // The health of the follower object (Enemy Follower)
+    public int maxHealth; // The health of the follower object (Enemy Follower)
 
 
     [Header("Hunger Situation Configurations")]

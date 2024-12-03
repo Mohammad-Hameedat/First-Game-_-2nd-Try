@@ -5,7 +5,6 @@ public class MovementController : MonoBehaviour
 {
     public FollowerProperties properties;
     public BoundsAndPositioningManager boundsManager { get; private set; }
-    public StateMachine stateMachine { get; private set; }
 
 
     public IMovementStrategy movementStrategy;
@@ -15,7 +14,6 @@ public class MovementController : MonoBehaviour
     private void Awake()
     {
         boundsManager = GetComponent<BoundsAndPositioningManager>();
-        stateMachine = GetComponent<StateMachine>();
         rb = GetComponent<Rigidbody>();
     }
 

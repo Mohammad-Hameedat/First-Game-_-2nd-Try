@@ -3,13 +3,15 @@ using UnityEngine;
 public class MainFishInteractionController : InteractionController
 {
     public int currentNumberofEatenObjects = 0;
-    private Hunger hunger;
+    //private MainFishHungerBehavior hungerSystem;
+
+    public HungerSystem hungerSystem;
 
 
     protected override void Awake()
     {
         base.Awake();
-        hunger = GetComponent<Hunger>();
+        //hungerSystem = GetComponent<HungerSystem>();
     }
 
 
@@ -20,14 +22,17 @@ public class MainFishInteractionController : InteractionController
             currentNumberofEatenObjects++;
 
             FoodProperties foodConfig = target.GetComponent<Food>().foodConfig;
-            hunger.hungerStartingTime = foodConfig.staminaTime;
-            hunger.destructionTime = foodConfig.destructionTime;
+
+            hungerSystem.hungerStrategy.SetHungerValues(
+                 foodConfig.staminaTime,
+              foodConfig.destructionTime
+              );
+
+            // Reset hunger
+            hungerSystem.hungerStrategy?.ResetHunger();
 
             // Consume the target
             Destroy(target);
-
-            // Reset hunger
-            hunger?.ResetHunger();
         }
     }
 }

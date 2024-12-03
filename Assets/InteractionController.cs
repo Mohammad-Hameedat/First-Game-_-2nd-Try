@@ -2,15 +2,19 @@ using UnityEngine;
 
 public abstract class InteractionController : MonoBehaviour
 {
-    public float interactionRange;
+    private EnemyController enemyController;
     protected TargetingSystem targetingSystem;
     protected FollowerProperties properties;
+
+    public float interactionRange;
 
     protected virtual void Awake()
     {
         targetingSystem = GetComponent<TargetingSystem>();
         properties = GetComponent<MovementController>().properties;
         interactionRange = properties.nearestDistanceToEatATarget;
+
+        enemyController = gameObject.GetComponent<EnemyController>();
     }
 
     private void Update()
@@ -21,8 +25,18 @@ public abstract class InteractionController : MonoBehaviour
     // Detect the nearest object and interact with it
     private void DetectionAndInteractionWithNearestObject()
     {
+        Transform nearestTarget = null;
+
+        if (enemyController != null)
+        {
+            nearestTarget = targetingSystem.GetNearestTarget();
+        }
+        else
+        {
+            nearestTarget = targetingSystem.GetlastNearestTarget();
+        }
+
         // Get the last nearest target object
-        Transform nearestTarget = targetingSystem.GetlastNearestTarget();
         // If there is no nearest target object, return
         if (nearestTarget == null) return;
 
