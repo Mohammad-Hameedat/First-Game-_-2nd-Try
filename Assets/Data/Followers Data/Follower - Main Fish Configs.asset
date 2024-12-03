@@ -21,12 +21,13 @@ MonoBehaviour:
   closeTargetsRangeThreshold: 3
   minRandomDesiredVelocity: 0.5
   maxRandomDesiredVelocity: 2
-  maxFollowingDesiredVelocity: 4
+  maxFollowingDesiredVelocity: 5
   minAccelerationDuration: 2
   maxAccelerationDuration: 8
   hungerStartingTime: 5
   destructionTime: 15
+  idleDuration: 0
+  hungerDuration: 0
   minCollectableSpwanTime: 7
   maxCollectableSpwanTime: 15
-  maxHealth: 0
   minDistanceTowardsRandomTarget: 1.5

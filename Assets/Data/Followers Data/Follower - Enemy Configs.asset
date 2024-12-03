@@ -12,20 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e610245fb9294c442803611fee1d36c2, type: 3}
   m_Name: Follower - Enemy Configs
   m_EditorClassIdentifier: 
-  collectablePrefab: {fileID: 0}
+  collectablePrefab: {fileID: 406720176294981580, guid: 6fb3355dc7a404e41b5da89fc4e981e2, type: 3}
   collectableConfigs:
   - {fileID: 11400000, guid: 7c588ca13ea72584c854369122e962cd, type: 2}
   nearestDistanceToEatATarget: 2
-  closeTargetsRangeThreshold: 6
   minRandomDesiredVelocity: 0.5
   maxRandomDesiredVelocity: 2
-  maxFollowingDesiredVelocity: 4.5
+  maxFollowingDesiredVelocity: 5.5
   minAccelerationDuration: 2
   maxAccelerationDuration: 8
-  timeToChangeRandomDirection: 4
   hungerStartingTime: 5
   destructionTime: 0
+  idleDuration: 4
+  hungerDuration: 12
   minCollectableSpwanTime: 7
   maxCollectableSpwanTime: 15
-  maxHealth: 0
   minDistanceTowardsRandomTarget: 1.5

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9464d1d2f0394e940882daa87cb351a5, type: 3}
   m_Name: Enemy - Food Eater Configs
   m_EditorClassIdentifier: 
-  health: 30
+  maxHealth: 30
   minRandomHungerTime: 3
   maxRandomHungerTime: 10
   numberOfObjectsToEat: 10

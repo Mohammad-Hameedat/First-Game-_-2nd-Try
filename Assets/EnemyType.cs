@@ -1,5 +1,5 @@
 public enum EnemyType
 {
     MainFishOnly,
-    MainFishAndFood
+    FishesAndFoodsEater
 }

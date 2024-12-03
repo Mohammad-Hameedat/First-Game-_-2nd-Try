@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int inSceneMoney = 300;
     Vector3 clampedSpawnPosition;
 
-    float enemySpawnDelay = 60f;
+    float enemySpawnDelay = 2f;
 
     // This is the delay value between clicks or touches, <<<<<<<< and will be replaced later with a value from a scriptable object >>>>>>>>
     const float spawnDelay = 0.001f;
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     {
         ClearStaticLists();
 
-        inSceneMoney = 99999999;
+        inSceneMoney = 999999990;
         GameEvents.EventsChannelInstance.UpdateInGameSceneMoney(inSceneMoney);
         GameEvents.EventsChannelInstance.RefreshEggCost(eggUpgradeCost);
 
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
 
                 Ray ray = Camera.main.ScreenPointToRay(inputPosition);
                 RaycastHit hit;
-                Physics.Raycast(ray, out hit, 21f);
+                Physics.Raycast(ray,out hit,21f);
 
 
 
@@ -158,8 +158,8 @@ public class GameManager : MonoBehaviour
                     // Or damage the enemy
                     else
                     {
-                        ChildEnemyController enemyController = hit.collider.gameObject.GetComponent<ChildEnemyController>();
-                        enemyController?.TakeDamage(weaponTypes[currentWeaponIndex].weaponDamage);
+                        Health decreaseHealth = hit.collider?.gameObject.GetComponent<Health>();
+                        decreaseHealth?.TakeDamage(weaponTypes[currentWeaponIndex].weaponDamage);
                         yield return new WaitForSeconds(weaponTypes[currentWeaponIndex].fireDelay);
                     }
                 }
@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
                 {
                     // Get a random position depending on the camera viewport
                     clampedSpawnPosition = positioningManager.GetNewRandomPosition();
-                    _spawnedObject = Instantiate(followerPrefab, clampedSpawnPosition, Quaternion.identity);
+                    _spawnedObject = Instantiate(followerPrefab,clampedSpawnPosition,Quaternion.identity);
 
                     currentActiveMainFishObjectsList.Add(_spawnedObject);
                     inSceneMoney -= followerInstantiateCost;
@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour
             case 2:
                 if (inSceneMoney >= foodTypes[currentFoodIndex].foodCost || currentActiveEnemyObjectsList.Count > 0)
                 {
-                    _spawnedObject = Instantiate(foodPrefab, clampedSpawnPosition, Quaternion.identity);
+                    _spawnedObject = Instantiate(foodPrefab,clampedSpawnPosition,Quaternion.identity);
                     _spawnedObject.GetComponent<Food>().foodConfig = foodTypes[currentFoodIndex];
 
                     currentActiveFoodTargetObjectsList.Add(_spawnedObject);
@@ -241,10 +241,10 @@ public class GameManager : MonoBehaviour
                 clampedSpawnPosition = positioningManager.GetNewRandomPosition();
 
                 GameObject tempEnemyInstance = enemyObjectsList[Random.Range(0, enemyObjectsList.Count)];
+                //GameObject tempEnemyInstance = enemyObjectsList[1];
 
 
                 GameObject enemyInstance = Instantiate(tempEnemyInstance, clampedSpawnPosition, Quaternion.identity);
-                //GameObject enemyInstance = Instantiate(enemy_FoodEaterPrefab, clampedSpawnPosition, Quaternion.identity);
 
 
 
@@ -262,9 +262,9 @@ public class GameManager : MonoBehaviour
     // A function that checks the type of the spawned enemy object
     private void CheckEnemyType(GameObject enemy)
     {
-        ChildEnemyController tempEnemyInstance = enemy.GetComponent<ChildEnemyController>();
+        EnemyType enemyType = enemy.GetComponent<EnemyController>().enemyType;
 
-        if (tempEnemyInstance.GetComponent<ChildEnemyController>() is ChildEnemyFoodEaterController)
+        if (enemyType == EnemyType.FishesAndFoodsEater)
         {
             isTypeOfFoodEater = true;
         }
@@ -291,7 +291,7 @@ public class GameManager : MonoBehaviour
     // A function that upgrades the weapon type on request
     void UpgradeWeapon()
     {
-        if (inSceneMoney >= weaponTypes[currentWeaponIndex].weaponCost && currentWeaponIndex < weaponTypes.Length - 1)
+        if (inSceneMoney - weaponTypes[currentWeaponIndex].weaponCost >= 0 && currentWeaponIndex < weaponTypes.Length - 1)
         {
             currentWeaponIndex = (currentWeaponIndex + 1) % weaponTypes.Length;
             inSceneMoney -= weaponTypes[currentWeaponIndex].weaponCost;
