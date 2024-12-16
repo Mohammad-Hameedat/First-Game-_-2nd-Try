@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using UnityEngine;
-
 public class EnemyHuntingState : IState
 {
     private TargetingSystem targetingSystem;
@@ -26,19 +23,19 @@ public class EnemyHuntingState : IState
 
     public void Execute()
     {
-        if (hungerSystem.hungerStrategy.IsHungry() && movementStrategy is not TargetedMovementStrategy)
+        if (hungerSystem.hungerStrategy.GetHungerStatus() && movementStrategy is not HybridSwimmingMovementStrategy)
         {
             //MonoBehaviour.print("Hunting");
-            movementStrategy = new TargetedMovementStrategy(
+            movementStrategy = new HybridSwimmingMovementStrategy(
                 movementController,
                 targetingSystem
                 );
 
             movementController.SetMovementStrategy(movementStrategy);
         }
-        else if (!hungerSystem.hungerStrategy.IsHungry() && movementStrategy is not RandomMovementStrategy)
+        else if (!hungerSystem.hungerStrategy.GetHungerStatus() && movementStrategy is not RandomizedSwimmingMovementStrategy)
         {
-            movementStrategy = new RandomMovementStrategy(
+            movementStrategy = new RandomizedSwimmingMovementStrategy(
                 movementController
                 );
 

@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: -2270203493312159981}
   - component: {fileID: -1992986221355741603}
   - component: {fileID: -4078236759278506260}
-  - component: {fileID: -6520406172717041468}
   - component: {fileID: 8584629251670702287}
   - component: {fileID: -1342103384687549308}
+  - component: {fileID: 7435952459695185677}
   m_Layer: 9
   m_Name: Fish - Test Object
   m_TagString: Untagged
@@ -100,7 +100,7 @@ Rigidbody:
   m_GameObject: {fileID: 1735303277889347158}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0596a312cdc286b4da2dea6bccd11bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followerProperties: {fileID: 11400000, guid: a386bb24ff28d3047a150b0cdc90dae2, type: 2}
+  followerProperties: {fileID: 11400000, guid: 63c3832cfb808e141873e86fa7aabec7, type: 2}
   currentNumberofEatenObjects: 0
 --- !u!114 &-2270203493312159981
 MonoBehaviour:
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8d03cc56eceb9049a5031d9d1121875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  properties: {fileID: 0}
+  movementProperties: {fileID: 0}
 --- !u!114 &-1992986221355741603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,21 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e759886c21a7a294aa7c3323d9cceb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6520406172717041468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735303277889347158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c44742533d892743b84a7b7c955bfc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionRange: 0
-  currentNumberofEatenObjects: 0
-  hungerSystem: {fileID: 0}
 --- !u!114 &8584629251670702287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,3 +193,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7435952459695185677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 029a4b270c0eda64780fb645fcf0b5d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionRange: 0

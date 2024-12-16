@@ -15,6 +15,10 @@ MonoBehaviour:
   sceneDatas_byGuid:
     keys:
     - 9fc0d4010bbf28b4594072e72b8655ab
+    - 1aada52fcf83497479dea08a5cfe2fbf
+    - 0d38947ffec7bf74e8a8cf814923ab6e
+    - ff5d3f0f54022ca42a1549e6eb2e0d11
+    - 260dbf22dc03e9245b9dba3c6f7b4540
     values:
     - goDatas_byGlobalId:
         keys:
@@ -39,6 +43,270 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-617309893-0
         - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-693691900-0
         - globalObjectIdString: GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1602868751-0
+        values:
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 3
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 3
+          iconNameOrGuid: Light Icon
+        - colorIndex: 3
+          iconNameOrGuid: MeshCollider Icon
+        - colorIndex: 4
+          iconNameOrGuid: EventSystem Icon
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 2
+          iconNameOrGuid: 
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 6
+          iconNameOrGuid: 
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-883318420-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1690839831-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1157081290-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-2088931378-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-2122178203-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-963194225-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-705507993-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-759427923-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-762708538-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-963296692-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1829359039-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1333480598-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1481859856-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1953548878-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-696970557-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1082591537-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1271192009-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-221049781-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-617309893-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-693691900-0
+        - globalObjectIdString: GlobalObjectId_V1-2-1aada52fcf83497479dea08a5cfe2fbf-1602868751-0
+        values:
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 3
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 3
+          iconNameOrGuid: Light Icon
+        - colorIndex: 3
+          iconNameOrGuid: MeshCollider Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 2
+          iconNameOrGuid: 
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 6
+          iconNameOrGuid: 
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-883318420-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1690839831-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1157081290-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-2088931378-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-2122178203-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-963194225-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-705507993-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-759427923-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-762708538-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-963296692-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1829359039-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1333480598-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1481859856-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1953548878-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-696970557-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1082591537-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1271192009-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-221049781-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-617309893-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-693691900-0
+        - globalObjectIdString: GlobalObjectId_V1-2-0d38947ffec7bf74e8a8cf814923ab6e-1602868751-0
+        values:
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 3
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 3
+          iconNameOrGuid: Light Icon
+        - colorIndex: 3
+          iconNameOrGuid: MeshCollider Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 2
+          iconNameOrGuid: 
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 6
+          iconNameOrGuid: 
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-883318420-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1690839831-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1157081290-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-2088931378-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-2122178203-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-963194225-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-705507993-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-759427923-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-762708538-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-963296692-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1829359039-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1333480598-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1481859856-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1953548878-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-696970557-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1082591537-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1271192009-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-221049781-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-617309893-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-693691900-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ff5d3f0f54022ca42a1549e6eb2e0d11-1602868751-0
+        values:
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 2
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 3
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 3
+          iconNameOrGuid: Light Icon
+        - colorIndex: 3
+          iconNameOrGuid: MeshCollider Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 3
+          iconNameOrGuid: 
+        - colorIndex: 2
+          iconNameOrGuid: 
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 4
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 6
+          iconNameOrGuid: 
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-883318420-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1690839831-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1157081290-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-2088931378-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-2122178203-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-963194225-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-705507993-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-759427923-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-762708538-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-963296692-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1829359039-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1333480598-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1481859856-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1953548878-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-696970557-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1082591537-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1271192009-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-221049781-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-617309893-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-693691900-0
+        - globalObjectIdString: GlobalObjectId_V1-2-260dbf22dc03e9245b9dba3c6f7b4540-1602868751-0
         values:
         - colorIndex: 2
           iconNameOrGuid: Settings Icon

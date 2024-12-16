@@ -7,18 +7,19 @@ using UnityEngine;
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(TargetingSystem))]
 [RequireComponent(typeof(HungerSystem))]
-[RequireComponent(typeof(MainFishInteractionController))]
+[RequireComponent(typeof(BoundsAndPositioningManager))]
+[RequireComponent(typeof(InteractionController))]
 #endregion
 public class MainFishController : MonoBehaviour
 {
     private MovementController movementController;
     private StateMachine stateMachine;
     private TargetingSystem targetingSystem;
-    private MainFishInteractionController mainFishInteractionController;
     private HungerSystem hungerSystem;
+    private InteractionController interactionController;
 
     private List<GameObject> targetObjectsList = new();
-    public FollowerProperties followerProperties;
+    public FollowerSettings followerProperties;
 
     public int currentNumberofEatenObjects = 0;
 
@@ -29,27 +30,35 @@ public class MainFishController : MonoBehaviour
         movementController = GetComponent<MovementController>();
         stateMachine = GetComponent<StateMachine>();
         targetingSystem = GetComponent<TargetingSystem>();
-        mainFishInteractionController = GetComponent<MainFishInteractionController>();
         hungerSystem = GetComponent<HungerSystem>();
+        interactionController = GetComponent<InteractionController>();
 
         // Assign the properties to the components
-        movementController.properties = followerProperties;
+        movementController.movementProperties = followerProperties.movementProperties;
 
         targetObjectsList = GameManager.currentActiveFoodTargetObjectsList;
-
-        // Initialize target list
-        targetingSystem.SetEatableTargetsList(targetObjectsList);
     }
 
 
     private void Start()
     {
+
+        targetingSystem.targetingStrategy = new FrameBasedTargetingStrategy();
+
+        // Initialize target list
+        targetingSystem.SetEatableTargetsList(targetObjectsList);
+
+        // Register the object in the list of active main fishes || Add to GameManager list
         hungerSystem.SetHungerBehavior(new MainFishHungerStrategy(
             gameObject,
-            followerProperties.hungerStartingTime,
-            followerProperties.destructionTime));
+            followerProperties.hungerProperties.hungerStartingTime,
+            followerProperties.hungerProperties.destructionTime));
 
-        mainFishInteractionController.hungerSystem = this.hungerSystem;
+        // Set the interaction strategy
+        interactionController.SetInteractionStrategy(new MainFishInteractionStrategy(
+            hungerSystem,
+            targetingSystem
+            ));
 
 
         // Start spawning money
@@ -62,12 +71,12 @@ public class MainFishController : MonoBehaviour
         // Handle state transitions based on existing enemies
         if (GameManager.currentActiveEnemyObjectsList.Count == 0)
         {
-            if (stateMachine.currentState is not NoDangerState)
+            if (stateMachine.currentState is not NoThreatSwimmingState)
             {
                 GetComponent<HungerSystem>().enabled = true;
 
                 // Switch to NoDangerState
-                stateMachine.ChangeState(new NoDangerState(
+                stateMachine.ChangeState(new NoThreatSwimmingState(
                 movementController,
                 targetingSystem,
                 hungerSystem
@@ -76,16 +85,16 @@ public class MainFishController : MonoBehaviour
         }
         else
         {
-            if (stateMachine.currentState is not InDangerMovementState)
+            if (stateMachine.currentState is not ThreatenedSwimmingState)
             {
                 GetComponent<HungerSystem>().enabled = false;
                 // Switch to InDangerMovementState
-                stateMachine.ChangeState(new InDangerMovementState(
+                stateMachine.ChangeState(new ThreatenedSwimmingState(
                     movementController));
             }
         }
 
-        currentNumberofEatenObjects = mainFishInteractionController.currentNumberofEatenObjects;
+        currentNumberofEatenObjects = interactionController.interactionStrategy.GetEatenObjectsCount();
     }
 
 
@@ -97,12 +106,12 @@ public class MainFishController : MonoBehaviour
             {
                 // Instantiate the collectable prefab at the current position
                 GameObject collectableInstance = Instantiate(
-                    followerProperties.collectablePrefab, 
-                    transform.position, 
+                    followerProperties.spawnProperties.collectablePrefab,
+                    transform.position,
                     Quaternion.identity);
 
                 // Set the collectable configuration
-                collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.collectableConfigs[0];
+                collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.spawnProperties.collectableConfigs[0];
             }
 
             float randomTimeBeforeNextCollectableSpawn = Random.Range(7f, 15f);
