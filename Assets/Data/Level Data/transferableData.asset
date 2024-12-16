@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bd8ab37d8a8e4a4b9713b510f6b5feb, type: 3}
   m_Name: transferableData
   m_EditorClassIdentifier: 
-  selectedLevel: 4
-  selectedSpecialAnimals: []
-  selectedSpecialAnimalsIDs: 
+  selectedLevel: 2
+  selectedSpecialPetsList:
+  - {fileID: 1451199827726647887, guid: 7f36db53360b7454a8ed9212b1cde6b2, type: 3}
+  selectedSpecialPetsIDs: 

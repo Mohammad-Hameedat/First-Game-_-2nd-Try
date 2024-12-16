@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e79bbb11b141c4ab7e8fcefc3f72ac, type: 3}
+  m_Name: MainFish Settings
+  m_EditorClassIdentifier: 
+  movementProperties: {fileID: 11400000, guid: 2ce5c8105f2cb174ab6c3b01cb583f97, type: 2}
+  hungerProperties: {fileID: 11400000, guid: 4a26c0331f5dc4d449d1112020030ba0, type: 2}
+  spawnProperties: {fileID: 11400000, guid: 1e5fc00b127a5844ab132e40aa6c7483, type: 2}

@@ -8,12 +8,14 @@ using UnityEngine;
 [RequireComponent(typeof(TargetingSystem))]
 [RequireComponent(typeof(HungerSystem))]
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(InteractionController))]
 #endregion
 public class EnemyController : MonoBehaviour
 {
     private MovementController movementController;
     private StateMachine stateMachine;
     private TargetingSystem targetingSystem;
+    private InteractionController interactionController;
     private Health health;
     private HungerSystem hungerSystem;
 
@@ -23,7 +25,7 @@ public class EnemyController : MonoBehaviour
     private static List<GameObject> targetObjectsList = new();
     public static IEnumerable<GameObject> combinedTargetsList = new List<GameObject>();
 
-    public FollowerProperties followerProperties;
+    public FollowerSettings followerProperties;
     public EnemyProperties enemyProperties;
 
     public EnemyType enemyType;
@@ -32,14 +34,15 @@ public class EnemyController : MonoBehaviour
     {
         // Get references to the components
         movementController = GetComponent<MovementController>();
-        stateMachine = GetComponent<StateMachine>();
         targetingSystem = GetComponent<TargetingSystem>();
+        interactionController = GetComponent<InteractionController>();
         health = GetComponent<Health>();
         hungerSystem = GetComponent<HungerSystem>();
+        stateMachine = GetComponent<StateMachine>();
 
 
         // Assign the properties to the components
-        movementController.properties = followerProperties;
+        movementController.movementProperties = followerProperties.movementProperties;
         health.maxHealth = enemyProperties.maxHealth;
 
 
@@ -66,10 +69,19 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
+        targetingSystem.targetingStrategy = new ProximityEnemyTargetingStrategy();
+
+
         // Register the enemy in the list of active enemies || Register in GameManager
         hungerSystem.SetHungerBehavior(new EnemyHungerStrategy(
-            followerProperties.hungerStartingTime,
-            followerProperties.hungerDuration
+            followerProperties.hungerProperties.hungerStartingTime,
+            followerProperties.hungerProperties.hungerDuration
+            ));
+
+        // Set the interaction strategy for the enemy
+        interactionController.SetInteractionStrategy(new EnemyInteractionStrategy(
+            gameObject,
+            targetingSystem
             ));
 
 
@@ -98,8 +110,8 @@ public class EnemyController : MonoBehaviour
         GameManager.currentActiveEnemyObjectsList.Remove(gameObject);
 
         // Spawn collectable if the enemy is destroyed
-        GameObject collectableInstance = Instantiate(followerProperties.collectablePrefab, transform.position, Quaternion.identity);
-        collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.collectableConfigs[0];
+        GameObject collectableInstance = Instantiate(followerProperties.spawnProperties.collectablePrefab, transform.position, Quaternion.identity);
+        collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.spawnProperties.collectableConfigs[0];
 
     }
 }

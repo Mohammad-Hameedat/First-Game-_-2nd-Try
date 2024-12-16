@@ -21,32 +21,23 @@ public class MainFishHungerStrategy : IHungerStrategy
 
     public void HandleHungerState()
     {
-        //if (!isHungerEnabled)
-        //    return;
-
         hungerTimeCounter += Time.deltaTime;
 
         // If the object is not hungry and the hunger time counter is greater than the hunger starting time
         if (!isHungry && hungerTimeCounter >= hungerStartingTime)
         {
-            //Debug.Log("Hungry");
-
-
             // Set the object as hungry
             isHungry = true;
         }
         // If the object is hungry and the hunger time counter is greater than the destruction time
         else if (isHungry && hungerTimeCounter >= destructionTime)
         {
-            //Debug.Log("Idle");
-
-
             // Destroy the object
             Object.Destroy(gameObject);
         }
     }
 
-    public bool IsHungry()
+    public bool GetHungerStatus()
     {
         return isHungry;
     }

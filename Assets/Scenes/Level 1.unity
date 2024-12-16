@@ -1982,7 +1982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f606dc49c73835d46836fadeed480d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyObjectsList:
+  spawnableEnemyPrefabsList:
   - {fileID: 1735303277889347158, guid: 9eab71e4898caff4ebd7b657f598f7d5, type: 3}
   - {fileID: 1735303277889347158, guid: 95ad1deadced9034e9f2afa882a75a68, type: 3}
   transferableGameData: {fileID: 11400000, guid: f06ca5dda652b4343845cd8e8f5ec73d, type: 2}
@@ -1991,6 +1991,7 @@ MonoBehaviour:
   enemy_FoodEaterPrefab: {fileID: 1735303277889347158, guid: 9eab71e4898caff4ebd7b657f598f7d5, type: 3}
   enemy_ClorpPrefab: {fileID: 1735303277889347158, guid: 95ad1deadced9034e9f2afa882a75a68, type: 3}
   inSceneMoney: 0
+  clampedSpawnPosition: {x: 0, y: 0, z: 0}
   foodTypes:
   - {fileID: 11400000, guid: fc592f2c99ac3464292fa527674ea0c0, type: 2}
   - {fileID: 11400000, guid: 0e11fc2cd685b6c449948e764863c4c7, type: 2}
