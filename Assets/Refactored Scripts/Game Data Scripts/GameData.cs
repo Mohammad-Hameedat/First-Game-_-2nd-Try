@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TransferableGameData", menuName = "GameData/Transferable Game Data", order = 1)]
+[CreateAssetMenu(fileName = "TransferableGameData", menuName = "Game Data/Transferable Game Data", order = 2)]
 public class GameData : ScriptableObject
 {
     public int selectedLevel;

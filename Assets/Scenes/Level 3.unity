@@ -1982,30 +1982,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f606dc49c73835d46836fadeed480d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyObjectsList:
-  - {fileID: 1735303277889347158, guid: 9eab71e4898caff4ebd7b657f598f7d5, type: 3}
-  - {fileID: 1735303277889347158, guid: 95ad1deadced9034e9f2afa882a75a68, type: 3}
+  levelData: {fileID: 11400000, guid: a98346d1afa390e448555489f198470f, type: 2}
   transferableGameData: {fileID: 11400000, guid: f06ca5dda652b4343845cd8e8f5ec73d, type: 2}
-  followerPrefab: {fileID: 1735303277889347158, guid: 3341687148eb16c4ebc409edc6de9b99, type: 3}
-  foodPrefab: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
-  enemy_FoodEaterPrefab: {fileID: 1735303277889347158, guid: 9eab71e4898caff4ebd7b657f598f7d5, type: 3}
-  enemy_ClorpPrefab: {fileID: 1735303277889347158, guid: 95ad1deadced9034e9f2afa882a75a68, type: 3}
-  inSceneMoney: 0
-  foodTypes:
-  - {fileID: 11400000, guid: fc592f2c99ac3464292fa527674ea0c0, type: 2}
-  - {fileID: 11400000, guid: 0e11fc2cd685b6c449948e764863c4c7, type: 2}
-  - {fileID: 11400000, guid: 3a3ef8bbf6f68e940bda77dfb509d5ca, type: 2}
-  weaponTypes:
-  - {fileID: 11400000, guid: b9bd9cad8ff30bd489e60a215a16d911, type: 2}
-  - {fileID: 11400000, guid: 1613bca980c2e0c42abd0e02485be169, type: 2}
-  - {fileID: 11400000, guid: b2bf942bab2722744836c6ef8672bd12, type: 2}
-  - {fileID: 11400000, guid: 12c57db9014ae9f449fd9dee3efc250f, type: 2}
-  - {fileID: 11400000, guid: cfccdf137d99ff1418b3b09e616359b4, type: 2}
-  - {fileID: 11400000, guid: d505b1bfe1b727544abad6f2d3b6953a, type: 2}
-  - {fileID: 11400000, guid: ce31f863b2ed6f54982941b8a3b8057a, type: 2}
-  - {fileID: 11400000, guid: 2dc203e497d39f245a3442b05adb8be0, type: 2}
-  - {fileID: 11400000, guid: aeca2daadd3659546897ffddfb23d931, type: 2}
-  - {fileID: 11400000, guid: 803c016fe3b7c5a4fae82b4bde5021d3, type: 2}
 --- !u!4 &1690839833
 Transform:
   m_ObjectHideFlags: 0

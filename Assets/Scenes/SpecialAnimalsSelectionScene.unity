@@ -1953,7 +1953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b0621843f0d1d4b815a22d0c275c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specialPet: {fileID: 1451199827726647887, guid: e29e31f6f96a2f047971ec90b1593ead, type: 3}
+  specialPet: {fileID: 6911758768734106187, guid: cbf86db5d4062944b820b2e88c4d974e, type: 3}
   toggleID: 4
 --- !u!1 &350133193
 GameObject:
@@ -2493,7 +2493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b0621843f0d1d4b815a22d0c275c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specialPet: {fileID: 1451199827726647887, guid: f308d88efa9239b42b7cc928206203d0, type: 3}
+  specialPet: {fileID: 3145314459416110979, guid: e8e420d745411bc4ba628cca3a87d42b, type: 3}
   toggleID: 3
 --- !u!1 &427105170
 GameObject:
@@ -5986,7 +5986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b0621843f0d1d4b815a22d0c275c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specialPet: {fileID: 1451199827726647887, guid: 4e6752a97e21e3e429e0ca1115e45ddc, type: 3}
+  specialPet: {fileID: 2375184754098174134, guid: 205ee6a8edd4d154a87687a4d5c447fd, type: 3}
   toggleID: 2
 --- !u!1 &973837505
 GameObject:
@@ -7002,7 +7002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b0621843f0d1d4b815a22d0c275c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specialPet: {fileID: 1451199827726647887, guid: 87941c772924c804e9df7cf483d19825, type: 3}
+  specialPet: {fileID: 8662208946642758922, guid: c9a4cdcd405cdcb43b7b77f3b8c3ff73, type: 3}
   toggleID: 5
 --- !u!1 &1092833793
 GameObject:

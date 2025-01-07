@@ -19,8 +19,8 @@ public class ThreatenedSwimmingState : IState
 
     public void Execute()
     {
-        // Additional logic if needed
-        // For example, if the object is hungry, change the state to HungryState
+        // Could add a feature where support pets can help the main fish escape from the threat here.
+        // A logic will be added here later.
     }
 
     public void Exit()

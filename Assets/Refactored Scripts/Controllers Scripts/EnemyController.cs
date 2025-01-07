@@ -111,7 +111,7 @@ public class EnemyController : MonoBehaviour
 
         // Spawn collectable if the enemy is destroyed
         GameObject collectableInstance = Instantiate(followerProperties.spawnProperties.collectablePrefab, transform.position, Quaternion.identity);
-        collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.spawnProperties.collectableConfigs[0];
+        collectableInstance.GetComponent<CollectibleScript>().collectibleProperties = followerProperties.spawnProperties.collectibleProperties[0];
 
     }
 }

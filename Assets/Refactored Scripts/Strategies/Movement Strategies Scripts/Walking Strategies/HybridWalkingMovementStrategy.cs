@@ -10,6 +10,7 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
     private readonly MovementProperties movementProperties;
     #endregion
 
+    private Transform target = null;
 
     #region Random Movement Variables
     private Vector3 randomTargetPosition;
@@ -18,7 +19,10 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
     private float timeBeforeChangingVelocity;
     #endregion
 
-    public HybridWalkingMovementStrategy(MovementController _movementController, TargetingSystem _targetingSystem)
+    public HybridWalkingMovementStrategy(
+        MovementController _movementController,
+        TargetingSystem _targetingSystem
+        )
     {
         movementController = _movementController;
         targetingSystem = _targetingSystem;
@@ -28,11 +32,14 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
         InitializeRandomMovement();
     }
 
+    public void GetTarget()
+    {
+        target = targetingSystem.GetNearestTarget();
+    }
+
     // 2 different movement strategies based on the existence of a target
     public void Move(Rigidbody rb)
     {
-        Transform target = targetingSystem.GetNearestTarget();
-
         if (target != null)
         {
             // Move towards the target only on the x-axis
@@ -75,7 +82,7 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
 
             if (positionDifference.sqrMagnitude <= movementProperties.minDistanceTowardsRandomTarget * movementProperties.minDistanceTowardsRandomTarget)
             {
-                randomTargetPosition = boundsManager.GetNewRandomPosition();
+                randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
             }
             Vector3 directionToRandomTarget = positionDifference.normalized;
 
@@ -92,7 +99,7 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
     // Initialize the random movement strategy of the object
     private void InitializeRandomMovement()
     {
-        randomTargetPosition = boundsManager.GetNewRandomPosition();
+        randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
         desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
         AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
         timeBeforeChangingVelocity = 0f;

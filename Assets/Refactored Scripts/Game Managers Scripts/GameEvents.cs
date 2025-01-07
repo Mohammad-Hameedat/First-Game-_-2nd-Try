@@ -12,6 +12,7 @@ public class GameEvents : MonoBehaviour
     public event Action OnUpgradeEgg;
 
     public event Action<int> OnSpawnObject;
+    public event Action<bool, int> OnBoostSpawningCollectibles;
 
     public event Action<int> OnRefreshInSceneMoney;
     public event Action<int> OnRefreshMainFishesCounter;
@@ -69,6 +70,11 @@ public class GameEvents : MonoBehaviour
         OnRefreshEggCost?.Invoke(eggCost);
     }
 
+    public void BoostSpawningCollectibles(bool isBoostingSpawning, int boostIterations)
+    {
+        OnBoostSpawningCollectibles?.Invoke(isBoostingSpawning, boostIterations);
+    }
+
 
     private void OnDisable()
     {
@@ -78,6 +84,7 @@ public class GameEvents : MonoBehaviour
         OnRefreshInSceneMoney = null;
         OnRefreshMainFishesCounter = null;
         OnRefreshEggCost = null;
+        OnBoostSpawningCollectibles = null;
     }
 
 }
