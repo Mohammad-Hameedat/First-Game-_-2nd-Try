@@ -2,7 +2,6 @@ public class NoThreatSwimmingState : IState
 {
     private TargetingSystem targetingSystem;
     private MovementController movementController;
-    //private MainFishHungerBehavior hungerStrategy;
     private HungerSystem hungerSystem;
 
 

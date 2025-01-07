@@ -19,6 +19,7 @@ public class RandomizedSwimmingMovementStrategy : IMovementStrategy
         InitializeMovement();
     }
 
+    public void GetTarget() { }
 
     // Move the object to a random target position
     public void Move(Rigidbody rb)
@@ -36,7 +37,7 @@ public class RandomizedSwimmingMovementStrategy : IMovementStrategy
 
         if (positionDifference.sqrMagnitude <= movementProperties.minDistanceTowardsRandomTarget * movementProperties.minDistanceTowardsRandomTarget)
         {
-            randomTargetPosition = boundsManager.GetNewRandomPosition();
+            randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
         }
 
         Vector3 directionToRandomTarget = positionDifference.normalized;
@@ -52,7 +53,7 @@ public class RandomizedSwimmingMovementStrategy : IMovementStrategy
         movementProperties = movementController.movementProperties;
         boundsManager = movementController.boundsManager;
 
-        randomTargetPosition = boundsManager.GetNewRandomPosition();
+        randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
         desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
         AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
     }

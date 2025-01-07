@@ -12,20 +12,37 @@ using UnityEngine;
 #endregion
 public class MainFishController : MonoBehaviour
 {
+    #region Components References
     private MovementController movementController;
     private StateMachine stateMachine;
     private TargetingSystem targetingSystem;
     private HungerSystem hungerSystem;
     private InteractionController interactionController;
 
-    private List<GameObject> targetObjectsList = new();
     public FollowerSettings followerProperties;
 
-    public int currentNumberofEatenObjects = 0;
+    #endregion
+
+    //private GameManager gameManager;
+
+    #region Main Fish - Required Variables
+    private List<GameObject> targetObjectsList = new();
+
+    private int currentFoodIndex = 0;
+
+    private bool isBoosting = false;
+    private int boostIterations;
+    private float boostWaitTime = 1f;
+
+    public int currentNumberofEatenObjects = 4;
+
+    #endregion
 
 
     private void Awake()
     {
+        //gameManager = FindAnyObjectByType<GameManager>();
+
         // Get references to the components
         movementController = GetComponent<MovementController>();
         stateMachine = GetComponent<StateMachine>();
@@ -33,16 +50,24 @@ public class MainFishController : MonoBehaviour
         hungerSystem = GetComponent<HungerSystem>();
         interactionController = GetComponent<InteractionController>();
 
+
         // Assign the properties to the components
         movementController.movementProperties = followerProperties.movementProperties;
-
+        //targetObjectsList = GameManager.currentActiveEnemyObjectsList;
         targetObjectsList = GameManager.currentActiveFoodTargetObjectsList;
+
+        GameManager.currentActiveMainFishObjectsList.Add(gameObject);
+    }
+
+
+    private void OnEnable()
+    {
+        GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles += ToggleBoostSpawningCollectibles;
     }
 
 
     private void Start()
     {
-
         targetingSystem.targetingStrategy = new FrameBasedTargetingStrategy();
 
         // Initialize target list
@@ -62,7 +87,7 @@ public class MainFishController : MonoBehaviour
 
 
         // Start spawning money
-        StartCoroutine(SpawnMoney());
+        StartCoroutine(CollectibleSpawnRoutine());
     }
 
 
@@ -73,7 +98,7 @@ public class MainFishController : MonoBehaviour
         {
             if (stateMachine.currentState is not NoThreatSwimmingState)
             {
-                GetComponent<HungerSystem>().enabled = true;
+                hungerSystem.enabled = true;
 
                 // Switch to NoDangerState
                 stateMachine.ChangeState(new NoThreatSwimmingState(
@@ -87,38 +112,125 @@ public class MainFishController : MonoBehaviour
         {
             if (stateMachine.currentState is not ThreatenedSwimmingState)
             {
-                GetComponent<HungerSystem>().enabled = false;
+                hungerSystem.enabled = false;
                 // Switch to InDangerMovementState
                 stateMachine.ChangeState(new ThreatenedSwimmingState(
                     movementController));
             }
+            /*if (stateMachine.currentState is not ZTSHPetAggressiveState)
+            {
+                stateMachine.ChangeState(new ZTSHPetAggressiveState(
+                    gameObject,
+                    targetingSystem,
+                    followerProperties.spawnProperties,
+                    movementController,
+                    hungerSystem,
+                    gameManager
+                    ));
+            }
+
+            hungerSystem.enabled = false;
+            */
         }
 
         currentNumberofEatenObjects = interactionController.interactionStrategy.GetEatenObjectsCount();
     }
 
 
-    IEnumerator SpawnMoney()
+
+    #region Collectibles Spawners
+    private IEnumerator CollectibleSpawnRoutine()
     {
+        yield return new WaitUntil(() => currentNumberofEatenObjects > 2);
+
         while (true)
         {
-            if (currentNumberofEatenObjects >= 3)
+            if (!isBoosting)
             {
-                // Instantiate the collectable prefab at the current position
-                GameObject collectableInstance = Instantiate(
-                    followerProperties.spawnProperties.collectablePrefab,
-                    transform.position,
-                    Quaternion.identity);
-
-                // Set the collectable configuration
-                collectableInstance.GetComponent<Collectable>().collectableConfig = followerProperties.spawnProperties.collectableConfigs[0];
+                if (currentNumberofEatenObjects >= 20)
+                    currentFoodIndex = 2;
+                else if (currentNumberofEatenObjects >= 10)
+                    currentFoodIndex = 1;
+                else if (currentNumberofEatenObjects >= 3)
+                    currentFoodIndex = 0;
             }
 
-            float randomTimeBeforeNextCollectableSpawn = Random.Range(7f, 15f);
-            yield return new WaitForSeconds(randomTimeBeforeNextCollectableSpawn);
+
+            float waitTime = isBoosting
+                ? boostWaitTime
+                : Random.Range(
+                    followerProperties.spawnProperties.minCollectableSpwanTime,
+                    followerProperties.spawnProperties.maxCollectableSpwanTime
+                    );
+
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < waitTime && !isBoosting)
+            {
+                elapsedTime += Time.deltaTime;
+                yield return null;
+                continue;
+            }
+
+            if (isBoosting)
+            {
+                elapsedTime = 0f;
+                /* Explaining the logic of the collectibles spawning booster:
+                 * 
+                 * The booster will spawn "X" collectibles in a row.
+                 * Each collectible will be spawned 1 second after the previous one.
+                 * 
+                 * "X" = Spawning booster iterations (Set by MTM Pet).
+                 * "S" = Spawning booster wait time (Set In MTM Pet's Controller Spawner Booster Coroutine).
+                 */
+                for (int iterationIndex = 0; iterationIndex < boostIterations; iterationIndex++)
+                {
+                    CreateCollectibleInstance(currentFoodIndex);
+                    yield return new WaitForSeconds(boostWaitTime);
+                }
+            }
+            else
+            {
+                CreateCollectibleInstance(currentFoodIndex);
+            }
+
+            yield return null;
         }
     }
 
+    private void CreateCollectibleInstance(int collectibleIndex)
+    {
+        // Instantiate the collectable prefab at the current position
+        GameObject collectableInstance = Instantiate(
+            followerProperties.spawnProperties.collectablePrefab,
+            transform.position,
+            Quaternion.identity);
+
+        // Set the collectable configuration
+        collectableInstance.GetComponent<CollectibleScript>().collectibleProperties =
+            followerProperties.spawnProperties.collectibleProperties[collectibleIndex];
+    }
+
+    #endregion
+
+
+    #region Collectibles Spawning Boosters
+    private void ToggleBoostSpawningCollectibles(bool _isBoosting, int _boostIterations)
+    {
+        isBoosting = _isBoosting;
+        boostIterations = _boostIterations;
+
+    }
+
+    #endregion
+
+
+
+    private void OnDisable()
+    {
+        GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles -= ToggleBoostSpawningCollectibles;
+    }
 
     private void OnDestroy()
     {

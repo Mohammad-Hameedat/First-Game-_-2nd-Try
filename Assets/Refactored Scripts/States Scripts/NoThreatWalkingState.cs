@@ -22,7 +22,7 @@ public class NoThreatWalkingState : IState
 
     public void Execute()
     {
-        if (hungerSystem.hungerStrategy.GetHungerStatus() && movementStrategy is not HybridWalkingMovementStrategy)
+        if (hungerSystem.IsHungry() && movementStrategy is not HybridWalkingMovementStrategy)
         {
             movementStrategy = new HybridWalkingMovementStrategy(
                 movementController,
@@ -30,7 +30,7 @@ public class NoThreatWalkingState : IState
 
             movementController.SetMovementStrategy(movementStrategy);
         }
-        else if (!hungerSystem.hungerStrategy.GetHungerStatus() && movementStrategy is not RandomizedWalkingMovementStrategy)
+        else if (!hungerSystem.IsHungry() && movementStrategy is not RandomizedWalkingMovementStrategy)
         {
             movementStrategy = new RandomizedWalkingMovementStrategy(
                 movementController);
