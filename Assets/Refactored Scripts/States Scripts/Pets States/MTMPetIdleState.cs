@@ -6,6 +6,8 @@ public class MTMPetIdleState : IState
     {
         movementController = _movementController;
     }
+
+
     public void Enter()
     {
         movementController.SetMovementStrategy(new RandomizedSwimmingMovementStrategy(
@@ -23,11 +25,5 @@ public class MTMPetIdleState : IState
     public void Exit()
     {
         movementController.SetMovementStrategy(null);
-    }
-
-
-    public void BoostSpawners()
-    {
-
     }
 }

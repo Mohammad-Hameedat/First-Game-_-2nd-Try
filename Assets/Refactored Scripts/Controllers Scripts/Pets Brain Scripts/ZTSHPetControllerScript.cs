@@ -50,8 +50,8 @@ public class ZTSHPetControllerScript : MonoBehaviour
 
     private void Start()
     {
-        targetingSystem.targetingStrategy = new ProximityEnemyTargetingStrategy();
-        targetingSystem.SetEatableTargetsList(targetObjectsList);
+        targetingSystem.targetingStrategy = new ProximityTargetTargetingStrategy();
+        targetingSystem.SetTargetObjectsList(targetObjectsList);
 
 
         /* Explaining Hunger System functionality for Zorf The Sea Horse (PTMF) Pet

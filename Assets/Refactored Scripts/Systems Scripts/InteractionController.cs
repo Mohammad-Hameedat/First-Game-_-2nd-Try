@@ -5,7 +5,8 @@ public class InteractionController : MonoBehaviour
     private MovementProperties movementProperties;
     public IInteractionStrategy interactionStrategy;
 
-    public float interactionRange;
+    [SerializeField]
+    private float interactionRange;
 
 
     public void SetInteractionStrategy(IInteractionStrategy _interactionStrategy)
@@ -41,6 +42,9 @@ public class InteractionController : MonoBehaviour
         {
             // Interact with the target object
             interactionStrategy.Interact(gameObject, nearestTarget.gameObject);
+
+            // Reset the nearest target object
+            nearestTarget = null;
         }
     }
 }

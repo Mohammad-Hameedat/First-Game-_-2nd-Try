@@ -5,7 +5,8 @@ public class MainFishInteractionStrategy : IInteractionStrategy
     private TargetingSystem targetingSystem;
     public HungerSystem hungerSystem;
 
-    public int currentNumberofEatenObjects = 0;
+    [SerializeField]
+    private int currentNumberofEatenObjects = 0;
 
     public MainFishInteractionStrategy(HungerSystem _hungerSystem, TargetingSystem _targetingSystem)
     {
@@ -42,7 +43,7 @@ public class MainFishInteractionStrategy : IInteractionStrategy
         }
     }
 
-    public int GetEatenObjectsCount()
+    public int GetInteractedTargetsCount()
     {
         return currentNumberofEatenObjects;
     }

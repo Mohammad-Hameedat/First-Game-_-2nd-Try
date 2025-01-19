@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb14419c284fbfa43a74417998bdc5b6, type: 3}
-  m_Name: MTM Pet Movement Data
+  m_Name: WTW Pet Movement Data
   m_EditorClassIdentifier: 
   minRandomDesiredVelocity: 0.5
   maxRandomDesiredVelocity: 3

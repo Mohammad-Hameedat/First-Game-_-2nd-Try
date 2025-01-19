@@ -9,7 +9,6 @@ using UnityEngine;
 #endregion
 public class MTMPetControllerScript : MonoBehaviour
 {
-
     #region Components References
     private MovementController movementController;
     private StateMachine stateMachine;

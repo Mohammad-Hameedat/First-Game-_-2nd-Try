@@ -56,20 +56,20 @@ public class EnemyController : MonoBehaviour
                 GameManager.currentActiveFoodTargetObjectsList
                 );
 
-            targetingSystem.SetEatableTargetsList(combinedTargetsList);
+            targetingSystem.SetTargetObjectsList(combinedTargetsList);
         }
         else
         {
             // Enemy targets only main fishes
             targetObjectsList = GameManager.currentActiveMainFishObjectsList;
 
-            targetingSystem.SetEatableTargetsList(targetObjectsList);
+            targetingSystem.SetTargetObjectsList(targetObjectsList);
         }
     }
 
     private void Start()
     {
-        targetingSystem.targetingStrategy = new ProximityEnemyTargetingStrategy();
+        targetingSystem.targetingStrategy = new ProximityTargetTargetingStrategy();
 
 
         // Register the enemy in the list of active enemies || Register in GameManager

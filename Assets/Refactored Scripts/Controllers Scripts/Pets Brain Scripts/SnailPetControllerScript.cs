@@ -41,10 +41,10 @@ public class SnailPetControllerScript : MonoBehaviour
     private void Start()
     {
         // Initialize target list
-        targetingSystem.SetEatableTargetsList(targetObjectsList);
+        targetingSystem.SetTargetObjectsList(targetObjectsList);
 
 
-        targetingSystem.targetingStrategy = new ProximityEnemyTargetingStrategy();
+        targetingSystem.targetingStrategy = new ProximityTargetTargetingStrategy();
 
         hungerSystem.SetHungerBehavior(new ChaseCollectibleHungerStrategy());
 
