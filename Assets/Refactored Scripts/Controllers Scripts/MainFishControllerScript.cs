@@ -7,10 +7,10 @@ using UnityEngine;
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(TargetingSystem))]
 [RequireComponent(typeof(HungerSystem))]
-[RequireComponent(typeof(BoundsAndPositioningManager))]
 [RequireComponent(typeof(InteractionController))]
+[RequireComponent(typeof(BoundsAndPositioningManager))]
 #endregion
-public class MainFishController : MonoBehaviour
+public class MainFishControllerScript : MonoBehaviour
 {
     #region Components References
     private MovementController movementController;
@@ -23,7 +23,6 @@ public class MainFishController : MonoBehaviour
 
     #endregion
 
-    //private GameManager gameManager;
 
     #region Main Fish - Required Variables
     private List<GameObject> targetObjectsList = new();
@@ -34,15 +33,13 @@ public class MainFishController : MonoBehaviour
     private int boostIterations;
     private float boostWaitTime = 1f;
 
-    public int currentNumberofEatenObjects = 4;
+    public int currentNumberofEatenObjects = 0;
 
     #endregion
 
 
     private void Awake()
     {
-        //gameManager = FindAnyObjectByType<GameManager>();
-
         // Get references to the components
         movementController = GetComponent<MovementController>();
         stateMachine = GetComponent<StateMachine>();
@@ -53,15 +50,17 @@ public class MainFishController : MonoBehaviour
 
         // Assign the properties to the components
         movementController.movementProperties = followerProperties.movementProperties;
-        //targetObjectsList = GameManager.currentActiveEnemyObjectsList;
         targetObjectsList = GameManager.currentActiveFoodTargetObjectsList;
 
+        // Register this object in the list of active main fishes || Add to GameManager list
         GameManager.currentActiveMainFishObjectsList.Add(gameObject);
     }
 
 
     private void OnEnable()
     {
+        //Debug.Log("Main Fish Object Enabled");
+
         GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles += ToggleBoostSpawningCollectibles;
     }
 
@@ -71,7 +70,7 @@ public class MainFishController : MonoBehaviour
         targetingSystem.targetingStrategy = new FrameBasedTargetingStrategy();
 
         // Initialize target list
-        targetingSystem.SetEatableTargetsList(targetObjectsList);
+        targetingSystem.SetTargetObjectsList(targetObjectsList);
 
         // Register the object in the list of active main fishes || Add to GameManager list
         hungerSystem.SetHungerBehavior(new MainFishHungerStrategy(
@@ -113,27 +112,14 @@ public class MainFishController : MonoBehaviour
             if (stateMachine.currentState is not ThreatenedSwimmingState)
             {
                 hungerSystem.enabled = false;
-                // Switch to InDangerMovementState
+
                 stateMachine.ChangeState(new ThreatenedSwimmingState(
-                    movementController));
-            }
-            /*if (stateMachine.currentState is not ZTSHPetAggressiveState)
-            {
-                stateMachine.ChangeState(new ZTSHPetAggressiveState(
-                    gameObject,
-                    targetingSystem,
-                    followerProperties.spawnProperties,
-                    movementController,
-                    hungerSystem,
-                    gameManager
+                    movementController
                     ));
             }
-
-            hungerSystem.enabled = false;
-            */
         }
 
-        currentNumberofEatenObjects = interactionController.interactionStrategy.GetEatenObjectsCount();
+        currentNumberofEatenObjects = interactionController.interactionStrategy.GetInteractedTargetsCount();
     }
 
 
@@ -186,20 +172,20 @@ public class MainFishController : MonoBehaviour
                  */
                 for (int iterationIndex = 0; iterationIndex < boostIterations; iterationIndex++)
                 {
-                    CreateCollectibleInstance(currentFoodIndex);
+                    SpawnCollectible(currentFoodIndex);
                     yield return new WaitForSeconds(boostWaitTime);
                 }
             }
             else
             {
-                CreateCollectibleInstance(currentFoodIndex);
+                SpawnCollectible(currentFoodIndex);
             }
 
             yield return null;
         }
     }
 
-    private void CreateCollectibleInstance(int collectibleIndex)
+    private void SpawnCollectible(int collectibleIndex)
     {
         // Instantiate the collectable prefab at the current position
         GameObject collectableInstance = Instantiate(
@@ -220,7 +206,6 @@ public class MainFishController : MonoBehaviour
     {
         isBoosting = _isBoosting;
         boostIterations = _boostIterations;
-
     }
 
     #endregion
@@ -229,6 +214,8 @@ public class MainFishController : MonoBehaviour
 
     private void OnDisable()
     {
+        //Debug.Log("Main Fish Object Disabled");
+
         GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles -= ToggleBoostSpawningCollectibles;
     }
 

@@ -42,8 +42,8 @@ public class ItchyPetControllerScript : MonoBehaviour
 
     private void Start()
     {
-        targetingSystem.targetingStrategy = new ProximityEnemyTargetingStrategy();
-        targetingSystem.SetEatableTargetsList(targetObjectsList);
+        targetingSystem.targetingStrategy = new ProximityTargetTargetingStrategy();
+        targetingSystem.SetTargetObjectsList(targetObjectsList);
 
         /* Explaining Hunger System functionality for Itchy Pet
          * 

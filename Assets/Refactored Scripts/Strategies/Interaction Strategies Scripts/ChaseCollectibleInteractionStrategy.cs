@@ -30,7 +30,7 @@ public class ChaseCollectibleInteractionStrategy : IInteractionStrategy
         }
     }
 
-    public int GetEatenObjectsCount()
+    public int GetInteractedTargetsCount()
     {
         throw new System.NotImplementedException("Snail pet does not eat objects");
     }

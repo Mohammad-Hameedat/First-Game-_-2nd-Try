@@ -9,7 +9,7 @@ public class MovementController : MonoBehaviour
 
 
     public IMovementStrategy movementStrategy;
-    private Rigidbody rb;
+    public Rigidbody rb;
 
 
     private void Awake()

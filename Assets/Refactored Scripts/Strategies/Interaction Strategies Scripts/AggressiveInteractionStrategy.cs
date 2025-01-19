@@ -36,7 +36,7 @@ public class AggressiveInteractionStrategy : IInteractionStrategy
     }
 
     #region Not Implemented
-    public int GetEatenObjectsCount()
+    public int GetInteractedTargetsCount()
     {
         return 0;
     }

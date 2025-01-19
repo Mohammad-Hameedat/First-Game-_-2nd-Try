@@ -20,17 +20,20 @@ public class EnemyInteractionStrategy : IInteractionStrategy
 
     public void Interact(GameObject interactor, GameObject target)
     {
-        if (GameManager.currentActiveFoodTargetObjectsList.Contains(target))
+        if (target.activeSelf)
         {
-            // Target is food
-            Food foodInstance = target.GetComponent<Food>();
-            health.TakeDamage(foodInstance.foodConfig.damage);
-            Object.Destroy(target);
-        }
-        else if (GameManager.currentActiveMainFishObjectsList.Contains(target))
-        {
-            // Target is main fish
-            Object.Destroy(target);
+            if (GameManager.currentActiveFoodTargetObjectsList.Contains(target))
+            {
+                // Target is food
+                Food foodInstance = target.GetComponent<Food>();
+                health.TakeDamage(foodInstance.foodConfig.damage);
+                Object.Destroy(target);
+            }
+            else if (GameManager.currentActiveMainFishObjectsList.Contains(target) && target.activeInHierarchy == true)
+            {
+                // Target is main fish
+                Object.Destroy(target);
+            }
         }
 
         if (health.GetCurrentHealth() <= 0)
@@ -39,7 +42,7 @@ public class EnemyInteractionStrategy : IInteractionStrategy
         }
     }
 
-    public int GetEatenObjectsCount()
+    public int GetInteractedTargetsCount()
     {
         return 0;
     }

@@ -72,6 +72,12 @@ public class LevelDataSettingsScript : ScriptableObject
     [Header("Pets Data")]
     #region Pets Data
 
+    //[Header("Protective Pets Prefabs")]
+    //#region Protective Pets Prefabs
+    //[Tooltip("Assign here the protective pets prefabs.")]
+    //public List<ProtectivePetType> protectivePetsPrefabsList = new();
+    //#endregion
+
     [Header("Niko's Pet Data")]
     #region Niko's Pets
     [Tooltip("Assign here the position of Niko's pet.\nNote: This position may change depending on scene's environment.")]

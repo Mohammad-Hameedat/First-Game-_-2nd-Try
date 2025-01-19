@@ -11,7 +11,13 @@ public class TargetingFoodEaterEnemyStrategy : ITargetingStrategy
         foreach (GameObject targetObject in targetObjectsList)
         {
             if (targetObject == null)
+            {
                 continue;
+            }
+            else
+            {
+                // Check if the target object is a food eater enemy || Will be implemented later
+            }
 
             Vector3 directionToTarget = targetObject.transform.position - currentPosition;
             float distanceSqr = directionToTarget.sqrMagnitude;

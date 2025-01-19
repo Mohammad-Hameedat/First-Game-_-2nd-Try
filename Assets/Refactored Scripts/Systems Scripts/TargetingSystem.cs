@@ -10,7 +10,7 @@ public class TargetingSystem : MonoBehaviour
 
 
     // Set the type of target objects to detect and interact with
-    public void SetEatableTargetsList(IEnumerable<GameObject> targets)
+    public void SetTargetObjectsList(IEnumerable<GameObject> targets)
     {
         targetObjectsList = targets;
     }
@@ -26,9 +26,16 @@ public class TargetingSystem : MonoBehaviour
         return lastNearestTarget;
     }
 
-    // Get the last nearest target object
+    // Get the last nearest target object detected but if no target object is found, check for the nearest target object
     public Transform GetlastNearestTarget()
     {
-        return lastNearestTarget;
+        if (targetObjectsList != null)
+        {
+            return lastNearestTarget;
+        }
+        else
+        {
+            return GetNearestTarget();
+        }
     }
 }

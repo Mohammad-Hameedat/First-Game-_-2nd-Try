@@ -10,11 +10,27 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     #region Current Active Objects Lists
+    /* Note: This region contains static lists, read the note below:
+     * 
+     * Whenever you implement a new static list in the GameManager,
+     * make sure to add it to the ClearStaticLists() function to avoid memory leaks,
+     * when the scene is changed or the game is closed.
+     */
+
     [Header("Current Active Objects Lists")]
     public static List<GameObject> currentActiveMainFishObjectsList = new();
     public static List<GameObject> currentActiveFoodTargetObjectsList = new();
     public static List<GameObject> currentActiveEnemyObjectsList = new();
     public static List<GameObject> currentActiveCollectiblesList = new();
+
+    //public static List<GameObject> currentActiveProtectivePetsList = new();
+
+
+    /* Dictionary to store the protective pets and their types
+     * 
+     * cAPPetsDictionary => cAP => stands for Current Active Protective Pets
+     */
+    public static Dictionary<ProtectivePetType, GameObject> cAPPetsDictionary = new();
     #endregion
 
 
@@ -257,6 +273,7 @@ public class GameManager : MonoBehaviour
 
 
     #region Utility Functions
+
     #region Enemy Utility Functions
     // A function that checks the type of the spawned enemy object
     private void CheckEnemyType(GameObject enemy)
@@ -377,6 +394,15 @@ public class GameManager : MonoBehaviour
         currentActiveFoodTargetObjectsList.Clear();
         currentActiveEnemyObjectsList.Clear();
         currentActiveCollectiblesList.Clear();
+    }
+
+    #endregion
+
+
+    #region Pets Utility Functions
+    public void IdentifyProtectivePet(GameObject pet)
+    {
+
     }
 
     #endregion
