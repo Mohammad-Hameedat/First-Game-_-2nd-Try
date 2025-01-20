@@ -48,7 +48,7 @@ public class ThreatenedSwimmingState : IState
 
             if (wtwMovementStrategy == null)
             {
-                movementStrategy = new ThreatenedSwimmingMovementStrategy(
+                movementStrategy = new ConstantTargetFollowingMovementStrategy(
                     movementController,
                     protectivePetObject.transform
                     );

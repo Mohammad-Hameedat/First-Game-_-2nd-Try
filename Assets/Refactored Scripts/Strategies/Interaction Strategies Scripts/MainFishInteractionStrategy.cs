@@ -5,7 +5,6 @@ public class MainFishInteractionStrategy : IInteractionStrategy
     private TargetingSystem targetingSystem;
     public HungerSystem hungerSystem;
 
-    [SerializeField]
     private int currentNumberofEatenObjects = 0;
 
     public MainFishInteractionStrategy(HungerSystem _hungerSystem, TargetingSystem _targetingSystem)

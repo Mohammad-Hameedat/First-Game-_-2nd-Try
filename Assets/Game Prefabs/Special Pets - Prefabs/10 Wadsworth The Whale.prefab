@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 3393465614306139900}
   - component: {fileID: 5685472046340350422}
   m_Layer: 0
-  m_Name: Wadsworth The Whale
+  m_Name: 10 Wadsworth The Whale
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
