@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ThreatenedSwimmingMovementStrategy : IMovementStrategy
+public class ConstantTargetFollowingMovementStrategy : IMovementStrategy
 {
 
     #region References
@@ -13,7 +13,7 @@ public class ThreatenedSwimmingMovementStrategy : IMovementStrategy
 
 
     #region Constructor
-    public ThreatenedSwimmingMovementStrategy(
+    public ConstantTargetFollowingMovementStrategy(
         MovementController _movementController,
         Transform protectivePetTarget
         )
@@ -31,7 +31,7 @@ public class ThreatenedSwimmingMovementStrategy : IMovementStrategy
 
     }
 
-    
+
     public void Move(Rigidbody rb)
     {
         if (target != null)
@@ -42,6 +42,5 @@ public class ThreatenedSwimmingMovementStrategy : IMovementStrategy
             float targetFollowingVelocity = movementProperties.maxFollowingDesiredVelocity;
             rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * targetFollowingVelocity, Time.fixedDeltaTime);
         }
-
     }
 }
