@@ -29,13 +29,6 @@ public class TargetingSystem : MonoBehaviour
     // Get the last nearest target object detected but if no target object is found, check for the nearest target object
     public Transform GetlastNearestTarget()
     {
-        if (targetObjectsList != null)
-        {
-            return lastNearestTarget;
-        }
-        else
-        {
-            return GetNearestTarget();
-        }
+        return lastNearestTarget;
     }
 }

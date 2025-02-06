@@ -9,13 +9,13 @@ using UnityEngine.SceneManagement;
 #endregion
 public class GameManager : MonoBehaviour
 {
-    #region Current Active Objects Lists
     /* Note: This region contains static lists, read the note below:
      * 
      * Whenever you implement a new static list in the GameManager,
      * make sure to add it to the ClearStaticLists() function to avoid memory leaks,
      * when the scene is changed or the game is closed.
      */
+    #region Current Active Objects Lists
 
     [Header("Current Active Objects Lists")]
     public static List<GameObject> currentActiveMainFishObjectsList = new();
@@ -23,14 +23,12 @@ public class GameManager : MonoBehaviour
     public static List<GameObject> currentActiveEnemyObjectsList = new();
     public static List<GameObject> currentActiveCollectiblesList = new();
 
-    //public static List<GameObject> currentActiveProtectivePetsList = new();
-
 
     /* Dictionary to store the protective pets and their types
      * 
      * cAPPetsDictionary => cAP => stands for Current Active Protective Pets
      */
-    public static Dictionary<ProtectivePetType, GameObject> cAPPetsDictionary = new();
+    public static Dictionary<PetType, GameObject> cAPPetsDictionary = new();
     #endregion
 
 
@@ -83,7 +81,13 @@ public class GameManager : MonoBehaviour
         // Enemy Spawner
         StartCoroutine(SpawnEnemy());
 
+        //for (int i = 0; i < 1000; i++)
+        //{
+        //    SpawnObject(1);
+        //}
+
         SpawnObject(1);
+
         SpawnPets();
 
     }

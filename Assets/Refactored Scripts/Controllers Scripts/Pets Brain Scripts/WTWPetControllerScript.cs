@@ -23,7 +23,7 @@ public class WTWPetControllerScript : MonoBehaviour
 
 
     #region WTW Pet - Required Variables
-    public ProtectivePetType PetType;
+    public PetType PetType;
 
     private List<GameObject> targetObjectsList = new();
     #endregion

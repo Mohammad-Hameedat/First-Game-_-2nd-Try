@@ -38,11 +38,11 @@ public class ThreatenedSwimmingState : IState
     #region Extra methods for cleaning up the state
     private void DetermineMovementStrategy()
     {
-        if (GameManager.cAPPetsDictionary.ContainsKey(ProtectivePetType.WTW))
+        if (GameManager.cAPPetsDictionary.ContainsKey(PetType.WTWPet))
         {
-            protectivePetObject = GameManager.cAPPetsDictionary[ProtectivePetType.WTW];
+            protectivePetObject = GameManager.cAPPetsDictionary[PetType.WTWPet];
 
-            GameObject wtwPet = GameManager.cAPPetsDictionary[ProtectivePetType.WTW];
+            GameObject wtwPet = GameManager.cAPPetsDictionary[PetType.WTWPet];
 
             IMovementStrategy wtwMovementStrategy = wtwPet.GetComponent<MovementController>().movementStrategy;
 
