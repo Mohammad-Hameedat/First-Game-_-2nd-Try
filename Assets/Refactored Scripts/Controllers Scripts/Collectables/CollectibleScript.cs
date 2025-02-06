@@ -2,36 +2,64 @@ using UnityEngine;
 
 public class CollectibleScript : MonoBehaviour
 {
+    #region Components References
     public CollectibleProperties collectibleProperties;
+
+    private GameObject sttPetInstance;
+    #endregion
 
 
     #region Destroying Managers
-    [Header("Destroying Managers")]
-    [SerializeField] float elapsedTime = 0f;
+    [Header("Destruction Managers")]
+    [SerializeField]
+    private float elapsedTime = 0f;
 
-    float lastPositionBeforeDestruction = 1f;
+    private float destructionYPosition = 1f;
+
+    private float slowModeMovementThreshold = 0.8f;
+    private float slowModeDestructionTimeScaler = 0.5f;
     #endregion
 
     private void Start()
     {
         GameManager.currentActiveCollectiblesList.Add(gameObject);
+
+        sttPetInstance = GameManager.cAPPetsDictionary.ContainsKey(PetType.STTPet)
+            ? GameManager.cAPPetsDictionary[PetType.STTPet]
+            : null;
     }
 
     private void Update()
     {
-        if (transform.position.y > lastPositionBeforeDestruction)
+        ManageDestruction();
+    }
+
+
+    private void ManageDestruction()
+    {
+        float movementSpeed = collectibleProperties.collectableMovementSpeed * Time.deltaTime;
+        if (sttPetInstance != null)
         {
-            transform.position += Vector3.down * collectibleProperties.collectableMovementSpeed * Time.deltaTime;
+            // Slow down the movement if the STT pet is active
+            movementSpeed *= slowModeMovementThreshold;
+        }
+
+        if (transform.position.y > destructionYPosition)
+        {
+            transform.position += Vector3.down * movementSpeed;
         }
         else
         {
-            elapsedTime += Time.deltaTime;
+            // Slow down the destruction process if the STT pet is active
+            elapsedTime += Time.deltaTime * ( sttPetInstance != null ? slowModeDestructionTimeScaler : 1f );
+
             if (elapsedTime >= collectibleProperties.TimeBeforeDestroy)
             {
                 Destroy(gameObject);
             }
         }
     }
+
 
     private void OnDestroy()
     {

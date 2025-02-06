@@ -24,7 +24,7 @@ public class MainFishControllerScript : MonoBehaviour
     #endregion
 
 
-    #region Main Fish - Required Variables
+    #region Main Fish Controller - Required Variables
     private List<GameObject> targetObjectsList = new();
 
     private int currentFoodIndex = 0;
@@ -33,7 +33,7 @@ public class MainFishControllerScript : MonoBehaviour
     private int boostIterations;
     private float boostWaitTime = 1f;
 
-    public int currentNumberofEatenObjects = 0;
+    public int totalEatenObjectsCount = 0;
 
     #endregion
 
@@ -119,7 +119,7 @@ public class MainFishControllerScript : MonoBehaviour
             }
         }
 
-        currentNumberofEatenObjects = interactionController.interactionStrategy.GetInteractedTargetsCount();
+        totalEatenObjectsCount = interactionController.interactionStrategy.GetInteractedTargetsCount();
     }
 
 
@@ -127,17 +127,17 @@ public class MainFishControllerScript : MonoBehaviour
     #region Collectibles Spawners
     private IEnumerator CollectibleSpawnRoutine()
     {
-        yield return new WaitUntil(() => currentNumberofEatenObjects > 2);
+        yield return new WaitUntil(() => totalEatenObjectsCount > 2);
 
         while (true)
         {
             if (!isBoosting)
             {
-                if (currentNumberofEatenObjects >= 20)
+                if (totalEatenObjectsCount >= 20)
                     currentFoodIndex = 2;
-                else if (currentNumberofEatenObjects >= 10)
+                else if (totalEatenObjectsCount >= 10)
                     currentFoodIndex = 1;
-                else if (currentNumberofEatenObjects >= 3)
+                else if (totalEatenObjectsCount >= 3)
                     currentFoodIndex = 0;
             }
 

@@ -29,11 +29,13 @@ public class AggressiveInteractionStrategy : IInteractionStrategy
 
             if (elapsedTime < attackProperties.nextAttackHitTime)
                 return;
+
             elapsedTime = 0f;
             Health targetHealth = target.GetComponent<Health>();
             targetHealth.TakeDamage(attackProperties.attackDamage);
         }
     }
+
 
     #region Not Implemented
     public int GetInteractedTargetsCount()
