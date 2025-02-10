@@ -55,7 +55,16 @@ public class CollectibleScript : MonoBehaviour
 
             if (elapsedTime >= collectibleProperties.TimeBeforeDestroy)
             {
-                Destroy(gameObject);
+                BombScript bombScriptInstance = gameObject.GetComponent<BombScript>();
+
+                if (bombScriptInstance != null)
+                {
+                    bombScriptInstance.DestroyNearbyTargets();
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
