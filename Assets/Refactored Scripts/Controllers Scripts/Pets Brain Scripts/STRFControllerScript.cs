@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#region VTS Pet Controller - Required Components
+#region STRF Pet Controller - Required Components
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(HungerSystem))]
 [RequireComponent(typeof(BoundsAndPositioningManager))]
 #endregion
-public class VTSControllerScript : MonoBehaviour
+public class STRFControllerScript : MonoBehaviour
 {
     #region Components References
     private MovementController movementController;
@@ -19,9 +19,7 @@ public class VTSControllerScript : MonoBehaviour
     #endregion
 
 
-    #region VTS Pet - Required Variables
-    private float elapsedTime = 0f;
-
+    #region STRF Pet - Required Variables
     private List<GameObject> targetObjectsList = new();
 
     #endregion
@@ -44,6 +42,11 @@ public class VTSControllerScript : MonoBehaviour
 
     private void Start()
     {
+        /* Read the following note before you do anything inside the following strategy script:
+         * 
+         * The following strategy script is the Idle state of another pet ogject
+         * that named "Vert The Skeleton (VTS)" pet.
+         */
         stateMachine.ChangeState(new VTSPetIdleState(
             movementController
             ));
@@ -51,12 +54,6 @@ public class VTSControllerScript : MonoBehaviour
 
         // Start spawning money
         StartCoroutine(SpawnMoney());
-    }
-
-
-    private void Update()
-    {
-        elapsedTime += Time.deltaTime;
     }
 
 
@@ -73,9 +70,10 @@ public class VTSControllerScript : MonoBehaviour
             else
             {
                 // Set collectible's configuration
-                float nextCollectibleSpawnTime = elapsedTime < 180f
-                    ? petProperties.spawnProperties.minCollectableSpwanTime
-                    : petProperties.spawnProperties.maxCollectableSpwanTime;
+                float nextCollectibleSpawnTime = Random.Range(
+                    petProperties.spawnProperties.minCollectableSpwanTime,
+                    petProperties.spawnProperties.maxCollectableSpwanTime
+                    );
 
                 yield return new WaitForSeconds(nextCollectibleSpawnTime);
 
@@ -83,11 +81,13 @@ public class VTSControllerScript : MonoBehaviour
                 GameObject collectibleInstance = Instantiate(
                         petProperties.spawnProperties.collectablePrefab,
                         transform.position,
-                        Quaternion.identity);
+                        Quaternion.identity
+                        );
 
-                int collectibleIndex = elapsedTime < 180f ? 0 : 1;
                 collectibleInstance.GetComponent<CollectibleScript>().collectibleProperties =
-                    petProperties.spawnProperties.collectibleProperties[collectibleIndex];
+                    petProperties.spawnProperties.collectibleProperties[0];
+
+                collectibleInstance.AddComponent<BombScript>();
             }
         }
     }

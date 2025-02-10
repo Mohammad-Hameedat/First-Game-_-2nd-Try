@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -228747253, guid: a4865f1ab4504ed8a368670db22f409c, type: 3}
-  m_Name: OdinModuleConfig
+  m_Script: {fileID: 11500000, guid: 1f0acc703540bf34689e7617d4ca5905, type: 3}
+  m_Name: 150 Coins
   m_EditorClassIdentifier: 
-  configurations:
-  - ID: Unity.Mathematics
-    ActivationSettings: 0
-  ModuleTogglingSettings: 1
-  ModuleUpdateSettings: 1
+  collectableValue: 150
+  collectableMovementSpeed: 1
+  TimeBeforeDestroy: 3
