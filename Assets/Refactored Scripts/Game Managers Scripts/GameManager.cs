@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -398,15 +399,51 @@ public class GameManager : MonoBehaviour
         currentActiveFoodTargetObjectsList.Clear();
         currentActiveEnemyObjectsList.Clear();
         currentActiveCollectiblesList.Clear();
+
+        cAPPetsDictionary.Clear();
     }
 
     #endregion
 
 
     #region Pets Utility Functions
-    public void IdentifyProtectivePet(GameObject pet)
+    public static PetType IdentifyProtectivePet()
     {
+        /* Read the following note when you add new protective pet types
+         * 
+         * The following random movement strategy is a temporary solution
+         * because there is no other protective pet types created yet.
+         * 
+         * Once you add new protective pet types,
+         * you should create or use the appropriate movement strategy.
+         */
 
+        PetType protectivePetObject = PetType.None;
+
+        // Find the best protective pet object.
+        foreach (KeyValuePair<PetType, GameObject> protectivePet in cAPPetsDictionary)
+        {
+            if (protectivePet.Value.activeSelf)
+            {
+                if (cAPPetsDictionary.ContainsKey(PetType.WTWPet))
+                {
+                    //protectivePetObject = cAPPetsDictionary[PetType.WTWPet];
+                    protectivePetObject = protectivePet.Key;
+                    break;
+                }
+                else if (protectivePet.Key == PetType.GTAPet)
+                {
+                    //protectivePetObject = cAPPetsDictionary[PetType.GTAPet];
+                    protectivePetObject = protectivePet.Key;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+        return protectivePetObject;
     }
 
     #endregion

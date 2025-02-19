@@ -26,22 +26,15 @@ MonoBehaviour:
     - d07737cba267bd84abc1fcc5b5d8f588
     - def8fc344e74d654999a69b7042da5a4
     - 8793a138e3ef0fa48b334e254feeee21
+    - 385531810cd246d45b5e52e0625061c7
     values:
     - iconNameOrGuid: 
       colorIndex: 1
       isIconRecursive: 0
       isColorRecursive: 1
-    - iconNameOrGuid: 
+    - iconNameOrGuid: Prefab Icon
       colorIndex: 2
-      isIconRecursive: 0
-      isColorRecursive: 1
-    - iconNameOrGuid: Settings Icon
-      colorIndex: 5
-      isIconRecursive: 0
-      isColorRecursive: 1
-    - iconNameOrGuid: 
-      colorIndex: 5
-      isIconRecursive: 0
+      isIconRecursive: 1
       isColorRecursive: 1
     - iconNameOrGuid: Settings Icon
       colorIndex: 5
@@ -55,7 +48,15 @@ MonoBehaviour:
       colorIndex: 5
       isIconRecursive: 0
       isColorRecursive: 1
-    - iconNameOrGuid: 
+    - iconNameOrGuid: Settings Icon
+      colorIndex: 5
+      isIconRecursive: 0
+      isColorRecursive: 1
+    - iconNameOrGuid: Settings Icon
+      colorIndex: 5
+      isIconRecursive: 0
+      isColorRecursive: 1
+    - iconNameOrGuid: cs Script Icon
       colorIndex: 7
       isIconRecursive: 0
       isColorRecursive: 1
@@ -71,9 +72,13 @@ MonoBehaviour:
       colorIndex: 3
       isIconRecursive: 0
       isColorRecursive: 1
-    - iconNameOrGuid: 
+    - iconNameOrGuid: Settings Icon
       colorIndex: 5
       isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: ScriptableObject Icon
+      colorIndex: 0
+      isIconRecursive: 1
       isColorRecursive: 0
   bookmarks:
   - guid: 6243bc9ae4737f34f8fe8df35f20b788
