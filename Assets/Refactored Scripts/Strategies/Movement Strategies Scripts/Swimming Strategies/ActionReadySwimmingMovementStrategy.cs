@@ -1,5 +1,14 @@
 using UnityEngine;
 
+
+/* Explanation of the useage of this movement strategy:
+ * 
+ * This movement strategy depends on the BoundsAndPositioningManager script
+ * to find the best corner to move to, and then move to that corner.
+ * 
+ * Note: The corners's positions are pre-defined in the BoundsAndPositioningManager script.
+ */
+[RequireComponent(typeof(BoundsAndPositioningManager))]
 public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 {
     #region References
@@ -20,8 +29,8 @@ public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 
 
     #region Movement Scaling Variables and properties
-    private float movementInterpolation = 1f;
-    private float movementSpeedScale = 1.5f;
+    private float movementInterpolation = 1f; // The interpolation value to move the object to the next corner.
+    private float movementSpeedScale = 1.5f; // The speed scale of the object movement.
 
     private bool isMoving = false; // Track if the object actively moving to a corner.
     private const float cornerArrivalDistance = 10f;
@@ -93,6 +102,11 @@ public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 
     private void Initialize()
     {
+        /* Explaining the use of the following line:
+         * 
+         * Set a starting corner for the object to move to
+         * so that it can determine the next corner as the object will always be moving to a corner.
+         */
         currentCorner = boundsManager.GetNearestCorner(movementController.transform.position);
     }
 }

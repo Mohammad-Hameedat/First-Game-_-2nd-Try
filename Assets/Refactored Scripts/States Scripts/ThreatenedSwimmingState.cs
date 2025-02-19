@@ -38,54 +38,36 @@ public class ThreatenedSwimmingState : IState
     #region Extra methods for cleaning up the state
     private void DetermineMovementStrategy()
     {
-        if (GameManager.cAPPetsDictionary.ContainsKey(PetType.WTWPet))
+        PetType protectivePetType = GameManager.IdentifyProtectivePet();
+
+
+        /* Read the following note when you add new protective pet types
+         * 
+         * The following random movement strategy is a temporary solution
+         * because there is no other protective pet types created yet.
+         * 
+         * Once you add new protective pet types,
+         * you should create or use the appropriate movement strategy.
+         */
+        if (protectivePetType == PetType.WTWPet || protectivePetType == PetType.GTAPet)
         {
-            protectivePetObject = GameManager.cAPPetsDictionary[PetType.WTWPet];
+            protectivePetObject = GameManager.cAPPetsDictionary[protectivePetType];
 
-            GameObject wtwPet = GameManager.cAPPetsDictionary[PetType.WTWPet];
-
-            IMovementStrategy wtwMovementStrategy = wtwPet.GetComponent<MovementController>().movementStrategy;
-
-            if (wtwMovementStrategy == null)
-            {
-                movementStrategy = new ConstantTargetFollowingMovementStrategy(
-                    movementController,
-                    protectivePetObject.transform
-                    );
-            }
-            else
-            {
-                movementStrategy = new RandomizedSwimmingMovementStrategy(
-                movementController
+            movementStrategy = new SingleTargetFollowingMovementStrategy(
+                movementController,
+                protectivePetObject.transform
                 );
-            }
         }
         else
         {
-            // Find the best protective pet object.
-            foreach (GameObject pet in GameManager.cAPPetsDictionary.Values)
-            {
-                if (pet.activeSelf)
-                {
-                    protectivePetObject = pet;
-
-                    // Set the movement strategy depending on the pet type
-
-                    break;
-                }
-            }
-
             /* Read the following note when you add new protective pet types
              * 
-             * The following random movement strategy is a temporary solution
-             * because there is no other protective pet types created yet.
-             * 
-             * Once you add new protective pet types,
-             * you should create or use the appropriate movement strategy.
+             * Here you should add the movement strategy depending on the protective pet type.
              */
+
             movementStrategy = new RandomizedSwimmingMovementStrategy(
-                      movementController
-                      );
+                movementController
+                );
         }
     }
     #endregion

@@ -26,7 +26,7 @@ public class WTWPetEnemySensitiveState : IState
 
     public void Enter()
     {
-        // Note: Activate the Idle animation here. || Will be implemented later.
+        // >>>>> Note: Activate the Idle animation here. || Will be implemented later.
 
         interactionController.enabled = true;
 
@@ -54,6 +54,13 @@ public class WTWPetEnemySensitiveState : IState
     }
 
 
+    /* Explaining the behavior of the WTW Pet when it is threatened by an enemy object:
+     * 
+     * The WTW pet will stop moving till all existing Main-Fish objects are protected.
+     * All the Main-Fish objects will start moving towards the WTW pet and get protected (deactivated).
+     * The WTW pet will start moving randomly and while keeping the Main-Fish objects protected for 20 secounds,
+     * And then re-activate all the Main-Fish objects, adding some challenge to the game.
+     */
     private IEnumerator HandleThreatenedBehavior()
     {
         while (interactionController.interactionStrategy.GetInteractedTargetsCount() < GameManager.currentActiveMainFishObjectsList.Count)
@@ -67,7 +74,7 @@ public class WTWPetEnemySensitiveState : IState
 
         interactionController.enabled = false;
 
-        // Note: Deactivate the Idle animation here. || Will be implemented in later.
+        // >>>>> Note: Deactivate the Idle animation here. || Will be implemented in later.
 
         movementController.SetMovementStrategy(new RandomizedSwimmingMovementStrategy(
             movementController
@@ -91,7 +98,7 @@ public class WTWPetEnemySensitiveState : IState
 
     private IEnumerator ReactivateProtectedObjects()
     {
-        // Note: Activate the Idle animation here (((AGAIN))). || Will be implemented later.
+        // >>>>> Note: Activate the Idle animation here (((AGAIN))). || Will be implemented later.
 
         foreach (GameObject protectedObject in GameManager.currentActiveMainFishObjectsList)
         {
@@ -106,6 +113,6 @@ public class WTWPetEnemySensitiveState : IState
             }
         }
 
-        // Note: Deactivate the Idle animation here. || Will be implemented in later.
+        // >>>>> Note: Deactivate the Idle animation here. || Will be implemented in later.
     }
 }
