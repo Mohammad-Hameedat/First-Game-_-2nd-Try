@@ -62,7 +62,7 @@ MonoBehaviour:
         - colorIndex: 3
           iconNameOrGuid: MeshCollider Icon
         - colorIndex: 4
-          iconNameOrGuid: EventSystem Icon
+          iconNameOrGuid: Canvas Icon
         - colorIndex: 3
           iconNameOrGuid: 
         - colorIndex: 3

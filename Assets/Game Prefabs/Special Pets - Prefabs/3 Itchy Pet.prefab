@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 8195584889443612758}
   - component: {fileID: 750126499961680777}
   - component: {fileID: 4529369272269046997}
-  - component: {fileID: 5063522588205930994}
   - component: {fileID: 4126639277082427736}
+  - component: {fileID: 5063522588205930994}
   m_Layer: 0
   m_Name: 3 Itchy Pet
   m_TagString: Untagged
@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementProperties: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!114 &8195584889443612758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,18 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4353548624cba49b7d5cb4cd1ff200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5063522588205930994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3145314459416110979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4126639277082427736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,3 +194,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRange: 0
+--- !u!114 &5063522588205930994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3145314459416110979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164c15b21945466429cfd34b17d7ce9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

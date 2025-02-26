@@ -80,15 +80,18 @@ public class WTWPetEnemySensitiveState : IState
             movementController
             ));
 
-        Debug.Log("Setting 20 secounds count down timer befor re-activating all Main-Fish objects");
+        Debug.Log($"Setting {GameManager.fishesProtectionDuration} secounds count down timer befor re-activating all Main-Fish objects");
 
-        /* Set a timer to re-activate all the Main-Fish objects after 20 secounds.
+        /* NOTE: Set a timer before re-activate all the Main-Fish objects.
          * 
-         * This is to give the Main-Fish objects a chance to escape from the threat
+         * This is to give the Main-Fish objects a chance to escape from the threat,
+         * And to add some challenge to the game.
          */
-        float protectionDuration = 20f;
+        float protectionDuration = GameManager.fishesProtectionDuration;
 
         yield return new WaitForSeconds(protectionDuration);
+
+        GameManager.canBeProtectedByWTWPet = false;
 
         yield return ReactivateProtectedObjects();
 
@@ -105,10 +108,10 @@ public class WTWPetEnemySensitiveState : IState
             if (!protectedObject.activeSelf)
             {
                 protectedObject.transform.position = petObject.transform.position;
-                protectedObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
                 protectedObject.SetActive(true);
 
+                // Activate 100 objects per second
                 yield return new WaitForSeconds(0.01f);
             }
         }

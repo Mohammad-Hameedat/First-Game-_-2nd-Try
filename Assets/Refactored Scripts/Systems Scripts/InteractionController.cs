@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InteractionController : MonoBehaviour
 {
-    private MovementProperties movementProperties;
+    private MovementController movementController;
     public IInteractionStrategy interactionStrategy;
 
     [SerializeField]
@@ -16,8 +16,8 @@ public class InteractionController : MonoBehaviour
 
     private void Start()
     {
-        movementProperties = GetComponent<MovementController>().movementProperties;
-        interactionRange = movementProperties.nearestDistanceToEatATarget;
+        movementController = GetComponent<MovementController>();
+        interactionRange = movementController.movementProperties.nearestDistanceToEatATarget;
     }
 
     private void Update()
@@ -33,6 +33,8 @@ public class InteractionController : MonoBehaviour
         // Return if no target object is found
         if (nearestTarget == null)
             return;
+
+        movementController.CurrentTarget = nearestTarget;
 
 
         // Check if the nearest target object is within the interaction range

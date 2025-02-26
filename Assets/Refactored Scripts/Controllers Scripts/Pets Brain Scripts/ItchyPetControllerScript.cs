@@ -6,8 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(TargetingSystem))]
 [RequireComponent(typeof(HungerSystem))]
-[RequireComponent(typeof(BoundsAndPositioningManager))]
 [RequireComponent(typeof(InteractionController))]
+[RequireComponent(typeof(BoundsAndPositioningManager))]
 #endregion
 public class ItchyPetControllerScript : MonoBehaviour
 {
@@ -49,7 +49,7 @@ public class ItchyPetControllerScript : MonoBehaviour
          * 
          * The Itchy Pet is an aggressive pet that attacks enemies
          * Whenever an enemy instance is detected, Itchy Pet will become hungry
-         * And this controller script will handle switching between states
+         * And this controller script will handle switching between states.
          */
         hungerSystem.SetHungerBehavior(new EnemySensitivePetHungerStrategy());
 
@@ -66,8 +66,7 @@ public class ItchyPetControllerScript : MonoBehaviour
             if (stateMachine.currentState is not AggressiveSwimmingState)
             {
                 stateMachine.ChangeState(new AggressiveSwimmingState(
-                    movementController,
-                    targetingSystem
+                    movementController
                     ));
             }
         }
@@ -77,7 +76,6 @@ public class ItchyPetControllerScript : MonoBehaviour
             {
                 stateMachine.ChangeState(new NoThreatSwimmingState(
                     movementController,
-                    targetingSystem,
                     hungerSystem
                     ));
             }

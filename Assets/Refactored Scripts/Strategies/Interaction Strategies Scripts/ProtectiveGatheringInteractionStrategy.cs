@@ -23,12 +23,13 @@ public class ProtectiveGatheringInteractionStrategy : IInteractionStrategy
 
     public void Interact(GameObject interator, GameObject target)
     {
+        // NOTE: the (interator) parameter is not used in this strategy.
+
         if (protectedTargetsCount == GameManager.currentActiveMainFishObjectsList.Count)
         {
             return;
         }
-
-        if (GameManager.currentActiveMainFishObjectsList.Contains(target) && target.activeSelf)
+        else if (GameManager.currentActiveMainFishObjectsList.Contains(target) && target.activeSelf)
         {
             //Debug.Log(message: "Protecting target: " + target.name);
 

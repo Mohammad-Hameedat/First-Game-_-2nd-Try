@@ -19,8 +19,6 @@ public class RandomizedWalkingMovementStrategy : IMovementStrategy
         InitializeMovement();
     }
 
-    public void GetTarget() { }
-
     // Move the object to a random target position
     public void Move(Rigidbody rb)
     {

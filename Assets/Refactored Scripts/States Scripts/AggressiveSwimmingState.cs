@@ -1,36 +1,25 @@
 public class AggressiveSwimmingState : IState
 {
-    private TargetingSystem targetingSystem;
     private MovementController movementController;
 
 
     private IMovementStrategy movementStrategy;
 
     public AggressiveSwimmingState(
-        MovementController _movementController,
-        TargetingSystem _targetingSystem
+        MovementController _movementController
         )
     {
         movementController = _movementController;
-        targetingSystem = _targetingSystem;
     }
 
 
     public void Enter()
     {
         movementStrategy = new HybridSwimmingMovementStrategy(
-            movementController,
-            targetingSystem);
+            movementController
+            );
 
         movementController.SetMovementStrategy(movementStrategy);
-
-        /* A different movement strategy can set later.
-         
-                movementStrategy = new RandomizedSwimmingMovementStrategy(
-                    movementController);
-
-                movementController.SetMovementStrategy(movementStrategy);
-        */
     }
 
     public void Execute()

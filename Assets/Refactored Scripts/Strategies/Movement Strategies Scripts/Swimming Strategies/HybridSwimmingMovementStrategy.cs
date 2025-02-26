@@ -5,7 +5,6 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
 
     #region References
     private readonly MovementController movementController;
-    private readonly TargetingSystem targetingSystem;
     private readonly BoundsAndPositioningManager boundsManager;
 
     private readonly MovementProperties movementProperties;
@@ -22,12 +21,10 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
 
     #region Constructor
     public HybridSwimmingMovementStrategy(
-        MovementController _movementController,
-        TargetingSystem _targetingSystem
+        MovementController _movementController
         )
     {
         movementController = _movementController;
-        targetingSystem = _targetingSystem;
         movementProperties = movementController.movementProperties;
         boundsManager = movementController.boundsManager;
 
@@ -36,21 +33,23 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
     #endregion
 
 
-    public void GetTarget()
-    {
-        target = targetingSystem.GetNearestTarget();
-    }
-
     // 2 different movement strategies based on the existence of a target
     public void Move(Rigidbody rb)
     {
+        target = movementController.CurrentTarget;
+
         if (target != null)
         {
             // Move towards the target
             Vector3 positionDifference = target.position - rb.position;
             Vector3 directionToTarget = positionDifference.normalized;
             float targetFollowingVelocity = movementProperties.maxFollowingDesiredVelocity;
-            rb.velocity = Vector3.Lerp(rb.velocity, directionToTarget * targetFollowingVelocity, Time.fixedDeltaTime);
+
+            rb.velocity = Vector3.Lerp(
+                rb.velocity,
+                directionToTarget * targetFollowingVelocity,
+                Time.fixedDeltaTime
+                );
         }
         else
         {
@@ -59,8 +58,16 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
 
             if (timeBeforeChangingVelocity >= AccelerationDuration)
             {
-                desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
-                AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
+                desiredVelocity = Random.Range(
+                    movementProperties.minRandomDesiredVelocity,
+                    movementProperties.maxRandomDesiredVelocity
+                    );
+
+                AccelerationDuration = Random.Range(
+                    movementProperties.minAccelerationDuration,
+                    movementProperties.maxAccelerationDuration
+                    );
+
                 timeBeforeChangingVelocity = 0f;
             }
 
@@ -73,7 +80,11 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
             Vector3 directionToRandomTarget = positionDifference.normalized;
 
             // Change the velocity of the object smoothly while moving towards the target position
-            rb.velocity = Vector3.Lerp(rb.velocity, directionToRandomTarget * desiredVelocity, Time.fixedDeltaTime);
+            rb.velocity = Vector3.Lerp(
+                rb.velocity,
+                directionToRandomTarget * desiredVelocity,
+                Time.fixedDeltaTime
+                );
         }
     }
 
@@ -81,8 +92,17 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
     private void InitializeRandomMovement()
     {
         randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
-        desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
-        AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
+
+        desiredVelocity = Random.Range(
+            movementProperties.minRandomDesiredVelocity,
+            movementProperties.maxRandomDesiredVelocity
+            );
+
+        AccelerationDuration = Random.Range(
+            movementProperties.minAccelerationDuration,
+            movementProperties.maxAccelerationDuration
+            );
+
         timeBeforeChangingVelocity = 0f;
     }
 }

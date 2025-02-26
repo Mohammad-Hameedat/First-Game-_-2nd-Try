@@ -124,91 +124,11 @@ public class FrameBasedTargetingStrategy : ITargetingStrategy
         return nearest;
     }
 
-
-
-    ///*
-    // * Returns a list of targets (up to 'maxNumberOfTargets') that fall within 
-    // * the specified 'rangeThreshold' from 'searcherPosition', using a frame-based 
-    // * partial iteration approach similar to GetNearestTarget.
-    // * 
-    // * 
-    // * targets = Collection of potential targets.
-    // * searcherPosition = Position of the searching agent.
-    // * maxNumberOfTargets = Maximum number of targets to return.
-    // * rangeThreshold = Distance threshold (in world units).
-    // * 
-    // * 
-    // * returns: A list of GameObjects within range.</returns>
-    //*/
-    //public List<Transform> GetTargetsWithinRange(IEnumerable<GameObject> targets, Vector3 searcherPosition, int maxNumberOfTargets, float rangeThreshold)
-    //{
-    //    // 1) Quick null check
-    //    if (targets == null)
-    //    {
-    //        ResetState();
-    //        return new List<Transform>();
-    //    }
-
-    //    // 2) Adapt the partial-check rate based on FPS (separate from main checksPerFrame)
-    //    UpdateRateParameters();
-
-    //    // 3) Determine if we need a forced (full) update for this range-based method
-    //    bool isUrgentUpdate = RequiresUrgentUpdateForRange(Time.time);
-    //    if (isUrgentUpdate)
-    //    {
-    //        // If urgent, reset so we can do a full iteration
-    //        nextFullUpdateTime = Time.time;
-    //    }
-
-    //    // 4) Convert/cast targets to a usable array or list
-    //    int targetCount;
-    //    List<GameObject> listRef = targets as List<GameObject>;
-    //    GameObject[] arrayRef = null;
-
-    //    if (listRef != null)
-    //    {
-    //        targetCount = listRef.Count;
-    //    }
-    //    else
-    //    {
-    //        arrayRef = targets as GameObject[];
-    //        if (arrayRef != null)
-    //        {
-    //            targetCount = arrayRef.Length;
-    //        }
-    //        else
-    //        {
-    //            // Fallback approach for any other IEnumerable<T>
-    //            _fallbackList.Clear();
-    //            foreach (var obj in targets)
-    //            {
-    //                _fallbackList.Add(obj);
-    //            }
-    //            listRef = _fallbackList;
-    //            targetCount = listRef.Count;
-    //        }
-    //    }
-
-    //    if (targetCount == 0)
-    //    {
-    //        ResetState();
-    //        return new List<Transform>();
-    //    }
-
-    //    // 5) Perform either full or partial iteration
-    //    List<Transform> targetsInRange = ProcessIterationForRange(
-    //        listRef, arrayRef, targetCount,
-    //        searcherPosition, rangeThreshold,
-    //        maxNumberOfTargets, isUrgentUpdate
-    //    );
-
-    //    return targetsInRange;
-    //}
-
     #endregion
 
 
     #region Process Iteration Methods
+
     /*
      * Processes targets either partially or fully, depending on isUrgentUpdate.
      * If isUrgentUpdate is true, we check all targets this frame.
@@ -273,72 +193,6 @@ public class FrameBasedTargetingStrategy : ITargetingStrategy
         return nearest;
     }
 
-
-
-    ///*
-    // * Processes the targets either partially or fully, collecting any that fall
-    // * within 'rangeThreshold' until 'maxNumberOfTargets' is reached.
-    // */
-    //private List<Transform> ProcessIterationForRange(
-    //    List<GameObject> listRef,
-    //    GameObject[] arrayRef,
-    //    int targetCount,
-    //    Vector3 searcherPosition,
-    //    float rangeThreshold,
-    //    int maxNumberOfTargets,
-    //    bool isUrgentUpdate
-    //)
-    //{
-    //    List<Transform> results = new List<Transform>(maxNumberOfTargets);
-
-    //    // Decide how many targets to check this frame
-    //    int checksAllowed = isUrgentUpdate
-    //        ? targetCount
-    //        : Mathf.FloorToInt(fpsStabilityFactor);
-
-    //    int processedCount = 0;
-    //    int startIndex = lastProcessedIndex;
-    //    float rangeThresholdSqr = rangeThreshold * rangeThreshold;
-
-    //    // Do the partial or full iteration
-    //    for (int i = 0; i < targetCount && processedCount < checksAllowed; i++)
-    //    {
-    //        int index = ( startIndex + i ) % targetCount;
-    //        GameObject candidate = ( listRef != null )
-    //            ? listRef[index]
-    //            : arrayRef[index];
-
-    //        if (!candidate)
-    //            continue;
-
-    //        float sqrDist = ( candidate.transform.position - searcherPosition ).sqrMagnitude;
-    //        if (sqrDist <= rangeThresholdSqr)
-    //        {
-    //            results.Add(candidate.transform);
-    //            if (results.Count >= maxNumberOfTargets)
-    //            {
-    //                processedCount++;
-    //                break; // We've collected enough targets
-    //            }
-    //        }
-
-    //        processedCount++;
-    //    }
-
-    //    // Update lastProcessedIndexRange for next frame (partial iteration)
-    //    lastProcessedIndex = ( startIndex + processedCount ) % targetCount;
-
-    //    // If we've processed everything or forced a full iteration,
-    //    // reset for the next pass
-    //    if (isUrgentUpdate || processedCount == targetCount)
-    //    {
-    //        lastProcessedIndex = 0;
-    //        nextFullUpdateTime = Time.time + updateInterval;
-    //    }
-
-    //    return results;
-    //}
-
     #endregion
 
 
@@ -389,16 +243,6 @@ public class FrameBasedTargetingStrategy : ITargetingStrategy
         return false;
     }
 
-
-    ///*
-    // * Determines if a full iteration should happen this frame for the
-    // * range-based method (no current "best" needed, just time-based).
-    //*/
-    //private bool RequiresUrgentUpdateForRange(float timeNow)
-    //{
-    //    // Check if it's time for the next full sweep
-    //    return ( timeNow > nextFullUpdateTime );
-    //}
 
     #endregion
 

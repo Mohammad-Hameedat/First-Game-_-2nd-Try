@@ -19,8 +19,8 @@ MonoBehaviour:
   primaryFishPrefab: {fileID: 1735303277889347158, guid: 3341687148eb16c4ebc409edc6de9b99, type: 3}
   foodPrefab: {fileID: 4858843760271760619, guid: b72df548180d24e4c89f265511e19511, type: 3}
   primaryFishPurchaseCost: 100
-  minEnemySpawnDelay: 5
-  maxEnemySpawnDelay: 10
+  minEnemySpawnDelay: 60
+  maxEnemySpawnDelay: 90
   foodSpawnDelay: 0.001
   foodQualityTypes:
   - {fileID: 11400000, guid: fc592f2c99ac3464292fa527674ea0c0, type: 2}
@@ -41,3 +41,4 @@ MonoBehaviour:
   foodQualityUpgradeCostsList: 96000000c80000002c010000
   nikoPetPosition: {x: -6, y: 10, z: -1}
   nikoPetCollectableValue: 150
+  fishesProtectionDuration: 20

@@ -73,14 +73,16 @@ public class WTWPetControllerScript : MonoBehaviour
     {
         if (!hungerSystem.IsHungry())
         {
+            // Disable the interaction controller to prevent unnecessary interactions with the main fish.
+            //interactionController.enabled = false;
+
+
             // Set new interaction strategy to reset the interaction strategy to the default values.
             interactionController.SetInteractionStrategy(
                new ProtectiveGatheringInteractionStrategy(
                targetingSystem
                ));
 
-            // Disable the interaction controller to prevent unnecessary interactions with the main fish.
-            //interactionController.enabled = false;
 
             if (stateMachine.currentState is not WTWPetIdleState)
             {
@@ -96,6 +98,12 @@ public class WTWPetControllerScript : MonoBehaviour
             {
                 //interactionController.enabled = true;
 
+                /* NOTE: The following code is commented because its for testing purposes
+                if (!GameManager.cAPPetsDictionary.ContainsKey(PetType))
+                {
+                    GameManager.cAPPetsDictionary.Add(PetType, gameObject);
+                }
+                /*
 
                 /* Read the following note when you back to continue the implementation
                  * 
