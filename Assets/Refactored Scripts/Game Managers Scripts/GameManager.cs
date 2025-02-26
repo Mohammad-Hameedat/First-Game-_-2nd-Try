@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -20,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Current Active Objects Lists")]
     public static List<GameObject> currentActiveMainFishObjectsList = new();
+    public static List<GameObject> currentActiveDistractibleObjectsList = new();
+
     public static List<GameObject> currentActiveFoodTargetObjectsList = new();
     public static List<GameObject> currentActiveEnemyObjectsList = new();
     public static List<GameObject> currentActiveCollectiblesList = new();
@@ -63,6 +64,13 @@ public class GameManager : MonoBehaviour
     private static int currentSceneCoins;
 
     private bool isTypeOfFoodEater = false; // New flag to track whether the current enemy is a Food Eater
+
+    #region Pets Utility Variables
+    public static float fishesProtectionDuration { get; private set; } // The duration that the WTW pet can protect the Main-Fish objects after an enemy object is spawned.
+
+    public static bool canBeProtectedByWTWPet = false; // A flag to check if the Main-Fish objects can be protected by the WTW pet.
+
+    #endregion
     #endregion
 
 
@@ -71,6 +79,8 @@ public class GameManager : MonoBehaviour
         ClearStaticLists();
 
         currentSceneCoins = levelData.initialAvailableCoins;
+        fishesProtectionDuration = levelData.fishesProtectionDuration;
+
         GameEvents.EventsChannelInstance.UpdateCurrentSceneCoins(currentSceneCoins);
         GameEvents.EventsChannelInstance.RefreshEggCost(levelData.eggUpgradeCostList[currentEggIndex]);
 
@@ -82,15 +92,16 @@ public class GameManager : MonoBehaviour
         // Enemy Spawner
         StartCoroutine(SpawnEnemy());
 
+        // Spawn 1000 Main Fishes
         //for (int i = 0; i < 1000; i++)
         //{
         //    SpawnObject(1);
         //}
 
-        SpawnObject(1);
 
         SpawnPets();
 
+        SpawnObject(1);
     }
 
 
@@ -250,6 +261,7 @@ public class GameManager : MonoBehaviour
                 currentActiveEnemyObjectsList.Add(enemyInstance);
 
                 CheckEnemyType(enemyInstance);
+                canBeProtectedByWTWPet = true;
             }
             yield return null;
         }
@@ -425,21 +437,19 @@ public class GameManager : MonoBehaviour
         {
             if (protectivePet.Value.activeSelf)
             {
-                if (cAPPetsDictionary.ContainsKey(PetType.WTWPet))
+                if (cAPPetsDictionary.ContainsKey(PetType.WTWPet) && canBeProtectedByWTWPet == true)
                 {
-                    //protectivePetObject = cAPPetsDictionary[PetType.WTWPet];
                     protectivePetObject = protectivePet.Key;
                     break;
                 }
                 else if (protectivePet.Key == PetType.GTAPet)
                 {
-                    //protectivePetObject = cAPPetsDictionary[PetType.GTAPet];
                     protectivePetObject = protectivePet.Key;
                     break;
                 }
                 else
                 {
-                    continue;
+                    break;
                 }
             }
         }

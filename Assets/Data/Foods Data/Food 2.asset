@@ -15,4 +15,4 @@ MonoBehaviour:
   foodCost: 6
   damage: 2
   staminaTime: 14
-  destructionTime: 24
+  destructionTime: 22

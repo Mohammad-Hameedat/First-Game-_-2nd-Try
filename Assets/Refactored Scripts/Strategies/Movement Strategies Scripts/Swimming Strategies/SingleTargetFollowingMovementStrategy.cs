@@ -28,9 +28,6 @@ public class SingleTargetFollowingMovementStrategy : IMovementStrategy
     #endregion
 
 
-    public void GetTarget() { }
-
-
     public void Move(Rigidbody rb)
     {
         if (target != null)

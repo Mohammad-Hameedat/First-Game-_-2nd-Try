@@ -1,32 +1,30 @@
 public class NoThreatSwimmingState : IState
 {
-    private TargetingSystem targetingSystem;
     private MovementController movementController;
     private HungerSystem hungerSystem;
 
 
     private IMovementStrategy movementStrategy;
 
-    public NoThreatSwimmingState(MovementController _movementController, TargetingSystem _targetingSystem, HungerSystem _hungerStrategy)
+    public NoThreatSwimmingState(
+        MovementController _movementController,
+        HungerSystem _hungerStrategy
+        )
     {
         movementController = _movementController;
-        targetingSystem = _targetingSystem;
         hungerSystem = _hungerStrategy;
     }
 
 
-    public void Enter()
-    {
-        //throw new System.NotImplementedException("Enter Func No Threat Swimming State");
-    }
+    public void Enter() { }
 
     public void Execute()
     {
         if (hungerSystem.IsHungry() && movementStrategy is not HybridSwimmingMovementStrategy)
         {
             movementStrategy = new HybridSwimmingMovementStrategy(
-                movementController,
-                targetingSystem);
+                movementController
+                );
 
             movementController.SetMovementStrategy(movementStrategy);
         }

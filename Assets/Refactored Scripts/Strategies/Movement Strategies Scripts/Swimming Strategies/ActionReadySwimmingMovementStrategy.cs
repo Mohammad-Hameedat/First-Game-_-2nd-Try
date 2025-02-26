@@ -21,7 +21,7 @@ public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 
 
     #region Targets And Targeing Variables
-    private Transform targetTransform;
+    private Transform target;
 
     private ScreenCorner currentCorner, nextCorenr;
     private Vector3 nextCorenerWorldPosition;
@@ -54,15 +54,12 @@ public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 
     #endregion
 
-    public void GetTarget()
-    {
-        targetTransform = targetingSystem.GetNearestTarget();
-    }
-
 
     public void Move(Rigidbody rb)
     {
-        if (targetTransform == null)
+        target = movementController.CurrentTarget;
+
+        if (target == null)
         {
             return;
         }
@@ -70,7 +67,7 @@ public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 
         if (!isMoving)
         {
-            nextCorenr = boundsManager.FindBestNextCorner(currentCorner, targetTransform.position);
+            nextCorenr = boundsManager.FindBestNextCorner(currentCorner, target.position);
 
             nextCorenerWorldPosition = boundsManager.CornerToWorldPosition(nextCorenr);
 

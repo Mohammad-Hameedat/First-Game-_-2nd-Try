@@ -10,13 +10,15 @@ public class TargetingSystem : MonoBehaviour
 
 
     // Set the type of target objects to detect and interact with
-    public void SetTargetObjectsList(IEnumerable<GameObject> targets)
+    public void SetTargetObjectsList(IEnumerable<GameObject> targetsList)
     {
-        targetObjectsList = targets;
+        targetObjectsList = targetsList;
     }
 
     public Transform GetNearestTarget()
     {
+        //if (targetObjectsList as List<GameObject> == null) // NOTE: -> For future testing
+
         if (targetObjectsList == null)
             return null;
 

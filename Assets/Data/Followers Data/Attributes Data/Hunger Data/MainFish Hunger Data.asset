@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfcd5e7dd12e6bc49a5e86f89603d634, type: 3}
   m_Name: MainFish Hunger Data
   m_EditorClassIdentifier: 
-  hungerStartingTime: 5
+  hungerStartingTime: 7
   destructionTime: 15
   idleDuration: 0
   hungerDuration: 0

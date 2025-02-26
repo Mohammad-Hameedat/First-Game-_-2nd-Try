@@ -7,7 +7,10 @@ public class MainFishInteractionStrategy : IInteractionStrategy
 
     private int currentNumberofEatenObjects = 0;
 
-    public MainFishInteractionStrategy(HungerSystem _hungerSystem, TargetingSystem _targetingSystem)
+    public MainFishInteractionStrategy(
+        HungerSystem _hungerSystem,
+        TargetingSystem _targetingSystem
+        )
     {
         hungerSystem = _hungerSystem;
         targetingSystem = _targetingSystem;
@@ -29,13 +32,13 @@ public class MainFishInteractionStrategy : IInteractionStrategy
 
             FoodProperties foodConfig = target.GetComponent<Food>().foodConfig;
 
+            // Reset hunger
+            hungerSystem.hungerStrategy.ResetHunger();
+
             hungerSystem.hungerStrategy.SetHungerValues(
                  foodConfig.staminaTime,
               foodConfig.destructionTime
               );
-
-            // Reset hunger
-            hungerSystem.hungerStrategy?.ResetHunger();
 
             // Consume the target
             Object.Destroy(target);

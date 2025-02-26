@@ -88,7 +88,6 @@ public class EnemyController : MonoBehaviour
         // Set the initial state of the enemy || Initialize state
         stateMachine.ChangeState(new EnemyHuntingState(
             movementController,
-            targetingSystem,
             hungerSystem
             ));
     }

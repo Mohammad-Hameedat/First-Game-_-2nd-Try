@@ -7,7 +7,10 @@ public class AggressiveInteractionStrategy : IInteractionStrategy
 
     private float elapsedTime = 0f;
 
-    public AggressiveInteractionStrategy(TargetingSystem _targetingSystem, AttackProperties _attackProperties)
+    public AggressiveInteractionStrategy(
+        TargetingSystem _targetingSystem,
+        AttackProperties _attackProperties
+        )
     {
         targetingSystem = _targetingSystem;
         attackProperties = _attackProperties;
@@ -16,7 +19,7 @@ public class AggressiveInteractionStrategy : IInteractionStrategy
 
     public Transform IdentifyNearestObject()
     {
-        Transform nearestTarget = targetingSystem.GetlastNearestTarget();
+        Transform nearestTarget = targetingSystem.GetNearestTarget();
 
         return nearestTarget;
     }

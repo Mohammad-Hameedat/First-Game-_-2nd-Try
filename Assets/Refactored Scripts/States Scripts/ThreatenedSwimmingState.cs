@@ -6,8 +6,6 @@ public class ThreatenedSwimmingState : IState
 
     private IMovementStrategy movementStrategy;
 
-    GameObject protectivePetObject;
-
     public ThreatenedSwimmingState(MovementController _movementController)
     {
         movementController = _movementController;
@@ -51,7 +49,7 @@ public class ThreatenedSwimmingState : IState
          */
         if (protectivePetType == PetType.WTWPet || protectivePetType == PetType.GTAPet)
         {
-            protectivePetObject = GameManager.cAPPetsDictionary[protectivePetType];
+            GameObject protectivePetObject = GameManager.cAPPetsDictionary[protectivePetType];
 
             movementStrategy = new SingleTargetFollowingMovementStrategy(
                 movementController,
@@ -70,5 +68,6 @@ public class ThreatenedSwimmingState : IState
                 );
         }
     }
+
     #endregion
 }

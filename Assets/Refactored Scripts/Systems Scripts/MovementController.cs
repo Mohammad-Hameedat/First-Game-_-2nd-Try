@@ -11,6 +11,10 @@ public class MovementController : MonoBehaviour
     public IMovementStrategy movementStrategy;
     public Rigidbody rb;
 
+    /* NOTE: a shared property that can be set by the InteractionController.
+     * The movement strategies will read from this to move the fish.
+     */
+    public Transform CurrentTarget { get; set; } = null;
 
     private void Awake()
     {
@@ -22,11 +26,6 @@ public class MovementController : MonoBehaviour
     {
         movementStrategy?.Move(rb);
         transform.position = boundsManager.ClampPositionWithInView(transform.position);
-    }
-
-    private void Update()
-    {
-        movementStrategy?.GetTarget();
     }
 
     // Set the movement strategy of the object

@@ -62,7 +62,6 @@ public class CTJPetControllerScript : MonoBehaviour
         // Switch to NoDangerState
         stateMachine.ChangeState(new NoThreatSwimmingState(
         movementController,
-        targetingSystem,
         hungerSystem
         ));
     }

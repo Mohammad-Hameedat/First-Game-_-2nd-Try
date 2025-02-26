@@ -1,16 +1,14 @@
 public class EnemyHuntingState : IState
 {
-    private TargetingSystem targetingSystem;
     private MovementController movementController;
     private HungerSystem hungerSystem;
 
     private IMovementStrategy movementStrategy;
 
 
-    public EnemyHuntingState(MovementController _movementController,TargetingSystem _targetingSystem,HungerSystem _hungerSystem)
+    public EnemyHuntingState(MovementController _movementController, HungerSystem _hungerSystem)
     {
         movementController = _movementController;
-        targetingSystem = _targetingSystem;
         hungerSystem = _hungerSystem;
     }
 
@@ -27,8 +25,7 @@ public class EnemyHuntingState : IState
         {
             //MonoBehaviour.print("Hunting");
             movementStrategy = new HybridSwimmingMovementStrategy(
-                movementController,
-                targetingSystem
+                movementController
                 );
 
             movementController.SetMovementStrategy(movementStrategy);

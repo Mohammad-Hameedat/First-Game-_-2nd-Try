@@ -19,6 +19,8 @@ public class MainFishControllerScript : MonoBehaviour
     private HungerSystem hungerSystem;
     private InteractionController interactionController;
 
+
+    private Rigidbody rb;
     public FollowerSettings followerProperties;
 
     #endregion
@@ -47,19 +49,37 @@ public class MainFishControllerScript : MonoBehaviour
         hungerSystem = GetComponent<HungerSystem>();
         interactionController = GetComponent<InteractionController>();
 
+        rb = GetComponent<Rigidbody>();
 
         // Assign the properties to the components
         movementController.movementProperties = followerProperties.movementProperties;
         targetObjectsList = GameManager.currentActiveFoodTargetObjectsList;
-
-        // Register this object in the list of active main fishes || Add to GameManager list
-        GameManager.currentActiveMainFishObjectsList.Add(gameObject);
     }
 
 
     private void OnEnable()
     {
-        //Debug.Log("Main Fish Object Enabled");
+        // Register this object in the list of active main fishes || Add to GameManager list
+        if (!GameManager.currentActiveMainFishObjectsList.Contains(gameObject))
+        {
+            GameManager.currentActiveMainFishObjectsList.Add(gameObject);
+        }
+
+        if (!GameManager.currentActiveDistractibleObjectsList.Contains(gameObject))
+        {
+            GameManager.currentActiveDistractibleObjectsList.Add(gameObject);
+        }
+
+        rb.velocity = Vector3.zero;
+
+        if (GameManager.currentActiveEnemyObjectsList.Count > 0)
+        {
+            hungerSystem.enabled = false;
+
+            stateMachine.ChangeState(new ThreatenedSwimmingState(
+                movementController
+                ));
+        }
 
         GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles += ToggleBoostSpawningCollectibles;
     }
@@ -75,8 +95,11 @@ public class MainFishControllerScript : MonoBehaviour
         // Register the object in the list of active main fishes || Add to GameManager list
         hungerSystem.SetHungerBehavior(new MainFishHungerStrategy(
             gameObject,
+            targetingSystem,
             followerProperties.hungerProperties.hungerStartingTime,
-            followerProperties.hungerProperties.destructionTime));
+            followerProperties.hungerProperties.destructionTime
+            ));
+
 
         // Set the interaction strategy
         interactionController.SetInteractionStrategy(new MainFishInteractionStrategy(
@@ -102,7 +125,6 @@ public class MainFishControllerScript : MonoBehaviour
                 // Switch to NoDangerState
                 stateMachine.ChangeState(new NoThreatSwimmingState(
                 movementController,
-                targetingSystem,
                 hungerSystem
                 ));
             }
@@ -214,10 +236,16 @@ public class MainFishControllerScript : MonoBehaviour
 
     private void OnDisable()
     {
-        //Debug.Log("Main Fish Object Disabled");
+        // Unregister the object from the list of active main fishes || Remove from GameManager list
+        //GameManager.currentActiveMainFishObjectsList.Remove(gameObject);
+        //GameManager.currentActiveDistractibleObjectsList.Remove(gameObject);
+
+        // Refresh the number of main fishes in the game
+        //GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.currentActiveMainFishObjectsList.Count);
 
         GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles -= ToggleBoostSpawningCollectibles;
     }
+
 
     private void OnDestroy()
     {
@@ -227,6 +255,7 @@ public class MainFishControllerScript : MonoBehaviour
 
         // Unregister the object from the list of active main fishes || Remove from GameManager list
         GameManager.currentActiveMainFishObjectsList.Remove(gameObject);
+        GameManager.currentActiveDistractibleObjectsList.Remove(gameObject);
 
         // Refresh the number of main fishes in the game
         GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.currentActiveMainFishObjectsList.Count);

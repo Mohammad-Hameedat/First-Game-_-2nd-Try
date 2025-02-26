@@ -32,14 +32,12 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
         InitializeRandomMovement();
     }
 
-    public void GetTarget()
-    {
-        target = targetingSystem.GetNearestTarget();
-    }
 
     // 2 different movement strategies based on the existence of a target
     public void Move(Rigidbody rb)
     {
+        target = movementController.CurrentTarget;
+
         if (target != null)
         {
             // Move towards the target only on the x-axis

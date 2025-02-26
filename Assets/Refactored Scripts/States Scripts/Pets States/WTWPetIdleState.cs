@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
 
@@ -28,10 +29,7 @@ public class WTWPetIdleState : IState
     }
 
 
-    public void Execute()
-    {
-
-    }
+    public void Execute() { }
 
 
     public void Exit()

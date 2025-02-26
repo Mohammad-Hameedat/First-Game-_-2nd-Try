@@ -87,5 +87,13 @@ public class LevelDataSettingsScript : ScriptableObject
     public int nikoPetCollectableValue;
     #endregion
 
+    [Header("Wadsworth The Whale Pet Data")]
+    #region Wadsworth The Whale Pet
+
+    [Tooltip("Assign here the time that Wadsworth The Whale will spend protecting the fishes.")]
+    public float fishesProtectionDuration;
+    #endregion
+
+
     #endregion
 }
