@@ -67,8 +67,10 @@ public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 
         if (!isMoving)
         {
+            // Find the best corner to move to -> Screen Corner
             nextCorenr = boundsManager.FindBestNextCorner(currentCorner, target.position);
 
+            // Get the world position of the next corner -> Vector3
             nextCorenerWorldPosition = boundsManager.CornerToWorldPosition(nextCorenr);
 
             isMoving = true;
@@ -88,10 +90,12 @@ public class ActionReadySwimmingMovementStrategy : IMovementStrategy
 
         if (distanceToNextCorner > movementInterpolation)
         {
+            // Move the object to the next corner
             rb.velocity = Vector3.Lerp(rb.velocity, movementDirection * targetVelocity, Time.fixedDeltaTime * 2f);
         }
         else if (distanceToNextCorner <= movementInterpolation)
         {
+            // Slow down the object's velocity as it approaches the corner
             rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, Time.fixedDeltaTime * 2f);
         }
     }

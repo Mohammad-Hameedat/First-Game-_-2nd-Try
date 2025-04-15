@@ -53,9 +53,11 @@ public class CTJPetControllerScript : MonoBehaviour
 
         targetingSystem.targetingStrategy = new ProximityTargetTargetingStrategy();
 
-        hungerSystem.SetHungerBehavior(new ChaseCollectibleHungerStrategy());
+        hungerSystem.SetHungerBehavior(new CheckForTargetHungerStrategy(
+            targetObjectsList
+            ));
 
-        interactionController.SetInteractionStrategy(new ChaseCollectibleInteractionStrategy(
+        interactionController.SetInteractionStrategy(new CollectCollectibleInteractionStrategy(
             targetingSystem
         ));
 

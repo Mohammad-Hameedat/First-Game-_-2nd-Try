@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8482009129857973868}
   - component: {fileID: -1430805017273182272}
   - component: {fileID: 7969786308705494300}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 2 Niko Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

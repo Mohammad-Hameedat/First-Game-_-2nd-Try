@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6610971316072054697}
   - component: {fileID: 5013988657972614040}
   - component: {fileID: 2243165282149577329}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 7 Vert The Skeleton Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

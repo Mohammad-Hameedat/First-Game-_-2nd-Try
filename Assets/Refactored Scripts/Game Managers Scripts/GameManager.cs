@@ -66,9 +66,16 @@ public class GameManager : MonoBehaviour
     private bool isTypeOfFoodEater = false; // New flag to track whether the current enemy is a Food Eater
 
     #region Pets Utility Variables
-    public static float fishesProtectionDuration { get; private set; } // The duration that the WTW pet can protect the Main-Fish objects after an enemy object is spawned.
 
+    #region WTW Pet protection variables
     public static bool canBeProtectedByWTWPet = false; // A flag to check if the Main-Fish objects can be protected by the WTW pet.
+    public static float fishesProtectionDuration { get; private set; } // The duration that the WTW pet can protect the Main-Fish objects after an enemy object is spawned.
+    #endregion
+
+    #region NTMR Pet Unique Ability
+    public static bool NTMRpetUniqueAbility = false; // A flag to check if the NTMR pet is active and has a unique ability.
+    #endregion
+
 
     #endregion
     #endregion
@@ -106,6 +113,9 @@ public class GameManager : MonoBehaviour
 
 
     #region Input Handling
+
+    /* Older Method:
+    
     IEnumerator HandleClicksAndTouches()
     {
         while (true)
@@ -181,6 +191,91 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
     }
+    */
+
+
+    // This method is optimized to handle the inputs depending on the platform
+    IEnumerator HandleClicksAndTouches()
+    {
+        while (true)
+        {
+            Vector3 inputPosition = Vector3.zero;
+            bool isInputActive = false;
+
+#if UNITY_STANDALONE || UNITY_EDITOR
+            // Handle Mouse Input for Standalone (Windows/Mac/Linux) and Unity Editor
+            if (Input.GetMouseButton(0))
+            {
+                inputPosition = Input.mousePosition;
+                isInputActive = true;
+            }
+#elif UNITY_ANDROID || UNITY_IOS
+        // Handle Touch Input for Mobile Devices
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            inputPosition = touch.position;
+            isInputActive = true;
+        }
+#endif
+
+            // Check if input is active
+            if (isInputActive)
+            {
+                // Prevent interaction if tapping on UI
+                if (
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+                    EventSystem.current.IsPointerOverGameObject()
+#elif UNITY_ANDROID || UNITY_IOS
+                (Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#endif
+                    )
+                {
+                    yield return new WaitForSeconds(.1f);
+                    continue;
+                }
+
+                // Convert the input position to world coordinates
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(inputPosition);
+                clampedSpawnPosition = positioningManager.ClampPositionWithInView(worldPosition);
+
+                Ray ray = Camera.main.ScreenPointToRay(inputPosition);
+                RaycastHit hit;
+                Physics.Raycast(ray, out hit, 21f);
+
+                // Check what was clicked/tapped
+                if (hit.collider != null)
+                {
+                    if (hit.collider.gameObject.tag == "Collectible") // Collectibles
+                    {
+                        UpdateSceneCoins(hit);
+                        yield return new WaitForSeconds(.05f);
+                    }
+                    else if (currentActiveEnemyObjectsList.Count > 0) // If there are enemies
+                    {
+                        if (isTypeOfFoodEater)
+                        {
+                            SpawnObject(2);
+                            yield return new WaitForSeconds(levelData.foodSpawnDelay);
+                        }
+                        else
+                        {
+                            Health decreaseHealth = hit.collider?.gameObject.GetComponent<Health>();
+                            decreaseHealth?.TakeDamage(levelData.weaponTypes[currentWeaponIndex].weaponDamage);
+                            yield return new WaitForSeconds(levelData.weaponTypes[currentWeaponIndex].fireDelay);
+                        }
+                    }
+                    else // Spawn food normally
+                    {
+                        SpawnObject(2);
+                        yield return new WaitForSeconds(levelData.foodSpawnDelay);
+                    }
+                }
+            }
+            yield return null;
+        }
+    }
+
 
     #endregion
 

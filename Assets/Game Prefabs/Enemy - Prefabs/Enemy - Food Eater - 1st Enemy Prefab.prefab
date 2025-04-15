@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 8564125101895663781}
   - component: {fileID: -7640273746041153083}
   - component: {fileID: 7435952459695185677}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Enemy - Food Eater - 1st Enemy Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementProperties: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!114 &4708603944904840274
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4072951988762856192}
   - component: {fileID: 2502570689467549827}
   - component: {fileID: 6754035832542757832}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 4 Prego The Momma Fish Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementProperties: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!114 &2502570689467549827
 MonoBehaviour:
   m_ObjectHideFlags: 0

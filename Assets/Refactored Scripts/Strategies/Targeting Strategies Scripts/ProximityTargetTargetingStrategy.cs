@@ -8,7 +8,7 @@ public class ProximityTargetTargetingStrategy : ITargetingStrategy
         Transform nearestTarget = null;
         float minDistance = Mathf.Infinity;
 
-        foreach (GameObject targetObject in targetObjectsList)
+        foreach (GameObject targetObject in targetObjectsList /*as List<GameObject>*/)
         {
             if (targetObject != null && targetObject.activeSelf)
             {

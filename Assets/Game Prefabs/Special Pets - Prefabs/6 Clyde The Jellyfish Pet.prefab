@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 780418189233514179}
   - component: {fileID: 8722302353094817629}
   - component: {fileID: 5204026484692934487}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 6 Clyde The Jellyfish Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

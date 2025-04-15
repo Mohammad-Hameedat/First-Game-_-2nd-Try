@@ -20,8 +20,6 @@ public class VTSControllerScript : MonoBehaviour
 
 
     #region VTS Pet - Required Variables
-    private float elapsedTime = 0f;
-
     private List<GameObject> targetObjectsList = new();
 
     #endregion
@@ -54,24 +52,21 @@ public class VTSControllerScript : MonoBehaviour
     }
 
 
-    private void Update()
-    {
-        elapsedTime += Time.deltaTime;
-    }
-
-
     IEnumerator SpawnMoney()
     {
+        float elapsedTime = 0f;
+
         while (true)
         {
             if (targetObjectsList.Count > 0)
             {
                 // Stop spawning money temporarily
                 yield return null;
-                continue;
             }
             else
             {
+                elapsedTime += Time.deltaTime;
+
                 // Set collectible's configuration
                 float nextCollectibleSpawnTime = elapsedTime < 180f
                     ? petProperties.spawnProperties.minCollectableSpwanTime

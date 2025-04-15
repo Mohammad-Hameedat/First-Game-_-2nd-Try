@@ -61,6 +61,7 @@ public class STRFControllerScript : MonoBehaviour
     {
         while (true)
         {
+            // Check if there are monsters in the game.
             if (targetObjectsList.Count > 0)
             {
                 // Stop spawning money temporarily
