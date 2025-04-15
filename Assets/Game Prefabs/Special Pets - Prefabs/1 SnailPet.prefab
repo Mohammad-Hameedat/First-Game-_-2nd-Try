@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -6942560352806270558}
   - component: {fileID: -7892665185827852963}
   - component: {fileID: 7937391446085402106}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 1 SnailPet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a7a35a310f4bf234099e346d4c063b79, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementProperties: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!114 &5557462245475261232
 MonoBehaviour:
   m_ObjectHideFlags: 0

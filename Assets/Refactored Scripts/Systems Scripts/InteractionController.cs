@@ -28,7 +28,7 @@ public class InteractionController : MonoBehaviour
     // Detect the nearest object and interact with it
     private void InteractWithNearestObject()
     {
-        Transform nearestTarget = interactionStrategy.IdentifyNearestObject();
+        Transform nearestTarget = interactionStrategy?.IdentifyNearestObject();
 
         // Return if no target object is found
         if (nearestTarget == null)

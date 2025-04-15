@@ -26,4 +26,17 @@ public class MovementProperties : ScriptableObject
 
     [Tooltip("The distance threshold for the follower to eat a target object.")]
     public float nearestDistanceToEatATarget; // Set a threshold for the distance between the follower and the target object before eating it
+
+
+
+    [Header("Movement Boundaries")]
+    [Tooltip("The minimum X position for object movement.")]
+    public float xMin = 0.05f;
+    [Tooltip("The maximum X position for object movement.")]
+    public float xMax = 0.95f;
+    [Tooltip("The minimum Y position for object movement.")]
+    public float yMin = 0.05f;
+    [Tooltip("The maximum Y position for object movement.")]
+    public float yMax = 0.80f;
+
 }

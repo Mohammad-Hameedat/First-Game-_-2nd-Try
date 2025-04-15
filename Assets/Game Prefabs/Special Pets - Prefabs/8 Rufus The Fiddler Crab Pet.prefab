@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 4593432097410810351}
   - component: {fileID: 5414799457097711521}
   - component: {fileID: 9208270552569383332}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 8 Rufus The Fiddler Crab Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementProperties: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!114 &602880548259649997
 MonoBehaviour:
   m_ObjectHideFlags: 0

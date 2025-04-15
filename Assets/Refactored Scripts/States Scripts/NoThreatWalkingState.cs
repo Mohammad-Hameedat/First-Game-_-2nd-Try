@@ -7,7 +7,11 @@ public class NoThreatWalkingState : IState
 
     private IMovementStrategy movementStrategy;
 
-    public NoThreatWalkingState(MovementController _movementController, TargetingSystem _targetingSystem, HungerSystem _hungerStrategy)
+    public NoThreatWalkingState(
+        MovementController _movementController,
+        TargetingSystem _targetingSystem,
+        HungerSystem _hungerStrategy
+        )
     {
         movementController = _movementController;
         targetingSystem = _targetingSystem;
@@ -26,14 +30,17 @@ public class NoThreatWalkingState : IState
         {
             movementStrategy = new HybridWalkingMovementStrategy(
                 movementController,
-                targetingSystem);
+                targetingSystem
+                );
 
             movementController.SetMovementStrategy(movementStrategy);
         }
         else if (!hungerSystem.IsHungry() && movementStrategy is not RandomizedWalkingMovementStrategy)
         {
             movementStrategy = new RandomizedWalkingMovementStrategy(
-                movementController);
+                movementController
+                );
+
             movementController.SetMovementStrategy(movementStrategy);
         }
     }

@@ -3,7 +3,7 @@
  * This uncommented script is a refactored version of the original BombScript.cs script
  * that uses Unity's Job System to optimize the search for nearby targets.
  * 
- * And I'm not experienced with Unity's Job System yet, so I'm not sure if
+ * And as I'm not experienced enough with Unity's Job System yet, I'm not sure if
  * this script will work as expected but the original script works fine.
  */
 using System.Collections.Generic;

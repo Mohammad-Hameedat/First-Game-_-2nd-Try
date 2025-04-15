@@ -4,7 +4,7 @@ using UnityEngine;
 public class BoundsAndPositioningManager : MonoBehaviour
 {
     #region Movement Area Variables
-    readonly float xMin = 0.05f, xMax = 0.95f, yMin = 0.05f, yMax = 0.80f;
+    float xMin = 0.05f, xMax = 0.95f, yMin = 0.05f, yMax = 0.80f;
     readonly float threshold = 0.01f;
     #endregion
 
@@ -88,6 +88,19 @@ public class BoundsAndPositioningManager : MonoBehaviour
         };
     }
 
+    private void Start()
+    {
+        MovementController movementController = gameObject.GetComponent<MovementController>();
+
+        if (movementController != null)
+        {
+            xMin = movementController.movementProperties.xMin;
+            xMax = movementController.movementProperties.xMax;
+            yMin = movementController.movementProperties.yMin;
+            yMax = movementController.movementProperties.yMax;
+        }
+    }
+
     #region Movement Area Methods
     // Clamp the position of the object to the camera view
     public Vector3 ClampPositionWithInView(Vector3 objectPosition)
@@ -112,10 +125,9 @@ public class BoundsAndPositioningManager : MonoBehaviour
     public Vector3 GenerateRandomClampedPosition()
     {
         // Get the new random position
-        Vector3 newPosition = new(
+        Vector2 newPosition = new(
             Random.Range(xMin, xMax),
-            Random.Range(yMin, yMax),
-            0
+            Random.Range(yMin, yMax)
             );
 
         Vector3 clampedRandomPosition = Camera.main.ViewportToWorldPoint(newPosition);
@@ -142,6 +154,7 @@ public class BoundsAndPositioningManager : MonoBehaviour
             return false;
         }
     }
+
     #endregion
 
 
@@ -259,9 +272,6 @@ public class BoundsAndPositioningManager : MonoBehaviour
                 bestCorner = fallbackCorner;
             }
         }
-
-
-        //Debug.Log($"Target Position: {nextCornerWorldPosition}");
 
         return bestCorner;
     }

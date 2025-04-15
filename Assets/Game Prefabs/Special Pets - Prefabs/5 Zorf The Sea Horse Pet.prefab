@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4880387524826971084}
   - component: {fileID: 1686174605316580067}
   - component: {fileID: 3536203003170433429}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 5 Zorf The Sea Horse Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementProperties: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!114 &6761836562553366551
 MonoBehaviour:
   m_ObjectHideFlags: 0

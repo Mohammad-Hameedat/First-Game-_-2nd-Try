@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#region Main Fish Controller - Required Components
+#region PTMF Pet Controller - Required Components
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(HungerSystem))]

@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 4529369272269046997}
   - component: {fileID: 4126639277082427736}
   - component: {fileID: 5063522588205930994}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 3 Itchy Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

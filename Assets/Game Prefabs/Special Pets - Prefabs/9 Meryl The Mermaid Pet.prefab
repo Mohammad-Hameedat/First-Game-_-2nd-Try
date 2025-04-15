@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 13704576001090979}
   - component: {fileID: 5165031873809863868}
   - component: {fileID: 6291397841014617927}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 9 Meryl The Mermaid Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,6 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementProperties: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!114 &13704576001090979
 MonoBehaviour:
   m_ObjectHideFlags: 0

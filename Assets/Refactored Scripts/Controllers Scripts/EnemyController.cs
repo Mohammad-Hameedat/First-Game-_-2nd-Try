@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
     //public List<GameObject> showListsContent = new();
 
     private static List<GameObject> targetObjectsList = new();
-    public static IEnumerable<GameObject> combinedTargetsList = new List<GameObject>();
+    private static IEnumerable<GameObject> combinedTargetsList = new List<GameObject>();
 
     public FollowerSettings followerProperties;
     public EnemyProperties enemyProperties;

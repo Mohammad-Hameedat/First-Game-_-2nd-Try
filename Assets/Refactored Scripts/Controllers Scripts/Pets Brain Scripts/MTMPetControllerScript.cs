@@ -58,7 +58,6 @@ public class MTMPetControllerScript : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 yield return null;
-                continue;
             }
 
             if (hungerSystem.IsHungry())

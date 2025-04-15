@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1298274533638948163}
   - component: {fileID: 7299356635702193459}
   - component: {fileID: 6222162934183662254}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 14 Blip The Porpoise Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

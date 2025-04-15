@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -4961080789990969228}
   - component: {fileID: -3868906009140734485}
   - component: {fileID: 2736863269171902043}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 12 Shrapnel The Robot Fish Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

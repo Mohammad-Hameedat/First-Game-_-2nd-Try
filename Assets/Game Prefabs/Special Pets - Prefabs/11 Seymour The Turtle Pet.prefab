@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 227615791238255090}
   - component: {fileID: 8651942382157214324}
   - component: {fileID: 8993512622405265307}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 11 Seymour The Turtle Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

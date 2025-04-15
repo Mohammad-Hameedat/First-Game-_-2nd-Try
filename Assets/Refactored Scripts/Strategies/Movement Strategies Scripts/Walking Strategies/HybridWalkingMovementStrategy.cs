@@ -43,17 +43,23 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
             // Move towards the target only on the x-axis
             Vector3 positionDifference = target.position - rb.position;
 
-            // Zero out Y and Z to ensure pure X-axis movement
-            positionDifference.y = 0f;
-            positionDifference.z = 0f;
-
+            /* Zero out Y and Z to ensure pure X-axis movement
+             * 
+            //positionDifference.y = 0f;
+            //positionDifference.z = 0f;
+            */
 
             Vector3 directionToTarget = positionDifference.normalized;
 
             float targetFollowingVelocity = movementProperties.maxFollowingDesiredVelocity;
 
-            // Calculate the interpolated velocity
-            Vector3 calculatedXVelocity = Vector3.Lerp(rb.velocity, directionToTarget * targetFollowingVelocity, Time.fixedDeltaTime / 2f);
+            // Calculate the interpolated velocity on the x-axis
+            Vector3 calculatedXVelocity = Vector3.Lerp(
+                rb.velocity,
+                directionToTarget * targetFollowingVelocity,
+                Time.fixedDeltaTime / 2f // Slow down the interpolation
+                );
+
             // Force the object to only move along X-axis
             calculatedXVelocity = new(calculatedXVelocity.x, 0f, 0f);
 
@@ -67,8 +73,16 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
 
             if (timeBeforeChangingVelocity >= AccelerationDuration)
             {
-                desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
-                AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
+                desiredVelocity = Random.Range(
+                    movementProperties.minRandomDesiredVelocity,
+                    movementProperties.maxRandomDesiredVelocity
+                    );
+
+                AccelerationDuration = Random.Range(
+                    movementProperties.minAccelerationDuration,
+                    movementProperties.maxAccelerationDuration
+                    );
+
                 timeBeforeChangingVelocity = 0f;
             }
 
@@ -98,8 +112,17 @@ public class HybridWalkingMovementStrategy : IMovementStrategy
     private void InitializeRandomMovement()
     {
         randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
-        desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
-        AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
+
+        desiredVelocity = Random.Range(
+            movementProperties.minRandomDesiredVelocity,
+            movementProperties.maxRandomDesiredVelocity
+            );
+
+        AccelerationDuration = Random.Range(
+            movementProperties.minAccelerationDuration,
+            movementProperties.maxAccelerationDuration
+            );
+
         timeBeforeChangingVelocity = 0f;
     }
 }

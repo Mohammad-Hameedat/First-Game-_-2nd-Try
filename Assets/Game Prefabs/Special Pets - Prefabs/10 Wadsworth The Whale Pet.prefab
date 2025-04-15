@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 3568250490285452216}
   - component: {fileID: 3393465614306139900}
   - component: {fileID: 5685472046340350422}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 10 Wadsworth The Whale Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followerProperties: {fileID: 11400000, guid: ceb560cf87fca3540be96fa84bfbe7a0, type: 2}
+  PetType: 0
 --- !u!114 &8076381132835421111
 MonoBehaviour:
   m_ObjectHideFlags: 0

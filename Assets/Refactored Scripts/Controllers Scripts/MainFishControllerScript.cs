@@ -153,6 +153,13 @@ public class MainFishControllerScript : MonoBehaviour
 
         while (true)
         {
+
+            /* Explaining the logic of setting the current food index/type:
+             * 
+             * The current food index will be set based on the total eaten objects count,
+             * which will determine the type of collectible to spawn, but only if the booster
+             * is not active.
+             */
             if (!isBoosting)
             {
                 if (totalEatenObjectsCount >= 20)
@@ -198,11 +205,21 @@ public class MainFishControllerScript : MonoBehaviour
                     yield return new WaitForSeconds(boostWaitTime);
                 }
             }
-            else
+            /* Important Note:
+             * This condition helps to keep the performance stable and high
+             * on each platform by limiting the number of collectibles in the scene.
+             */
+            else if (
+#if UNITY_STANDALONE || UNITY_EDITOR
+                GameManager.currentActiveCollectiblesList.Count < 400
+#elif UNITY_ANDROID || UNITY_IOS
+                GameManager.currentActiveCollectiblesList.Count < 200
+#endif
+                )
             {
                 SpawnCollectible(currentFoodIndex);
+                yield return null;
             }
-
             yield return null;
         }
     }
@@ -211,9 +228,9 @@ public class MainFishControllerScript : MonoBehaviour
     {
         // Instantiate the collectable prefab at the current position
         GameObject collectableInstance = Instantiate(
-            followerProperties.spawnProperties.collectablePrefab,
-            transform.position,
-            Quaternion.identity);
+        followerProperties.spawnProperties.collectablePrefab,
+        transform.position,
+        Quaternion.identity);
 
         // Set the collectable configuration
         collectableInstance.GetComponent<CollectibleScript>().collectibleProperties =

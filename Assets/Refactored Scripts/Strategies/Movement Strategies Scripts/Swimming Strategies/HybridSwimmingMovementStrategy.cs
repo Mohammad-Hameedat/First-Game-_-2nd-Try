@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class HybridSwimmingMovementStrategy : IMovementStrategy
 {
-
     #region References
     private readonly MovementController movementController;
     private readonly BoundsAndPositioningManager boundsManager;

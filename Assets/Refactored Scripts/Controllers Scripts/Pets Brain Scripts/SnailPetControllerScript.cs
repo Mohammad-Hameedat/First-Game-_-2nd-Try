@@ -7,8 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(TargetingSystem))]
 [RequireComponent(typeof(HungerSystem))]
-[RequireComponent(typeof(BoundsAndPositioningManager))]
 [RequireComponent(typeof(InteractionController))]
+[RequireComponent(typeof(BoundsAndPositioningManager))]
 #endregion
 public class SnailPetControllerScript : MonoBehaviour
 {
@@ -42,15 +42,18 @@ public class SnailPetControllerScript : MonoBehaviour
     {
         // Initialize target list
         targetingSystem.SetTargetObjectsList(targetObjectsList);
+        targetingSystem.targetingStrategy = new FrameBasedTargetingStrategy();
 
 
-        targetingSystem.targetingStrategy = new ProximityTargetTargetingStrategy();
+        hungerSystem.SetHungerBehavior(new CheckForTargetHungerStrategy(
+            targetObjectsList
+            ));
 
-        hungerSystem.SetHungerBehavior(new ChaseCollectibleHungerStrategy());
 
-        interactionController.SetInteractionStrategy(new ChaseCollectibleInteractionStrategy(
+        interactionController.SetInteractionStrategy(new CollectCollectibleInteractionStrategy(
             targetingSystem
         ));
+
 
         // Switch to NoDangerState
         stateMachine.ChangeState(new NoThreatWalkingState(
