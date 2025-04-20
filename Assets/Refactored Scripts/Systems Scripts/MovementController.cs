@@ -1,20 +1,17 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(BoundsAndPositioningManager))]
 public class MovementController : MonoBehaviour
 {
-    //public FollowerProperties properties;
     public MovementProperties movementProperties;
     public BoundsAndPositioningManager boundsManager { get; private set; }
+    public Rigidbody rb;
 
 
     public IMovementStrategy movementStrategy;
-    public Rigidbody rb;
-
-    /* NOTE: a shared property that can be set by the InteractionController.
-     * The movement strategies will read from this to move the fish.
-     */
     public Transform CurrentTarget { get; set; } = null;
+
 
     private void Awake()
     {

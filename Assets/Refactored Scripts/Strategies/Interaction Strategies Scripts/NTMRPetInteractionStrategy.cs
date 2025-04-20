@@ -3,15 +3,12 @@ using UnityEngine;
 public class NTMRPetInteractionStrategy : IInteractionStrategy
 {
     private TargetingSystem targetingSystem;
-    private BoundsAndPositioningManager boundsAndPositioningManager;
 
     public NTMRPetInteractionStrategy(
-        TargetingSystem _targetingSystem,
-        BoundsAndPositioningManager _boundsAndPositioningManager
+        TargetingSystem _targetingSystem
         )
     {
         targetingSystem = _targetingSystem;
-        boundsAndPositioningManager = _boundsAndPositioningManager;
     }
 
 

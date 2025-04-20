@@ -1,8 +1,8 @@
-public class NTMRPetThreatenedState : IState
+public class DeadState : IState
 {
     private MovementController movementController;
 
-    public NTMRPetThreatenedState(
+    public DeadState(
         MovementController _movementController
         )
     {
@@ -11,15 +11,14 @@ public class NTMRPetThreatenedState : IState
 
     public void Enter()
     {
-        movementController.SetMovementStrategy(new LandingMovementStrategy(
+        // Change the MeshRenderer to the dead object to indicate that the object is dead.
+
+        movementController.SetMovementStrategy(new DeadMovementStrategy(
             movementController
             ));
     }
 
-    public void Execute()
-    {
-
-    }
+    public void Execute() { }
 
     public void Exit()
     {

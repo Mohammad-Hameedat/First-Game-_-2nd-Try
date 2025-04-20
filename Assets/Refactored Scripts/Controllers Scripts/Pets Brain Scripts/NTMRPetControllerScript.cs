@@ -57,8 +57,7 @@ public class NTMRPetControllerScript : MonoBehaviour
 
 
         interactionController.SetInteractionStrategy(new NTMRPetInteractionStrategy(
-            targetingSystem,
-            movementController.boundsManager
+            targetingSystem
             ));
     }
 

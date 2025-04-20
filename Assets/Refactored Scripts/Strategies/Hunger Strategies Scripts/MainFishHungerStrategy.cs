@@ -93,9 +93,6 @@ public class MainFishHungerStrategy : IHungerStrategy
         hungerArrowScript.colorMaxValue = destructionTime - hungerStartingTime;
         hungerArrowScript.RevertToInitialColor();
 
-        //hungerArrowObject = hungerArrowScript.gameObject;
-        //hungerArrowObject.SetActive(false);
-
         hungerCanvasObject = hungerArrowScript.GetComponentInParent<Canvas>().gameObject;
         hungerCanvasObject.SetActive(false);
     }
