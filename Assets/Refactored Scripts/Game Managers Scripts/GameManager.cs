@@ -18,12 +18,16 @@ public class GameManager : MonoBehaviour
     #region Current Active Objects Lists
 
     [Header("Current Active Objects Lists")]
+    // This list contains the current active Main Fish objects in the scene 
     public static List<GameObject> currentActiveMainFishObjectsList = new();
+
+    // This list contains all current active and distractible objects in the scene
     public static List<GameObject> currentActiveDistractibleObjectsList = new();
 
     public static List<GameObject> currentActiveFoodTargetObjectsList = new();
-    public static List<GameObject> currentActiveEnemyObjectsList = new();
     public static List<GameObject> currentActiveCollectiblesList = new();
+
+    public static List<GameObject> currentActiveEnemyObjectsList = new();
 
 
     /* Dictionary to store the protective pets and their types
@@ -97,7 +101,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(HandleClicksAndTouches());
 
         // Enemy Spawner
-        StartCoroutine(SpawnEnemy());
+        //StartCoroutine(SpawnEnemy());
 
         // Spawn 1000 Main Fishes
         //for (int i = 0; i < 1000; i++)
@@ -249,7 +253,7 @@ public class GameManager : MonoBehaviour
                     if (hit.collider.gameObject.tag == "Collectible") // Collectibles
                     {
                         UpdateSceneCoins(hit);
-                        yield return new WaitForSeconds(.05f);
+                        yield return new WaitForSeconds(0.05f);
                     }
                     else if (currentActiveEnemyObjectsList.Count > 0) // If there are enemies
                     {
@@ -265,8 +269,15 @@ public class GameManager : MonoBehaviour
                             yield return new WaitForSeconds(levelData.weaponTypes[currentWeaponIndex].fireDelay);
                         }
                     }
-                    else // Spawn food normally
+                    else if (hit.collider.gameObject.tag == "Amp")
                     {
+                        hit.collider.gameObject.GetComponent<ATEEPetControllerScript>().CurrentClickIndex++;
+
+                        yield return new WaitForSeconds(1f);
+                    }
+                    else
+                    {
+                        // Spawn food normally
                         SpawnObject(2);
                         yield return new WaitForSeconds(levelData.foodSpawnDelay);
                     }
@@ -376,8 +387,6 @@ public class GameManager : MonoBehaviour
                     clampedSpawnPosition,
                     Quaternion.identity
                     );
-
-                //Debug.Log($"(((Pet {transferableGameData.selectedSpecialPetsList[i].name}))) has been spawned");
             }
         }
     }

@@ -27,14 +27,24 @@ public class RandomizedSwimmingMovementStrategy : IMovementStrategy
 
         if (timeBeforeChangingVelocity >= AccelerationDuration)
         {
-            desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
-            AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
+            desiredVelocity = Random.Range(
+                movementProperties.minRandomDesiredVelocity,
+                movementProperties.maxRandomDesiredVelocity
+                );
+
+            AccelerationDuration = Random.Range(
+                movementProperties.minAccelerationDuration,
+                movementProperties.maxAccelerationDuration
+                );
+
             timeBeforeChangingVelocity = 0f;
         }
 
         Vector3 positionDifference = randomTargetPosition - rb.position;
 
-        if (positionDifference.sqrMagnitude <= movementProperties.minDistanceTowardsRandomTarget * movementProperties.minDistanceTowardsRandomTarget)
+        float minDistanceToRandomTarget = movementProperties.minDistanceTowardsRandomTarget;
+
+        if (positionDifference.sqrMagnitude <= minDistanceToRandomTarget * minDistanceToRandomTarget)
         {
             randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
         }
@@ -42,7 +52,11 @@ public class RandomizedSwimmingMovementStrategy : IMovementStrategy
         Vector3 directionToRandomTarget = positionDifference.normalized;
 
         // Change the velocity of the object smoothly while moving towards the target position
-        rb.velocity = Vector3.Lerp(rb.velocity, directionToRandomTarget * desiredVelocity, Time.fixedDeltaTime);
+        rb.velocity = Vector3.Lerp(
+            rb.velocity,
+            directionToRandomTarget * desiredVelocity,
+            Time.fixedDeltaTime
+            );
     }
 
 
@@ -50,10 +64,20 @@ public class RandomizedSwimmingMovementStrategy : IMovementStrategy
     private void InitializeMovement()
     {
         movementProperties = movementController.movementProperties;
+
         boundsManager = movementController.boundsManager;
 
         randomTargetPosition = boundsManager.GenerateRandomClampedPosition();
-        desiredVelocity = Random.Range(movementProperties.minRandomDesiredVelocity, movementProperties.maxRandomDesiredVelocity);
-        AccelerationDuration = Random.Range(movementProperties.minAccelerationDuration, movementProperties.maxAccelerationDuration);
+
+
+        desiredVelocity = Random.Range(
+            movementProperties.minRandomDesiredVelocity,
+            movementProperties.maxRandomDesiredVelocity
+            );
+
+        AccelerationDuration = Random.Range(
+            movementProperties.minAccelerationDuration,
+            movementProperties.maxAccelerationDuration
+            );
     }
 }

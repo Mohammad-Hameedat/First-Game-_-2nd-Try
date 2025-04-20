@@ -37,12 +37,14 @@ public class MainFishControllerScript : MonoBehaviour
 
     public int totalEatenObjectsCount = 0;
 
+    public bool isDead = false;
+
     #endregion
 
 
     private void Awake()
     {
-        // Get references to the components
+        // Get references to the attachedScripts
         movementController = GetComponent<MovementController>();
         stateMachine = GetComponent<StateMachine>();
         targetingSystem = GetComponent<TargetingSystem>();
@@ -51,7 +53,7 @@ public class MainFishControllerScript : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
 
-        // Assign the properties to the components
+        // Assign the properties to the attachedScripts
         movementController.movementProperties = followerProperties.movementProperties;
         targetObjectsList = GameManager.currentActiveFoodTargetObjectsList;
     }
@@ -115,35 +117,45 @@ public class MainFishControllerScript : MonoBehaviour
 
     private void Update()
     {
-        // Handle state transitions based on existing enemies
-        if (GameManager.currentActiveEnemyObjectsList.Count == 0)
+        if (!isDead)
         {
-            if (stateMachine.currentState is not NoThreatSwimmingState)
+            // Handle state transitions based on existing enemies
+            if (GameManager.currentActiveEnemyObjectsList.Count == 0)
             {
-                hungerSystem.enabled = true;
+                if (stateMachine.currentState is not NoThreatSwimmingState)
+                {
+                    hungerSystem.enabled = true;
 
-                // Switch to NoDangerState
-                stateMachine.ChangeState(new NoThreatSwimmingState(
-                movementController,
-                hungerSystem
-                ));
+                    // Switch to NoDangerState
+                    stateMachine.ChangeState(new NoThreatSwimmingState(
+                    movementController,
+                    hungerSystem
+                    ));
+                }
             }
+            else
+            {
+                if (stateMachine.currentState is not ThreatenedSwimmingState)
+                {
+                    hungerSystem.enabled = false;
+
+                    stateMachine.ChangeState(new ThreatenedSwimmingState(
+                        movementController
+                        ));
+                }
+            }
+
+            totalEatenObjectsCount = interactionController.interactionStrategy.GetInteractedTargetsCount();
         }
         else
         {
-            if (stateMachine.currentState is not ThreatenedSwimmingState)
+            if (transform.position.y <= movementController.boundsManager.CornerToWorldPosition(ScreenCorner.BottomCenter).y)
             {
-                hungerSystem.enabled = false;
-
-                stateMachine.ChangeState(new ThreatenedSwimmingState(
-                    movementController
-                    ));
+                // Destroy the object if it falls below the bottom corner
+                Destroy(gameObject);
             }
         }
-
-        totalEatenObjectsCount = interactionController.interactionStrategy.GetInteractedTargetsCount();
     }
-
 
 
     #region Collectibles Spawners
@@ -185,7 +197,6 @@ public class MainFishControllerScript : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 yield return null;
-                continue;
             }
 
             if (isBoosting)
@@ -196,8 +207,8 @@ public class MainFishControllerScript : MonoBehaviour
                  * The booster will spawn "X" collectibles in a row.
                  * Each collectible will be spawned 1 second after the previous one.
                  * 
-                 * "X" = Spawning booster iterations (Set by MTM Pet).
-                 * "S" = Spawning booster wait time (Set In MTM Pet's Controller Spawner Booster Coroutine).
+                 * "boostIterations" = Spawning booster iterations (Set by MTM Pet).
+                 * "boostWaitTime" = Spawning booster wait time (Set In MTM Pet's Controller Spawner Booster Coroutine).
                  */
                 for (int iterationIndex = 0; iterationIndex < boostIterations; iterationIndex++)
                 {
@@ -205,6 +216,7 @@ public class MainFishControllerScript : MonoBehaviour
                     yield return new WaitForSeconds(boostWaitTime);
                 }
             }
+
             /* Important Note:
              * This condition helps to keep the performance stable and high
              * on each platform by limiting the number of collectibles in the scene.
@@ -250,6 +262,56 @@ public class MainFishControllerScript : MonoBehaviour
     #endregion
 
 
+    public void ElectrificationTrigger()
+    {
+        GameObject collectibleInstance = Instantiate(
+            followerProperties.spawnProperties.collectablePrefab,
+            transform.position,
+            Quaternion.identity
+            );
+
+        collectibleInstance.GetComponent<CollectibleScript>().collectibleProperties =
+            followerProperties.spawnProperties.collectibleProperties[2];
+
+        TriggerDeathState();
+    }
+
+    public void TriggerDeathState()
+    {
+        isDead = true;
+
+        MonoBehaviour[] attachedScripts = GetComponents<MonoBehaviour>();
+
+        foreach (MonoBehaviour script in attachedScripts)
+        {
+            if (script == this || script is MovementController || script is BoundsAndPositioningManager)
+                continue;
+
+            script.enabled = false;
+        }
+
+
+        stateMachine.ChangeState(new DeadState(
+            movementController
+            ));
+    }
+
+
+    public void Revive()
+    {
+        isDead = false;
+
+        MonoBehaviour[] attachedScripts = GetComponents<MonoBehaviour>();
+
+        foreach (MonoBehaviour script in attachedScripts)
+        {
+            if (script == this || script is MovementController || script is BoundsAndPositioningManager)
+                continue;
+
+            script.enabled = true;
+        }
+    }
+
 
     private void OnDisable()
     {
@@ -266,9 +328,11 @@ public class MainFishControllerScript : MonoBehaviour
 
     private void OnDestroy()
     {
+#if UNITY_EDITOR
         // Return if the game stoped in the editor
         if (!this.gameObject.scene.isLoaded)
             return;
+#endif
 
         // Unregister the object from the list of active main fishes || Remove from GameManager list
         GameManager.currentActiveMainFishObjectsList.Remove(gameObject);

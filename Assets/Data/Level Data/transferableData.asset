@@ -15,5 +15,5 @@ MonoBehaviour:
   selectedLevel: 2
   selectedSpecialPetsList:
   - {fileID: 1451199827726647887, guid: 7f36db53360b7454a8ed9212b1cde6b2, type: 3}
-  - {fileID: 5722310159858675401, guid: 2047b9e2f8a3faf4d930722e8ddaa7df, type: 3}
+  - {fileID: 8161085477632833559, guid: 1d2a39956ebb40945936709e9e619b07, type: 3}
   selectedSpecialPetsIDs: 
