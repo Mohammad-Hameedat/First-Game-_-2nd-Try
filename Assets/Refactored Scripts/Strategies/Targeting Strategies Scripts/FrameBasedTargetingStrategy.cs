@@ -775,7 +775,7 @@ public class FrameBasedTargetingStrategy : ITargetingStrategy
     private int frameInterval = 3; // Interval to distribute nearest object checks
     private int currentObjectIndex = 0; // Tracks the current object index being processed across frames
 
-    public Transform GetNearestTarget(IEnumerable<GameObject> targetObjectsList, Transform lastNearestObject, Vector3 currentPosition)
+    public Transform GetNearestTarget(IEnumerable<GameObject> targetedEnemyObjectsList, Transform lastNearestObject, Vector3 currentPosition)
     {
         if (Time.frameCount % frameInterval != 0 && lastNearestObject != null)
         {
@@ -789,7 +789,7 @@ public class FrameBasedTargetingStrategy : ITargetingStrategy
 
             int index = 0;
 
-            foreach (GameObject targetObject in targetObjectsList)
+            foreach (GameObject targetObject in targetedEnemyObjectsList)
             {
                 if (index % frameInterval == currentObjectIndex)
                 {

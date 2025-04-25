@@ -73,7 +73,7 @@ public class EnemyController : MonoBehaviour
 
 
         // Register the enemy in the list of active enemies || Register in GameManager
-        hungerSystem.SetHungerBehavior(new EnemyHungerStrategy(
+        hungerSystem.SetHungerBehavior(new IntermittentHungerStrategy(
             followerProperties.hungerProperties.hungerStartingTime,
             followerProperties.hungerProperties.hungerDuration
             ));

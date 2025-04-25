@@ -32,12 +32,12 @@ public class ProximityTargetTargetingStrategy : ITargetingStrategy
 
 
     /*
-        public List<Transform> GetNearestTargets_ReturnList(IEnumerable<GameObject> targetObjectsList, Transform lastNearestTarget, Vector3 currentPosition, int numberOfTargets)
+        public List<Transform> GetNearestTargets_ReturnList(IEnumerable<GameObject> targetedEnemyObjectsList, Transform lastNearestTarget, Vector3 currentPosition, int numberOfTargets)
         {
             List<Transform> nearestTargets = new List<Transform>();
             List<float> distances = new List<float>();
 
-            foreach (GameObject targetObject in targetObjectsList)
+            foreach (GameObject targetObject in targetedEnemyObjectsList)
             {
                 if (targetObject != null && targetObject.activeSelf)
                 {

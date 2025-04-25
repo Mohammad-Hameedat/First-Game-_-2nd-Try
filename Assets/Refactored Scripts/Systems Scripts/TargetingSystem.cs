@@ -17,7 +17,7 @@ public class TargetingSystem : MonoBehaviour
 
     public Transform GetNearestTarget()
     {
-        //if (targetObjectsList as List<GameObject> == null) // NOTE: -> For future testing
+        //if (targetedEnemyObjectsList as List<GameObject> == null) // NOTE: -> For future testing
 
         if (targetObjectsList == null)
             return null;
