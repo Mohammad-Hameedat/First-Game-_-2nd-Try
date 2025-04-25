@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyHungerStrategy : IHungerStrategy
+public class IntermittentHungerStrategy : IHungerStrategy
 {
     private float idleDuration;   // Time spent in idle state
     private float hungerDuration; // Time spent in hungry state
@@ -10,7 +10,7 @@ public class EnemyHungerStrategy : IHungerStrategy
 
     private float currentCycleDuration;
 
-    public EnemyHungerStrategy(float _idleDuration,float _hungerDuration)
+    public IntermittentHungerStrategy(float _idleDuration,float _hungerDuration)
     {
         idleDuration = _idleDuration;
         hungerDuration = _hungerDuration;
@@ -37,7 +37,7 @@ public class EnemyHungerStrategy : IHungerStrategy
 
     public bool GetHungerStatus() => isHungry;
 
-    public void SetHungerValues(float _hungerStartingTime,float _destructionTime)
+    public void ReconfigureHungerTimingSettings(float _hungerStartingTime,float _destructionTime)
     {
         idleDuration = _hungerStartingTime;
         hungerDuration = _destructionTime;

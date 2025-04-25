@@ -69,7 +69,7 @@ public class MainFishHungerStrategy : IHungerStrategy
         return isHungry;
     }
 
-    public void SetHungerValues(float _hungerStartingTime, float _destructionTime)
+    public void ReconfigureHungerTimingSettings(float _hungerStartingTime, float _destructionTime)
     {
         hungerStartingTime = _hungerStartingTime;
         destructionTime = _destructionTime;
@@ -154,7 +154,7 @@ public class MainFishHungerStrategy : IHungerStrategy
 //        return isHungry;
 //    }
 
-//    public void SetHungerValues(float _hungerStartingTime, float _destructionTime)
+//    public void ReconfigureHungerTimingSettings(float _hungerStartingTime, float _destructionTime)
 //    {
 //        hungerStartingTime = _hungerStartingTime;
 //        destructionTime = _destructionTime;

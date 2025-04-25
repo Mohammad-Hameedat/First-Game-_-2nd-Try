@@ -20,7 +20,7 @@ public class EnemySensitivePetHungerStrategy : IHungerStrategy
     }
 
     #region Not Implemented
-    public void SetHungerValues(float _hungerStartingTime, float _destructionTime)
+    public void ReconfigureHungerTimingSettings(float _hungerStartingTime, float _destructionTime)
     {
         throw new System.NotImplementedException("Pet Set Hunger Values Exception");
     }

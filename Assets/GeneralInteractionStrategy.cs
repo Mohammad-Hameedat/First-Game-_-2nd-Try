@@ -1,19 +1,24 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class MainFishInteractionStrategy : IInteractionStrategy
+public class GeneralInteractionStrategy : IInteractionStrategy
 {
     private TargetingSystem targetingSystem;
     public HungerSystem hungerSystem;
 
+    private IEnumerable<GameObject> targetObjectsList;
     private int currentNumberofEatenObjects = 0;
 
-    public MainFishInteractionStrategy(
+    public GeneralInteractionStrategy(
         HungerSystem _hungerSystem,
-        TargetingSystem _targetingSystem
+        TargetingSystem _targetingSystem,
+        IEnumerable<GameObject> _targetObjectsList
         )
     {
         hungerSystem = _hungerSystem;
         targetingSystem = _targetingSystem;
+        targetObjectsList = _targetObjectsList;
     }
 
 
@@ -26,19 +31,15 @@ public class MainFishInteractionStrategy : IInteractionStrategy
 
     public void Interact(GameObject interator, GameObject target)
     {
-        if (GameManager.currentActiveFoodTargetObjectsList.Contains(target))
+        /* Note:
+         * Automatically define the target objects list
+         * based on the type of targets that the interactor can interact with
+        */
+        if (targetObjectsList.Contains(target))
         {
             currentNumberofEatenObjects++;
 
-            FoodProperties foodConfig = target.GetComponent<Food>().foodConfig;
-
-            // Reset hunger
             hungerSystem.hungerStrategy.ResetHunger();
-
-            hungerSystem.hungerStrategy.ReconfigureHungerTimingSettings(
-                 foodConfig.staminaTime,
-              foodConfig.destructionTime
-              );
 
             // Consume the target
             Object.Destroy(target);
