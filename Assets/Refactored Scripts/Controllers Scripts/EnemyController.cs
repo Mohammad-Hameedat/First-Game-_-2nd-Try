@@ -51,7 +51,7 @@ public class EnemyController : MonoBehaviour
         {
             targetObjectsList = GameManager.currentActiveMainFishObjectsList;
 
-            // Combine the target lists to target both main fishes and foods
+            // Combine the target associatedGameObjectLists to target both main fishes and foods
             combinedTargetsList = targetObjectsList.Concat(
                 GameManager.currentActiveFoodTargetObjectsList
                 );

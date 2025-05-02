@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class HybridSwimmingMovementStrategy : IMovementStrategy
+public class DashingMovementStrategy : IMovementStrategy
 {
+
     #region References
     private readonly MovementController movementController;
     private readonly BoundsAndPositioningManager boundsManager;
@@ -11,6 +12,12 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
 
     private Transform target = null;
 
+    private float targetFollowingVelocity = 0f;
+
+    private bool isDashing = false;
+    private float dashingVelocity = 10f;
+    private float directionalVelocityAdjustmentSpeed = 5f;
+
     #region Random Movement Variables
     private Vector3 randomTargetPosition;
     private float desiredVelocity;
@@ -19,12 +26,14 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
     #endregion
 
     #region Constructor
-    public HybridSwimmingMovementStrategy(
+    public DashingMovementStrategy(
         MovementController _movementController
         )
     {
         movementController = _movementController;
         movementProperties = movementController.movementProperties;
+        targetFollowingVelocity = movementProperties.maxFollowingDesiredVelocity;
+
         boundsManager = movementController.boundsManager;
 
         InitializeRandomMovement();
@@ -39,15 +48,16 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
 
         if (target != null)
         {
+            isDashing = true;
+
             // Move towards the target
             Vector3 positionDifference = target.position - rb.position;
             Vector3 directionToTarget = positionDifference.normalized;
-            float targetFollowingVelocity = movementProperties.maxFollowingDesiredVelocity;
 
             rb.velocity = Vector3.Lerp(
                 rb.velocity,
-                directionToTarget * targetFollowingVelocity,
-                Time.fixedDeltaTime
+                directionToTarget * targetFollowingVelocity * dashingVelocity,
+                Time.fixedDeltaTime * directionalVelocityAdjustmentSpeed
                 );
 
             /* Note:
@@ -63,6 +73,20 @@ public class HybridSwimmingMovementStrategy : IMovementStrategy
         }
         else
         {
+
+            if (isDashing)
+            {
+                rb.velocity = Vector3.Lerp(
+                    rb.velocity,
+                    rb.velocity.normalized * ( movementProperties.minRandomDesiredVelocity - 0.5f ),
+                    Time.fixedDeltaTime * directionalVelocityAdjustmentSpeed * 1.5f
+                    );
+
+                _ = rb.velocity.magnitude <= movementProperties.minRandomDesiredVelocity
+                    ? isDashing = false
+                    : isDashing = true;
+            }
+
             // Move randomly
             timeBeforeChangingVelocity += Time.fixedDeltaTime;
 

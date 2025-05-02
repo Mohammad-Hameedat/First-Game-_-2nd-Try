@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb14419c284fbfa43a74417998bdc5b6, type: 3}
-  m_Name: GTA Pet Movement Data
+  m_Name: ATAF Pet Movement Data
   m_EditorClassIdentifier: 
   minRandomDesiredVelocity: 0.5
-  maxRandomDesiredVelocity: 3
-  maxFollowingDesiredVelocity: 4
-  minAccelerationDuration: 2
-  maxAccelerationDuration: 8
-  minDistanceTowardsRandomTarget: 2
-  nearestDistanceToEatATarget: 2
+  maxRandomDesiredVelocity: 2.5
+  maxFollowingDesiredVelocity: 5
+  minAccelerationDuration: 3
+  maxAccelerationDuration: 7
+  minDistanceTowardsRandomTarget: 1.5
+  nearestDistanceToEatATarget: 1.5
   xMin: 0.05
   xMax: 0.95
   yMin: 0.05

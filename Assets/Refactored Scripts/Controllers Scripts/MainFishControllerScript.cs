@@ -2,58 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#region Main Fish Controller - Required Components
+#region Required Components
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(TargetingSystem))]
 [RequireComponent(typeof(HungerSystem))]
 [RequireComponent(typeof(InteractionController))]
+[RequireComponent(typeof(DeathAndRevivalSystem))]
 [RequireComponent(typeof(BoundsAndPositioningManager))]
 #endregion
+
+
 public class MainFishControllerScript : MonoBehaviour
 {
-    #region Components References
+    #region Serialized Settings
+    [Header("Follower Settings")]
+    public FollowerSettings followerProperties;
+    #endregion
+
+
+    #region Cached Component References
     private MovementController movementController;
     private StateMachine stateMachine;
     private TargetingSystem targetingSystem;
     private HungerSystem hungerSystem;
     private InteractionController interactionController;
-
+    private DeathAndRevivalSystem deathAndRevivalSystem;
 
     private Rigidbody rb;
-    public FollowerSettings followerProperties;
-
     #endregion
 
 
-    #region Main Fish Controller - Required Variables
+    #region StateAndRuntimeData
+    Vector3 bottomPosition;
+
     private List<GameObject> targetObjectsList = new();
 
     private int currentFoodIndex = 0;
-
     private bool isBoosting = false;
-    private int boostIterations;
-    private float boostWaitTime = 1f;
+    private int boostIterations = 0;
+    private const float boostWaitTime = 1f;
 
     public int totalEatenObjectsCount = 0;
-
-    public bool isDead = false;
-
     #endregion
 
 
+    #region UNITY LIFECYCLE
     private void Awake()
     {
-        // Get references to the attachedScripts
+        // Cache required components
         movementController = GetComponent<MovementController>();
         stateMachine = GetComponent<StateMachine>();
         targetingSystem = GetComponent<TargetingSystem>();
         hungerSystem = GetComponent<HungerSystem>();
         interactionController = GetComponent<InteractionController>();
-
+        deathAndRevivalSystem = GetComponent<DeathAndRevivalSystem>();
         rb = GetComponent<Rigidbody>();
 
-        // Assign the properties to the attachedScripts
+        // Pass settings to sub-systems
         movementController.movementProperties = followerProperties.movementProperties;
         targetObjectsList = GameManager.currentActiveFoodTargetObjectsList;
     }
@@ -61,15 +67,10 @@ public class MainFishControllerScript : MonoBehaviour
 
     private void OnEnable()
     {
-        // Register this object in the list of active main fishes || Add to GameManager list
-        if (!GameManager.currentActiveMainFishObjectsList.Contains(gameObject))
+        if (deathAndRevivalSystem.corpseStrategy != null
+            && deathAndRevivalSystem.corpseStrategy.IsDead)
         {
-            GameManager.currentActiveMainFishObjectsList.Add(gameObject);
-        }
-
-        if (!GameManager.currentActiveDistractibleObjectsList.Contains(gameObject))
-        {
-            GameManager.currentActiveDistractibleObjectsList.Add(gameObject);
+            deathAndRevivalSystem.corpseStrategy.TriggerRevivalState();
         }
 
         rb.velocity = Vector3.zero;
@@ -77,10 +78,7 @@ public class MainFishControllerScript : MonoBehaviour
         if (GameManager.currentActiveEnemyObjectsList.Count > 0)
         {
             hungerSystem.enabled = false;
-
-            stateMachine.ChangeState(new ThreatenedSwimmingState(
-                movementController
-                ));
+            stateMachine.ChangeState(new ThreatenedSwimmingState(movementController));
         }
 
         GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles += ToggleBoostSpawningCollectibles;
@@ -89,76 +87,193 @@ public class MainFishControllerScript : MonoBehaviour
 
     private void Start()
     {
-        targetingSystem.targetingStrategy = new FrameBasedTargetingStrategy();
+        deathAndRevivalSystem.corpseStrategy = new MainFishDeathStrategy(
+            gameObject,
+            this,
+            true,
+            GameManager.currentActiveMainFishObjectsList,
+            GameManager.currentActiveDistractibleObjectsList,
+            GameManager.currentActiveCorpsedObjectsList
+            );
 
-        // Initialize target list
+        deathAndRevivalSystem.corpseStrategy.TriggerRevivalState();
+
+        GameEvents.EventsChannelInstance.RefresheMainFishesNumber(
+            GameManager.currentActiveMainFishObjectsList.Count);
+
+        bottomPosition = movementController.boundsManager.CornerToWorldPosition(ScreenCorner.BottomCenter);
+
+
+        targetingSystem.targetingStrategy = new FrameBasedTargetingStrategy();
         targetingSystem.SetTargetObjectsList(targetObjectsList);
 
-        // Register the object in the list of active main fishes || Add to GameManager list
         hungerSystem.SetHungerBehavior(new MainFishHungerStrategy(
             gameObject,
+            deathAndRevivalSystem,
             targetingSystem,
             followerProperties.hungerProperties.hungerStartingTime,
-            followerProperties.hungerProperties.destructionTime
-            ));
+            followerProperties.hungerProperties.destructionTime));
 
-
-        // Set the interaction strategy
         interactionController.SetInteractionStrategy(new MainFishInteractionStrategy(
             hungerSystem,
             targetingSystem
             ));
 
 
-        // Start spawning money
+        StartCoroutine(MainFishLifeCycle());
+
         StartCoroutine(CollectibleSpawnRoutine());
     }
 
 
-    private void Update()
+    private IEnumerator MainFishLifeCycle()
     {
-        if (!isDead)
+        while (true)
         {
-            // Handle state transitions based on existing enemies
-            if (GameManager.currentActiveEnemyObjectsList.Count == 0)
+            /*   ALIVE BRANCH   */
+            while (!deathAndRevivalSystem.corpseStrategy.IsDead)
             {
+                // THREATENED  =>  NOT-THREATENED
                 if (stateMachine.currentState is not NoThreatSwimmingState)
                 {
+                    // Stay in the threatened state *until* no enemies are left,
+                    // then switch to the peaceful state.
+                    yield return new WaitUntil(() => GameManager.currentActiveEnemyObjectsList.Count == 0);
+
                     hungerSystem.enabled = true;
 
-                    // Switch to NoDangerState
                     stateMachine.ChangeState(new NoThreatSwimmingState(
-                    movementController,
-                    hungerSystem
-                    ));
+                        movementController,
+                        hungerSystem
+                        ));
                 }
-            }
-            else
-            {
-                if (stateMachine.currentState is not ThreatenedSwimmingState)
+                // NOT-THREATENED  =>  THREATENED
+                else
                 {
+                    // Stay in the peaceful state *until* at least one enemy appears,
+                    // then switch to the threatened state.
+                    yield return new WaitUntil(() => GameManager.currentActiveEnemyObjectsList.Count > 0);
+
                     hungerSystem.enabled = false;
 
                     stateMachine.ChangeState(new ThreatenedSwimmingState(
                         movementController
                         ));
                 }
+
+                yield return null;
             }
 
-            totalEatenObjectsCount = interactionController.interactionStrategy.GetInteractedTargetsCount();
-        }
-        else
-        {
-            if (transform.position.y <= movementController.boundsManager.CornerToWorldPosition(ScreenCorner.BottomCenter).y)
+
+            /*   DEAD / FALLING BRANCH   */
+            // Ensure we are in DeadState once the corpse flag is set.
+            if (stateMachine.currentState is not DeadState)
             {
-                // Destroy the object if it falls below the bottom corner
-                Destroy(gameObject);
+                stateMachine.ChangeState(new DeadState(movementController));
             }
+
+            // Wait until the corpse reaches the bottom, then destroy and end.
+            yield return new WaitUntil(() =>
+            {
+                HandleFallingDeath();
+
+                return transform.position.y <= bottomPosition.y || !deathAndRevivalSystem.corpseStrategy.IsDead;
+            });
+
+            if (transform.position.y <= bottomPosition.y)
+            {
+                Destroy(gameObject);
+
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    private void Update()
+    {
+        /*
+                if (!deathAndRevivalSystem.corpseStrategy.IsDead)
+                {
+                    HandleThreatStates();
+
+                    totalEatenObjectsCount = 
+                        interactionController.interactionStrategy.GetInteractedTargetsCount();
+                }
+                else
+                {
+                    HandleFallingDeath();
+                }
+        */
+
+        totalEatenObjectsCount =
+            interactionController.interactionStrategy.GetInteractedTargetsCount();
+    }
+
+
+    private void OnDisable()
+    {
+        GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles -= ToggleBoostSpawningCollectibles;
+    }
+
+
+    private void OnDestroy()
+    {
+#if UNITY_EDITOR
+        // Return if the game stoped in the editor
+        if (!this.gameObject.scene.isLoaded)
+            return;
+#endif
+
+        deathAndRevivalSystem.corpseStrategy.ClearFromAllLists();
+
+        GameEvents.EventsChannelInstance.RefresheMainFishesNumber(
+            GameManager.currentActiveMainFishObjectsList.Count);
+    }
+    #endregion
+
+
+
+    #region UPDATE HELPERS
+
+    private void HandleThreatStates()
+    {
+        bool enemiesExist = GameManager.currentActiveEnemyObjectsList.Count > 0;
+
+        if (!enemiesExist && stateMachine.currentState is not NoThreatSwimmingState)
+        {
+            hungerSystem.enabled = true;
+            stateMachine.ChangeState(new NoThreatSwimmingState(movementController, hungerSystem));
+        }
+        else if (enemiesExist && stateMachine.currentState is not ThreatenedSwimmingState)
+        {
+            hungerSystem.enabled = false;
+            stateMachine.ChangeState(new ThreatenedSwimmingState(movementController));
         }
     }
 
 
-    #region Collectibles Spawners
+    private void HandleFallingDeath()
+    {
+        if (stateMachine.currentState is not DeadState)
+        {
+            stateMachine.ChangeState(new DeadState(
+                movementController
+                ));
+        }
+
+        if (transform.position.y <= bottomPosition.y)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    #endregion
+
+
+
+    #region COLLECTIBLES
     private IEnumerator CollectibleSpawnRoutine()
     {
         yield return new WaitUntil(() => totalEatenObjectsCount > 2);
@@ -236,32 +351,28 @@ public class MainFishControllerScript : MonoBehaviour
         }
     }
 
+
     private void SpawnCollectible(int collectibleIndex)
     {
-        // Instantiate the collectable prefab at the current position
-        GameObject collectableInstance = Instantiate(
-        followerProperties.spawnProperties.collectablePrefab,
-        transform.position,
-        Quaternion.identity);
+        GameObject instance = Instantiate(
+            followerProperties.spawnProperties.collectablePrefab,
+            transform.position,
+            Quaternion.identity);
 
-        // Set the collectable configuration
-        collectableInstance.GetComponent<CollectibleScript>().collectibleProperties =
+        instance.GetComponent<CollectibleScript>().collectibleProperties =
             followerProperties.spawnProperties.collectibleProperties[collectibleIndex];
     }
 
-    #endregion
 
-
-    #region Collectibles Spawning Boosters
     private void ToggleBoostSpawningCollectibles(bool _isBoosting, int _boostIterations)
     {
         isBoosting = _isBoosting;
         boostIterations = _boostIterations;
     }
-
     #endregion
 
 
+    // External electrification kills fish and drops high-value collectible
     public void ElectrificationTrigger()
     {
         GameObject collectibleInstance = Instantiate(
@@ -273,72 +384,6 @@ public class MainFishControllerScript : MonoBehaviour
         collectibleInstance.GetComponent<CollectibleScript>().collectibleProperties =
             followerProperties.spawnProperties.collectibleProperties[2];
 
-        TriggerDeathState();
-    }
-
-    public void TriggerDeathState()
-    {
-        isDead = true;
-
-        MonoBehaviour[] attachedScripts = GetComponents<MonoBehaviour>();
-
-        foreach (MonoBehaviour script in attachedScripts)
-        {
-            if (script == this || script is MovementController || script is BoundsAndPositioningManager)
-                continue;
-
-            script.enabled = false;
-        }
-
-
-        stateMachine.ChangeState(new DeadState(
-            movementController
-            ));
-    }
-
-
-    public void Revive()
-    {
-        isDead = false;
-
-        MonoBehaviour[] attachedScripts = GetComponents<MonoBehaviour>();
-
-        foreach (MonoBehaviour script in attachedScripts)
-        {
-            if (script == this || script is MovementController || script is BoundsAndPositioningManager)
-                continue;
-
-            script.enabled = true;
-        }
-    }
-
-
-    private void OnDisable()
-    {
-        // Unregister the object from the list of active main fishes || Remove from GameManager list
-        //GameManager.currentActiveMainFishObjectsList.Remove(gameObject);
-        //GameManager.currentActiveDistractibleObjectsList.Remove(gameObject);
-
-        // Refresh the number of main fishes in the game
-        //GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.currentActiveMainFishObjectsList.Count);
-
-        GameEvents.EventsChannelInstance.OnBoostSpawningCollectibles -= ToggleBoostSpawningCollectibles;
-    }
-
-
-    private void OnDestroy()
-    {
-#if UNITY_EDITOR
-        // Return if the game stoped in the editor
-        if (!this.gameObject.scene.isLoaded)
-            return;
-#endif
-
-        // Unregister the object from the list of active main fishes || Remove from GameManager list
-        GameManager.currentActiveMainFishObjectsList.Remove(gameObject);
-        GameManager.currentActiveDistractibleObjectsList.Remove(gameObject);
-
-        // Refresh the number of main fishes in the game
-        GameEvents.EventsChannelInstance.RefresheMainFishesNumber(GameManager.currentActiveMainFishObjectsList.Count);
+        deathAndRevivalSystem.corpseStrategy.TriggerDeathState();
     }
 }

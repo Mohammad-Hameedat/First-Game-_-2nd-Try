@@ -101,7 +101,7 @@ public class WTWPetControllerScript : MonoBehaviour
                 /* NOTE: The following code is commented because its for testing purposes
                 if (!GameManager.cAPPetsDictionary.ContainsKey(PetType))
                 {
-                    GameManager.cAPPetsDictionary.Add(PetType, gameObject);
+                    GameManager.cAPPetsDictionary.Add(PetType, associatedGameObject);
                 }
                 /*
 

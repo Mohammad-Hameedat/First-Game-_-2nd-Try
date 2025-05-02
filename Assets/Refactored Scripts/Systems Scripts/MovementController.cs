@@ -10,6 +10,7 @@ public class MovementController : MonoBehaviour
 
 
     public IMovementStrategy movementStrategy;
+
     public Transform CurrentTarget { get; set; } = null;
 
 
@@ -25,6 +26,7 @@ public class MovementController : MonoBehaviour
         transform.position = boundsManager.ClampPositionWithInView(transform.position);
     }
 
+   
     // Set the movement strategy of the object
     public void SetMovementStrategy(IMovementStrategy strategy)
     {

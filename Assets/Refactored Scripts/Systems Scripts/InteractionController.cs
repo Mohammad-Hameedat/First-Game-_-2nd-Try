@@ -36,7 +36,6 @@ public class InteractionController : MonoBehaviour
 
         movementController.CurrentTarget = nearestTarget;
 
-
         // Check if the nearest target object is within the interaction range
         float distanceToTargetSqr = ( nearestTarget.position - transform.position ).magnitude;
 
