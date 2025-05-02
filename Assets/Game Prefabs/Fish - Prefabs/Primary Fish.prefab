@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: -4078236759278506260}
   - component: {fileID: 8584629251670702287}
   - component: {fileID: 7435952459695185677}
+  - component: {fileID: 9131316396864370029}
   - component: {fileID: -1342103384687549308}
   m_Layer: 0
   m_Name: Primary Fish
@@ -316,6 +317,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRange: 0
+--- !u!114 &9131316396864370029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735303277889347158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5711c041b16c0404988bb0c994d895e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-1342103384687549308
 MonoBehaviour:
   m_ObjectHideFlags: 0

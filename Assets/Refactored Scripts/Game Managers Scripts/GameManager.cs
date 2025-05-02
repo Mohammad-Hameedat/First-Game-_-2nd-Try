@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 #endregion
 public class GameManager : MonoBehaviour
 {
-    /* Note: This region contains static lists, read the note below:
+    /* Note: This region contains static associatedGameObjectLists, read the note below:
      * 
      * Whenever you implement a new static list in the GameManager,
      * make sure to add it to the ClearStaticLists() function to avoid memory leaks,
@@ -18,17 +18,26 @@ public class GameManager : MonoBehaviour
     #region Current Active Objects Lists
 
     [Header("Current Active Objects Lists")]
+
+    #region Main Fish Objects Lists
     // This list contains the current active Main Fish objects in the scene 
     public static List<GameObject> currentActiveMainFishObjectsList = new();
+    #endregion
 
-    // This list contains all current active and distractible objects in the scene
+    #region General Active Objects Lists
+    // This list contains any active and distractible objects in the scene
     public static List<GameObject> currentActiveDistractibleObjectsList = new();
+    // This list contains any active but corpsed objects in the scene
+    public static List<GameObject> currentActiveCorpsedObjectsList = new();
+    #endregion
 
+    #region
     public static List<GameObject> currentActiveFoodTargetObjectsList = new();
+
     public static List<GameObject> currentActiveCollectiblesList = new();
 
     public static List<GameObject> currentActiveEnemyObjectsList = new();
-
+    #endregion
 
     /* Dictionary to store the protective pets and their types
      * 
@@ -101,7 +110,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(HandleClicksAndTouches());
 
         // Enemy Spawner
-        //StartCoroutine(SpawnEnemy());
+        StartCoroutine(SpawnEnemy());
 
         // Spawn 1000 Main Fishes
         //for (int i = 0; i < 1000; i++)
@@ -163,7 +172,7 @@ public class GameManager : MonoBehaviour
                 Physics.Raycast(ray, out hit, 21f);
 
                 // Is a collectable object
-                if (hit.collider != null && hit.collider.gameObject.layer == 8)
+                if (hit.collider != null && hit.collider.associatedGameObject.layer == 8)
                 {
                     UpdateSceneCoins(hit);
                     yield return new WaitForSeconds(.05f);
@@ -180,7 +189,7 @@ public class GameManager : MonoBehaviour
                     // Or damage the enemy
                     else
                     {
-                        Health decreaseHealth = hit.collider?.gameObject.GetComponent<Health>();
+                        Health decreaseHealth = hit.collider?.associatedGameObject.GetComponent<Health>();
                         decreaseHealth?.TakeDamage(levelData.weaponTypes[currentWeaponIndex].weaponDamage);
                         yield return new WaitForSeconds(levelData.weaponTypes[currentWeaponIndex].fireDelay);
                     }
@@ -354,7 +363,7 @@ public class GameManager : MonoBehaviour
                             0,
                             levelData.spawnableEnemyPrefabsList.Count
                             )];
-                //GameObject tempEnemyInstance = enemyObjectsList[1];
+                //GameObject selectRandomEnemyPrefab = levelData.spawnableEnemyPrefabsList[1];
 
 
                 GameObject enemyInstance = Instantiate(
@@ -507,14 +516,15 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(selectNextScene);
     }
 
-    // A function that clears the static lists of the current active objects in a current scene
+    // A function that clears the static associatedGameObjectLists of the current active objects in a current scene
     private void ClearStaticLists()
     {
-        // Clear the lists of the current active objects in a current scene
+        // Clear the associatedGameObjectLists of the current active objects in a current scene
         currentActiveMainFishObjectsList.Clear();
         currentActiveFoodTargetObjectsList.Clear();
         currentActiveEnemyObjectsList.Clear();
         currentActiveCollectiblesList.Clear();
+        currentActiveDistractibleObjectsList.Clear();
 
         cAPPetsDictionary.Clear();
     }

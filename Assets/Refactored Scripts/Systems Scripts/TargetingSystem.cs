@@ -15,6 +15,14 @@ public class TargetingSystem : MonoBehaviour
         targetObjectsList = targetsList;
     }
 
+
+    // Get the last nearest target object detected but if no target object is found, check for the nearest target object
+    public Transform GetlastNearestTarget()
+    {
+        return lastNearestTarget;
+    }
+
+
     public Transform GetNearestTarget()
     {
         //if (targetedEnemyObjectsList as List<GameObject> == null) // NOTE: -> For future testing
@@ -25,12 +33,6 @@ public class TargetingSystem : MonoBehaviour
         Vector3 currentPosition = transform.position;
         lastNearestTarget = targetingStrategy.GetNearestTarget(targetObjectsList, lastNearestTarget, currentPosition);
 
-        return lastNearestTarget;
-    }
-
-    // Get the last nearest target object detected but if no target object is found, check for the nearest target object
-    public Transform GetlastNearestTarget()
-    {
         return lastNearestTarget;
     }
 }

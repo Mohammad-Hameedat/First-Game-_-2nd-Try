@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class MainFishHungerStrategy : IHungerStrategy
 {
-    private GameObject gameObject;
     private TargetingSystem targetingSystem;
+    private DeathAndRevivalSystem deathAndRevivalSystem;
 
+    private GameObject associatedGameObject;
     private GameObject hungerCanvasObject;
     private HungerArrow hungerArrowScript;
 
@@ -13,16 +14,19 @@ public class MainFishHungerStrategy : IHungerStrategy
     private float hungerTimeCounter = 0f;
 
     private bool isHungry = false;
+    private bool mayDie = false;
 
 
     public MainFishHungerStrategy(
-        GameObject _gameObject,
+        GameObject _associatedGameObject,
+        DeathAndRevivalSystem _deathAndRevivalSystem,
         TargetingSystem _targetingSystem,
         float _hungerStartingTime,
         float _destructionTime
         )
     {
-        gameObject = _gameObject;
+        associatedGameObject = _associatedGameObject;
+        deathAndRevivalSystem = _deathAndRevivalSystem;
         targetingSystem = _targetingSystem;
         hungerStartingTime = _hungerStartingTime;
         destructionTime = _destructionTime;
@@ -37,6 +41,9 @@ public class MainFishHungerStrategy : IHungerStrategy
         // If the object is not hungry and the hunger time counter is greater than the hunger starting time
         if (!isHungry && hungerTimeCounter >= hungerStartingTime)
         {
+            /* Important Note!!
+             * An animation or Color change must be added here to indicate that the object is hungry
+             */
             if (GameManager.cAPPetsDictionary.ContainsKey(PetType.BTPPet))
             {
                 hungerCanvasObject.SetActive(true);
@@ -44,23 +51,20 @@ public class MainFishHungerStrategy : IHungerStrategy
 
             // Set the object as hungry
             isHungry = true;
-
-            /* Important Note!!
-             * An animation or Color change must be added here to indicate that the object is hungry
-             */
+            mayDie = false;
         }
         // If the object is hungry and the hunger time counter is greater than the destruction time
-        else if (isHungry)
+        else if (isHungry && hungerTimeCounter <= destructionTime)
         {
-            hungerArrowScript.UpdateColorBasedOnHunger(hungerTimeCounter - hungerStartingTime);
+            if (hungerArrowScript.enabled)
+                hungerArrowScript.UpdateColorBasedOnHunger(hungerTimeCounter - hungerStartingTime);
 
             targetingSystem.GetNearestTarget();
-
-            if (hungerTimeCounter >= destructionTime)
-            {
-                // Destroy the object ---> This must be replaced with disabling the object when adding the reviver pet object.
-                Object.Destroy(gameObject);
-            }
+        }
+        else if (hungerTimeCounter >= destructionTime && !mayDie)
+        {
+            mayDie = true;
+            deathAndRevivalSystem.corpseStrategy.TriggerDeathState();
         }
     }
 
@@ -89,7 +93,7 @@ public class MainFishHungerStrategy : IHungerStrategy
 
     private void InitializeHungerArrow()
     {
-        hungerArrowScript = gameObject.GetComponentInChildren<HungerArrow>();
+        hungerArrowScript = associatedGameObject.GetComponentInChildren<HungerArrow>();
         hungerArrowScript.colorMaxValue = destructionTime - hungerStartingTime;
         hungerArrowScript.RevertToInitialColor();
 
@@ -104,7 +108,7 @@ public class MainFishHungerStrategy : IHungerStrategy
 
 //public class MainFishHungerStrategy : IHungerStrategy
 //{
-//    private GameObject gameObject; // This game object.
+//    private GameObject associatedGameObject; // This game object.
 
 //    private GameObject hungerArrowObject; // The sub object that will be used to indicate the hunger state of the object.
 //    private HungerArrow hungerArrow;
@@ -118,7 +122,7 @@ public class MainFishHungerStrategy : IHungerStrategy
 
 //    public MainFishHungerStrategy(GameObject _gameObject, float _hungerStartingTime, float _destructionTime)
 //    {
-//        gameObject = _gameObject;
+//        associatedGameObject = _gameObject;
 //        hungerStartingTime = _hungerStartingTime;
 //        destructionTime = _destructionTime;
 
@@ -145,7 +149,7 @@ public class MainFishHungerStrategy : IHungerStrategy
 //        else if (isHungry && hungerTimeCounter >= destructionTime)
 //        {
 //            // Destroy the object ---> This must be replaced with disabling the object when adding the reviver pet object.
-//            Object.Destroy(gameObject);
+//            Object.Destroy(associatedGameObject);
 //        }
 //    }
 
@@ -175,11 +179,11 @@ public class MainFishHungerStrategy : IHungerStrategy
 
 //    private void InitializeHungerArrow()
 //    {
-//        hungerArrow = gameObject.GetComponentInChildren<HungerArrow>();
+//        hungerArrow = associatedGameObject.GetComponentInChildren<HungerArrow>();
 //        hungerArrow.maxHealth = destructionTime - hungerStartingTime;
 //        hungerArrow.SetInitialColor();
 
-//        hungerArrowObject = hungerArrow.gameObject;
+//        hungerArrowObject = hungerArrow.associatedGameObject;
 //        hungerArrowObject.SetActive(false);
 //    }
 //}

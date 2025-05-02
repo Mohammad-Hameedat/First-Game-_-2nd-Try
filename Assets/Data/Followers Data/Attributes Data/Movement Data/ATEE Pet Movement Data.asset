@@ -18,7 +18,7 @@ MonoBehaviour:
   minAccelerationDuration: 3
   maxAccelerationDuration: 7
   minDistanceTowardsRandomTarget: 2
-  nearestDistanceToEatATarget: 1.5
+  nearestDistanceToEatATarget: 2
   xMin: 0.05
   xMax: 0.95
   yMin: 0.05

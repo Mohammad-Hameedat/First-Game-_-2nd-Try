@@ -192,13 +192,13 @@ public class BombScript : MonoBehaviour
             {
                 //Debug.Log("Targets detected, launching bomb!\nTargets count: " + nearbyTargetsList.Count);
 
-                Destroy(currentTarget.gameObject);
+                Destroy(currentTarget.associatedGameObject);
 
                 targetsCount++;
             }
         }
         Debug.Log("Number of targets destroyed: " + targetsCount);
 
-        Destroy(gameObject);
+        Destroy(associatedGameObject);
     }
 }*/
