@@ -35,21 +35,17 @@ public class SpecialAnimalsSelector : MonoBehaviour
         // Get the special animal from the custom component
         GameObject specialPet = specialPetToggle.specialPet;
 
-        if (toggle.isOn && selectedSpecialPets.Count < maxSelectedSpecialAnimalsNumber && !selectedSpecialPets.Contains(specialPet))
+        if (toggle.isOn &&
+            selectedSpecialPets.Count < maxSelectedSpecialAnimalsNumber &&
+            !selectedSpecialPets.Contains(specialPet))
         {
-            // <<<<<The IF statement must be deleted but the code inside it must be kept>>>>>
-            if (specialPetToggle.specialPet != null)
-            {
-                selectedSpecialPets.Add(specialPetToggle.specialPet);  // Add the selected animal to the list
-            }
+            // Add the selected animal to the list
+            selectedSpecialPets.Add(specialPetToggle.specialPet);
         }
         else
         {
-            // <<<<<The IF statement must be deleted but the code inside it must be kept>>>>>
-            if (selectedSpecialPets.Contains(specialPet))
-            {
-                selectedSpecialPets.Remove(specialPetToggle.specialPet);  // Remove the deselected animal from the list
-            }
+            // Remove the deselected animal from the list
+            selectedSpecialPets.Remove(specialPetToggle.specialPet);
         }
 
         UpdateToggleInteractivity();
